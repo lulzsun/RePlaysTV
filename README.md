@@ -24,6 +24,9 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
     * [ ] Youtube upload support
     * [ ] Imgur upload support
     * [ ] Gfycat upload support
+    
+# Issues
+ * Currently none
 
 # Disclaimer & Fair Use Statement
 This Github repository may contain copyrighted material, the use of which may not have been specifically authorized by the copyright owner. This material is available in an effort to provide user modifications and bug fixes to improve the quality of life of the Plays.tv client, while teaching the workings behind the Plays.tv client. The material contained in this repository is distributed without profit for research and educational purposes. Only very small portions of the original work are being used and those could not be used easily to duplicate the original work.
