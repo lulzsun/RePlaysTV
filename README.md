@@ -12,8 +12,12 @@ On 12/15/19, Plays.tv will discontinue support to their website and desktop appl
 Currently in development, no releases. Currently based on Plays 2.2.0. Planning for a release before 12/15.
 
 # Roadmap
-  * [ ] Offline functionality
-    * [ ] Custom UI
+  * [ ] Patcher Program
+  * [x] Offline functionality
+    * [x] Custom UI
+      * [x] Sessions functionality
+      * [ ] Clips functionality
+      * [ ] Settings functionality
     * [ ] Clean up and delete plays.tv service related functions
   * [ ] Upload functionality
     * [ ] Streamable upload support
