@@ -16,8 +16,14 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
   * [x] Offline functionality
     * [x] Custom UI
       * [x] Sessions functionality
+        * [ ] Clip function
+        * [ ] Playback function
       * [ ] Clips functionality
+        * [ ] Upload function
+        * [ ] Playback function
       * [ ] Settings functionality
+        * [ ] Settings detection
+      * [ ] Automatic recording detection
     * [ ] Clean up and delete plays.tv service related functions
   * [ ] Upload functionality
     * [ ] Streamable upload support
