@@ -18,9 +18,11 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
       * [x] Sessions functionality
         * [ ] Clip function
         * [ ] Playback function
+        * [ ] Sorting function
       * [ ] Clips functionality
         * [ ] Upload function
         * [ ] Playback function
+        * [ ] Sorting function
       * [ ] Settings functionality
         * [ ] Settings detection
       * [ ] Automatic recording detection
