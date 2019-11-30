@@ -16,16 +16,16 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
   * [x] Offline functionality
     * [x] Custom UI
       * [x] Sessions functionality
-        * [ ] Clip function
-        * [ ] Playback function
-        * [ ] Sorting function
-      * [ ] Clips functionality
+        * [x] Clip function
+        * [x] Playback function
+        * [x] Sorting function
+      * [x] Clips functionality
         * [ ] Upload function
-        * [ ] Playback function
-        * [ ] Sorting function
-      * [ ] Settings functionality
-        * [ ] Settings detection
-      * [ ] Automatic recording detection
+        * [x] Playback function
+        * [x] Sorting function
+      * [x] Settings functionality
+        * [x] Settings detection
+      * [x] Automatic recording detection
     * [ ] Clean up and delete plays.tv service related functions
   * [ ] Upload functionality
     * [ ] Streamable upload support
@@ -33,7 +33,7 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
     * [ ] Imgur upload support
     * [ ] Gfycat upload support
     
-# Issues
+# Notable Issues
  * Currently none
 
 # Disclaimer & Fair Use Statement
