@@ -1,15 +1,11 @@
 # RePlaysTV
 A client modification for Plays.tv
 
-If you are coming here wondering where the last repo went, it was deleted because it was infringing on Plays.tv's copyright (since it was containing their source code, files, etc) and I was told to delete it. 
+This patches over the existing Plays.tv (3.0.0) software to give it a custom user interface with plenty of upload platforms.
 
-This repo will contain no source code/relating files that is copyrighted by Plays.tv, this is simply a patch or mod (made from scratch) for the existing client.
+On 12/15/19, Plays.tv discontinued support to their website and desktop application.
 
-This is a non-profit, community based project to extend the life of the Plays.tv client for offline use.
-
-On 12/15/19, Plays.tv will discontinue support to their website and desktop application.
-
-Currently in development, no releases. Currently based on Plays 2.2.0. Planning for a release before 12/15.
+This is a non-profit, community based project to extend the life of the Plays.tv client for future use.
 
 # Roadmap
   * [ ] Patcher Executable
