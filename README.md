@@ -18,6 +18,8 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
       * [x] Sessions functionality
         * [x] Clip function
         * [x] Playback function
+          * [ ] Deep Integration
+          * [ ] Bookmarks
         * [x] Sorting function
       * [x] Clips functionality
         * [ ] Upload function
@@ -30,8 +32,8 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
   * [ ] Upload functionality
     * [ ] Streamable upload support
     * [ ] Youtube upload support
-    * [ ] Imgur upload support
     * [ ] Gfycat upload support
+    * [ ] Imgur upload support
     
 # Notable Issues
  * Currently none
