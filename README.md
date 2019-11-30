@@ -8,7 +8,7 @@ On 12/15/19, Plays.tv discontinued support to their website and desktop applicat
 This is a non-profit, community based project to extend the life of the Plays.tv client for future use.
 
 # Roadmap
-  * [ ] Patcher Executable
+  * [ ] Installer Executable
   * [x] Offline functionality
     * [x] Custom UI
       * [x] Sessions functionality
