@@ -1,4 +1,4 @@
-# RePlaysTV 3.0.1
+# RePlaysTV
 A client modification for Plays.tv
 
 This patches over the existing Plays.tv (3.0.0) software to give it a custom user interface with plenty of upload platforms.
