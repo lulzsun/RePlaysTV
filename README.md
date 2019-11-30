@@ -27,13 +27,13 @@ Currently in development, no releases. Currently based on Plays 2.2.0. Planning 
         * [x] Sorting function
       * [x] Settings functionality
         * [x] Settings detection
-      * [x] Automatic recording detection
-    * [ ] Clean up and delete plays.tv service related functions
+      * [x] Recording functionality
   * [ ] Upload functionality
-    * [ ] Streamable upload support
-    * [ ] Youtube upload support
-    * [ ] Gfycat upload support
-    * [ ] Imgur upload support
+    * [ ] Streamable
+    * [ ] Youtube
+    * [ ] Gfycat
+    * [ ] Imgur
+  * [ ] Clean up and delete plays.tv service related functions
     
 # Notable Issues
  * Currently none
