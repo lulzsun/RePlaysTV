@@ -29,8 +29,12 @@ This is a non-profit, community based project to extend the life of the Plays.tv
     * [ ] Youtube
     * [ ] Gfycat
     * [ ] Imgur
+  * [ ] Deep Integration
+	* [ ] League of Legends
+	* [ ] Counter-Strike Global Offensive
+	* [ ] Dota 2
   * [ ] Clean up and delete plays.tv service related functions
-    
+
 # Notable Issues
  * Currently none
 

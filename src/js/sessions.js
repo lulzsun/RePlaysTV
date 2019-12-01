@@ -1,0 +1,610 @@
+import {shell, ipcRenderer} from 'electron';
+import urljoin from 'url-join';
+import moment from 'moment';
+import shortid from 'shortid';
+import BaseService from '../../../../src/service/BaseService';
+import VideoService from '../../../../src/service/VideoService';
+import TranscoderService from '../../../../src/service/TranscoderService';
+import request from 'request-promise-native';
+
+import * as IPC from '../../../../src/core/IPCCapsule.js';
+
+const Settings = BaseService.getSettings();
+
+const vidList = document.getElementById('session-list-div');
+const apiBase = Settings.getMainSetting('api');
+const baseUrl = apiBase.baseurl;
+
+var _videos = [];
+var sortType = "Newest";
+var sortGame = "All Games";
+
+var continuePlay, sliding;
+var seeker, segments;
+var playClipped = false;
+var testSegments;
+const ZOOM = [100, 110, 125, 150, 175, 200, 250, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 7500, 10000];
+const videoSessDom = document.createElement('video'); //video playback on the editor
+
+TranscoderService.initialize();
+fetchAllVideos();
+
+ipcRenderer.on(IPC.LTC_VIDEO_TRANSCODING_STATUS,
+    (event, payload) => {
+        if(payload.status == "DONE") {
+            alert("Clip saved successfully!");
+        }
+    }
+);
+
+function doGet(urlPath) {
+return new Promise(
+    (accept) => {
+    request.get(urlPath).then(
+        (response) => {
+        accept(JSON.parse(response));
+        });
+    });
+}
+
+//editor tab
+$("#video-editor-div").mousedown( function (e) {
+    var element;
+    if($(e.target)[0].id == '' || $(e.target)[0].id =='sess-ClipsStamp'){
+        element = $(e.target)[0].parentElement;
+    }else element = $(e.target)[0];
+
+    if(e.which == 1) {
+        if(element.id.includes("sess-play-") || element.id.includes("sess-PlayPause")){
+            (videoSessDom.paused) ? continuePlay=true : continuePlay=false;
+            (videoSessDom.paused) ? videoSessDom.play() : videoSessDom.pause();
+            document.getElementById("sess-PlayPause").innerHTML = '';
+            const clickable = document.createElement('span');
+            (videoSessDom.paused) ? clickable.setAttribute('class', 'fa fa-play') : clickable.setAttribute('class', 'fa fa-pause');
+            document.getElementById("sess-PlayPause").append(clickable);
+        }
+        if(element.id.includes("sess-Rewind5")){
+            if(!(videoSessDom.currentTime < 5))
+                videoSessDom.currentTime -= 5;
+            else videoSessDom.currentTime = 0;
+        }
+        if(element.id.includes("sess-PlaySpeed")){
+            document.getElementById("sess-PlaySpeed").innerText = element.innerText;
+            videoSessDom.playbackRate = parseFloat(element.id.split("-")[2]);
+        }
+        if(element.id.includes("sess-Volume")){
+            element.oninput = function() {
+                videoSessDom.volume = element.value / 100;
+    
+                if(element.value > 50)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-up";
+                else if(element.value == 0)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-off";
+                else if(element.value < 50)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-down";
+            } 
+        }
+        if(element.id.includes("sess-AddClip"))
+            addClip();
+        if(element.id.includes("sess-PlayPauseClips"))
+            playPauseClips();
+        if(element.id.includes("sess-SaveClips"))
+            saveClips();
+        if(element.id.includes("sess-Bookmark"))
+            alert("Bookmarks and deep integration pins are work in progress");
+    }
+
+    if(element.id.includes("sess-Zoom")){
+        var index = parseInt(document.getElementById("sess-Zoomer").className.split("-")[1]);
+
+        if(element.id.includes("sess-ZoomOut")){
+            if((index-1) < 0) index = 0;
+            else index -= 1;
+        }
+        else if(element.id.includes("sess-ZoomIn")){
+            if((index+1) > ZOOM.length) index = ZOOM.length;
+            else index += 1;
+        }
+
+        document.getElementById("sess-Segments").style.width = ZOOM[index] + "%";
+        document.getElementById("sess-Seeker").style.width = ZOOM[index] + "%";
+
+        document.getElementById("sess-Zoomer").className = "index-" + (index);
+        document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
+
+        //scroll to zoomer, needs work
+        //var offset = document.getElementById("sess-Seeker").firstChild.childNodes[1].offsetLeft;
+        //document.getElementById("sess-SeekBar").scrollLeft = offset;
+        //console.log(offset);
+    }
+
+    if(e.which == 3 && element.className == "noUi-connects")
+    {
+        removeClip(element);
+    }
+});
+
+//sessions tab
+$("#sessions-div").mousedown( function (e) {
+    var element;
+    if($(e.target)[0].id == '' || $(e.target)[0].id =='sess-ClipsStamp'){
+        element = $(e.target)[0].parentElement;
+    }else element = $(e.target)[0];
+
+    if(e.which == 1) { //left click
+        if(element.id.includes("-CARD")) {
+            if(document.getElementById("session-play")  && videoSessDom.firstChild) { //if element exists
+                videoSessDom.removeChild(videoSessDom.firstChild); //remove src, so that new src can play
+            }
+            const id = element.id.split("-")[0];
+            openVideoEditor(getVideoById(id));
+        }
+        if(element.id.includes("-CBOX"))
+            console.log("clicked on video: " + element.id.split("-")[0]);
+        if(element.id.includes("sess-Sort-")) {
+            if(!element.id.split("-")[2].includes("Game|")) {
+                sortType = element.id.split("-")[2];
+                document.getElementById("sess-SortType").innerText = sortType + " First";
+            }
+            else {
+                sortGame = element.id.split("|")[1];
+                document.getElementById("sess-SortGame").innerText = sortGame;
+            }
+            fetchAllVideos(sortGame, sortType);
+        }
+    }
+});
+
+function removeClip(element) {
+
+}
+
+function addClip(){
+    const element = document.getElementById("sess-Segments");
+    var starts = segments.noUiSlider.get();
+    var connects = segments.noUiSlider.options.connect;
+
+    if(element.style.visibility == "hidden"){ //that means no clips exist, so we will prepare first clip
+        starts.pop();
+        starts.pop();
+        connects.pop();
+        connects.pop();
+        
+        element.style.visibility = "visible";
+        document.getElementById("sess-ClipAndSave").style.visibility = "visible";
+    }
+    const seekPos = parseFloat(seeker.noUiSlider.get());
+
+    for(var i=1; i<=starts.length+1; i+=2) {
+        if(starts[i] == null && starts[i+1] == null){ //when no other clips exist
+            console.log(starts[i] + ", " + starts[i+1]);
+            starts.push(seekPos, seekPos+10);
+            connects.push(true, false);
+            break;
+        }
+        else if((seekPos < starts[0]) && starts[1] != null){ //at the start, when another clip exists
+            alert("Currently, you cannot create a clip at the start when another clip exists\nClips must be created at the end\nSorry for the technical downgrade, issue is being worked on");
+            //pretty much the same issue as the issue below
+            break;
+        }
+        else if((seekPos > starts[i]) && (seekPos < starts[i+1])) { //when there is space between 2 clips
+            alert("Currently, you cannot create a clips between 2 clips\nClips must be created at the end\nSorry for the technical downgrade, issue is being worked on");
+            //console.log(starts[i] + ", " + starts[i+1]);
+            //starts.splice(i, 0, [seekPos, starts[i+1]]); why wont it splice?
+            //connects.push(true, false);
+            break;
+        }
+        else if((seekPos > starts[i-1]) && (seekPos < starts[i])) { //in the middle of a clip
+            alert("You cannot place a clip inside of a clip");
+            break;
+        }
+        else if(starts[i] != null && starts[i+1] == null){ //at the end
+            console.log(starts[i] + ", " + starts[i+1]);
+            starts.push(seekPos, seekPos+10);
+            connects.push(true, false);
+            break;
+        }
+    }
+
+    var options = {
+        start: starts,
+        connect: connects,
+        behaviour: 'drag', //-unconstrained
+        range: {
+            'min': [0],
+            'max': [videoSessDom.duration]
+        }
+    }
+    segments.noUiSlider.destroy();
+    noUiSlider.create(segments, options);
+
+    segments.noUiSlider.off('update'); //reset to prevent memory leaks
+    segments.noUiSlider.on('update', function () {
+        var numOfClips = segments.noUiSlider.get().length / 2;
+        var txt;
+        var duration = 0;
+
+        for(var i=0; i<segments.noUiSlider.get().length-1; i+=2) {
+            //console.log(segments.noUiSlider.get()[i+1] - segments.noUiSlider.get()[i]);
+            duration += (segments.noUiSlider.get()[i+1] - segments.noUiSlider.get()[i]);
+        }
+
+        duration = moment("2019-12-15 00:00:00").seconds(duration).format('HH:mm:ss').toString();
+    
+        if(duration.startsWith("00:")){
+            duration = duration.slice(3);
+        }else if(duration.startsWith("0")){
+            duration = duration.slice(1);
+        }
+
+        (numOfClips>1) ? txt=" Clips: " : txt=" Clip: ";
+        document.getElementById("sess-ClipsStamp").innerText = numOfClips + txt + duration;
+    });
+}
+
+function playPauseClips() {
+    playClipped = !playClipped;
+    if(playClipped){
+        testSegments = segments.noUiSlider.get();
+        videoSessDom.currentTime = segments.noUiSlider.get()[0];
+        videoSessDom.play();
+        document.getElementsByClassName("fa fa-play-circle")[0].className = "fa fa-pause-circle";
+    }else{
+        videoSessDom.pause();
+        document.getElementsByClassName("fa fa-pause-circle")[0].className = "fa fa-play-circle";
+    }
+}
+
+function saveClips(){
+    const id = videoSessDom.id.split("-")[2];
+    var testSegments = segments.noUiSlider.get();
+    var readySegments = new Array();
+
+    for(var i=0; i<testSegments.length; i+=2) {
+        if(testSegments[i+1] == null){
+            break;
+        }else{
+            readySegments.push({"duration" : (testSegments[i+1]*1000)-(testSegments[i]*1000), "start" : testSegments[i]*1000});
+        }
+    }
+
+    console.log(readySegments);
+    TranscoderService.beginCreateClipTask(shortid.generate(), getVideoById(id), readySegments).then(
+        (msg) => {
+          console.log("hello! ");
+          console.log(msg);
+    });
+    console.log("saving clips from video: " + getVideoById(id)._id);
+}
+
+$('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup if navigated out of editor
+    if(videoSessDom.paused == false) {
+        videoSessDom.pause();
+        document.getElementById("sess-PlayPause").innerHTML = '';
+        const clickable = document.createElement('span');
+        clickable.setAttribute('class', 'fa fa-play');
+        document.getElementById("sess-PlayPause").append(clickable);
+    }
+
+    if(document.getElementById("sess-Segments").style.visibility == 'visible') {
+        document.getElementById("sess-ClipAndSave").style.visibility = 'hidden';
+        document.getElementById("sess-Segments").style.visibility = 'hidden';
+    
+        segments.noUiSlider.destroy();
+        noUiSlider.create(segments, {
+            start: [0, 0],
+            connect: [false, true, false],
+            behaviour: 'drag',
+            range: {
+                'min': [0],
+                'max': [videoSessDom.duration]
+            }
+        });
+    }
+})
+
+videoSessDom.addEventListener('timeupdate', function(){
+    if(!sliding && seeker){
+        seeker.noUiSlider.set(videoSessDom.currentTime);
+    }else if(playClipped) playPauseClips();
+
+    if(playClipped){
+        for(var i=1; i<testSegments.length; i+=2) {
+            if(testSegments[i+1] == null){
+                if(videoSessDom.currentTime >= testSegments[i]) {
+                    playPauseClips();
+                    console.log("ended clip at: " + videoSessDom.currentTime);
+                    videoSessDom.currentTime = testSegments[i];
+                    break;
+                }
+            }else if(videoSessDom.currentTime >= testSegments[i]) {
+                console.log("ended clip at: " + videoSessDom.currentTime);
+                videoSessDom.currentTime = testSegments[i+1];
+                testSegments.splice(i,2);
+                break;
+            }
+        }
+    }
+
+    var currentTime = moment("2019-12-15 00:00:00").seconds(videoSessDom.currentTime).format('HH:mm:ss').toString();
+    var duration = moment("2019-12-15 00:00:00").seconds(videoSessDom.duration).format('HH:mm:ss').toString();
+
+    if(duration.startsWith("00:")){
+        duration = duration.slice(3);
+        currentTime = currentTime.slice(3);
+    }else if(duration.startsWith("0")){
+        duration = duration.slice(1);
+        currentTime = currentTime.slice(1);
+    }
+
+    document.getElementById("sess-TimeStamp").innerText = currentTime + " / " + duration;
+})
+
+videoSessDom.addEventListener('loadeddata', function() {
+    if(!seeker) {
+        seeker = $('#sess-Seeker')[0];
+        noUiSlider.create(seeker, {
+            start: [0],
+            behaviour: 'tap',
+            range: {
+                'min': [0],
+                'max': [videoSessDom.duration]
+            }
+        });
+        seeker.noUiSlider.set(0);
+        segments = $('#sess-Segments')[0];
+        noUiSlider.create(segments, {
+            start: [0, 0],
+            connect: [false, true, false],
+            behaviour: 'drag',
+            range: {
+                'min': [0],
+                'max': [videoSessDom.duration]
+            }
+        });
+    } else {
+        seeker.noUiSlider.off();
+        seeker.noUiSlider.updateOptions({
+            range: {
+                'min': [0],
+                'max': [videoSessDom.duration]
+            }
+        });
+        seeker.noUiSlider.set(0);
+        segments.noUiSlider.off();
+        segments.noUiSlider.updateOptions({
+            range: {
+                'min': [0],
+                'max': [videoSessDom.duration]
+            }
+        });
+    }
+    
+    seeker.noUiSlider.on('start', function () {
+        sliding = true;
+        videoSessDom.pause();
+    });
+
+    seeker.noUiSlider.on('end', function () {
+        sliding = false;
+        if(continuePlay)
+            videoSessDom.play();
+    });
+
+    seeker.noUiSlider.on('slide', function () {
+        if(videoSessDom.currentTime != seeker.noUiSlider.get())
+            videoSessDom.currentTime = seeker.noUiSlider.get();
+    });
+ }, false);
+
+function openVideoEditor(video) {
+    //console.log(video.url);
+    const videoSource = document.createElement('source');
+    videoSessDom.setAttribute('id', `sess-play-${video.id}`);
+    videoSource.setAttribute('src', video.url);
+    videoSessDom.setAttribute('style', "height: calc(100vh - 160px);width: 100%");
+    videoSessDom.setAttribute('preload', 'auto');
+    videoSessDom.appendChild(videoSource);
+    videoSessDom.setAttribute('class', 'vid-vid');
+
+    const clickable = document.createElement('a');
+    clickable.setAttribute('id', "session-play");
+    clickable.setAttribute('href', '#');
+    clickable.appendChild(videoSessDom);
+
+    document.getElementById('sess-video-view').innerHTML = '';
+    document.getElementById('sess-video-view').append(clickable);
+    document.getElementById(`sess-play-${video.id}`).load();
+
+    $("#v-pills-video-editor-tab").click();
+}
+
+function getVideoById(id) {
+    for (var i = 0; i < _videos.length; i++) {
+        if (_videos[i].id === id){
+            return _videos[i];
+        }
+    }
+}
+
+function fetchAllVideos(game=null, type=null) {
+    var totalSize = 0;
+    document.getElementById("sess-TotalSize").innerText = '';
+    doGet(urljoin(baseUrl, 'api/recordings')).then(
+        (videos) => {
+        vidList.innerHTML = '';
+        videos
+            .sort(function(left, right){
+                if(type == "Smallest")
+                    return left.fileSizeBytes - right.fileSizeBytes;
+                else if(type == "Largest")
+                    return right.fileSizeBytes - left.fileSizeBytes;
+                else if(type == "Oldest")
+                    return left.createdTime - right.createdTime;
+                else
+                    return right.createdTime - left.createdTime;
+            })
+            .forEach(
+            (video) => {
+                if(video.type != "clipped") {
+                    if(document.getElementById("sess-Sort-Game|" + video.game.title) == null) {
+                        const clickable = document.createElement('a');
+                        clickable.setAttribute('id', 'sess-Sort-Game|' + video.game.title);
+                        clickable.setAttribute('class', 'dropdown-item');
+                        clickable.setAttribute('href', '#');
+                        clickable.innerText = video.game.title;
+                        document.getElementById("sess-SortGameContainer").append(clickable);
+                    }
+                    if(game && game != "All Games") {
+                        if(video.game.title == game) {
+                            //console.log('Fetched video.id=%s', video.id);
+                            video._id = video.id;
+                            const newVidDom = makeVidDOM(video);
+                            vidList.appendChild(newVidDom);
+                            _videos.push(video);
+                            totalSize += parseFloat((video.fileSizeBytes * 0.000000001));
+                        }
+                    }
+                    else {
+                        //console.log('Fetched video.id=%s', video.id);
+                        video._id = video.id;
+                        const newVidDom = makeVidDOM(video);
+                        vidList.appendChild(newVidDom);
+                        _videos.push(video);
+                        totalSize += parseFloat((video.fileSizeBytes * 0.000000001));
+                    }
+                }
+            });
+            document.getElementById("sess-TotalSize").innerText = totalSize.toFixed(2) + " GB";
+        }
+    );
+}
+
+function makeVidDOM(video) {
+    const _card_id = video.id + "-CARD";
+    const _cbox_id = video.id + "-CBOX";
+    const _dmenu_id = video.id + "-DMENU";
+
+    const result = document.createElement('div');
+    result.setAttribute('class', 'col-xl-3 col-md-5 mb-4');
+    result.setAttribute('id', video.id);
+    
+    const card = document.createElement('div');
+    card.setAttribute('class', 'card h-100');
+    result.append(card);
+
+    const card_img = document.createElement('img');
+    card_img.setAttribute('class', 'card-img-top');
+    card_img.setAttribute('src', video.posterUrl);
+    card_img.setAttribute('alt', 'Missing Thumbnail');
+    card.append(card_img);
+
+    const card_hover1 = document.createElement('div');
+    card_hover1.setAttribute('class', 'card-img-overlay d-flex flex-column justify-content-between');
+    card.append(card_hover1);
+
+    const card_hover2 = document.createElement('h5');
+    card_hover2.setAttribute('class', 'row justify-content-between');
+    card_hover1.append(card_hover2);
+
+    const clickable = document.createElement('a');
+    clickable.setAttribute('class', 'stretched-link');
+    clickable.setAttribute('id', _card_id);
+    clickable.setAttribute('href', '#');
+    card_hover1.append(clickable);
+
+    const card_hover_ctrl1 = document.createElement('div');
+    card_hover_ctrl1.setAttribute('class', 'custom-control custom-checkbox');
+    card_hover_ctrl1.setAttribute('style', 'z-index:10; width:0px; margin-left:15px');
+    card_hover2.append(card_hover_ctrl1);
+
+    const card_hover_cbox1 = document.createElement('input');
+    card_hover_cbox1.setAttribute('class', 'custom-control-input');
+    card_hover_cbox1.setAttribute('type', 'checkbox');
+    card_hover_cbox1.setAttribute('id', _cbox_id);
+    card_hover_ctrl1.append(card_hover_cbox1);
+
+    const card_hover_cbox2 = document.createElement('label');
+    card_hover_cbox2.setAttribute('class', 'custom-control-label');
+    card_hover_cbox2.setAttribute('for', _cbox_id);
+    card_hover_ctrl1.append(card_hover_cbox2);
+
+    const card_hover_ctrl2 = document.createElement('div');
+    card_hover_ctrl2.setAttribute('class', 'dropdown show');
+    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:15px');
+    card_hover2.append(card_hover_ctrl2);
+
+    const card_hover_dmenu1 = document.createElement('a');
+    card_hover_dmenu1.setAttribute('href', '#');
+    card_hover_dmenu1.setAttribute('role', 'button');
+    card_hover_dmenu1.setAttribute('data-toggle', 'dropdown');
+    card_hover_dmenu1.setAttribute('aria-haspopup', 'true');
+    card_hover_dmenu1.setAttribute('aria-expanded', 'false');
+    card_hover_dmenu1.setAttribute('id', _dmenu_id);
+    card_hover_ctrl2.append(card_hover_dmenu1);
+
+    const card_hover_dmenu1_sub1 = document.createElement('i');
+    card_hover_dmenu1_sub1.setAttribute('class', 'fa fa-ellipsis-v');
+    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px');
+    card_hover_dmenu1.append(card_hover_dmenu1_sub1);
+
+    const card_hover_dmenu2 = document.createElement('div');
+    card_hover_dmenu2.setAttribute('class', 'dropdown-menu');
+    card_hover_dmenu2.setAttribute('aria-labelledby', _dmenu_id);
+    card_hover_ctrl2.append(card_hover_dmenu2);
+
+    const card_hover_dmenu2_sub1 = document.createElement('a');
+    card_hover_dmenu2_sub1.setAttribute('class', 'dropdown-item');
+    card_hover_dmenu2_sub1.setAttribute('href', '#');
+    card_hover_dmenu2_sub1.append('Show In Folder');
+    card_hover_dmenu2_sub1.onclick = () => shell.showItemInFolder(video.filePath);
+    card_hover_dmenu2.append(card_hover_dmenu2_sub1);
+
+    const card_hover_dmenu2_sub2 = document.createElement('a');
+    card_hover_dmenu2_sub2.setAttribute('class', 'dropdown-item');
+    card_hover_dmenu2_sub2.setAttribute('href', '#');
+    card_hover_dmenu2_sub2.append('Delete');
+    card_hover_dmenu2_sub2.onclick = () => deleteVideo(video.id);
+    card_hover_dmenu2.append(card_hover_dmenu2_sub2);
+
+    const card_body = document.createElement('div');
+    card_body.setAttribute('class', 'card-body');
+    card_body.setAttribute('style', '10px;padding-bottom: 0px;padding-left: 10px;padding-right: 10px;');
+    card.append(card_body);
+
+    const card_title = document.createElement('p');
+    card_title.setAttribute('class', 'card-title');
+    card_title.setAttribute('style', 'margin-bottom: 5px;');
+    const icon = document.createElement('i');
+    icon.setAttribute('class', 'fa fa-video');
+    card_title.append(icon);
+    card_title.append(" " + (video.game || {}).title || 'Game Unknown');
+    card_body.append(card_title);
+
+    const card_subtitle = document.createElement('p');
+    card_subtitle.setAttribute('class', 'card-subtitle mb-2 text-muted');
+    card_subtitle.append(moment(video.createdTime).format('YYYY/MM/DD | hh:mm A | ' + (video.fileSizeBytes * 0.000000001).toFixed(2) + ' GB'));
+    card_body.append(card_subtitle);
+    return result;
+}
+
+function deleteVideo(videoId) {
+    VideoService.getVideo(videoId).then(
+        (video) => {
+        if (!video) {
+            console.log(`Did not find video ${videoId}`);
+            return;
+        }
+        const confirmString = `Are you certain you want to delete ${video.fileName}? It will also delete the file`;
+        // eslint-disable-next-line no-alert
+        if (window.confirm(confirmString)) {
+            console.log(`Deleting video ${video._id} - ${video.fileName}`);
+            VideoService.deleteVideos([videoId]).then(
+            (docs) => {
+                console.log(`Successfully deleted ${docs.length} documents`);
+                document.getElementById(videoId).remove();
+            }
+            );
+        }
+    });
+}
