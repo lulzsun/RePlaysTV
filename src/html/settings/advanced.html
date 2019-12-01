@@ -1,0 +1,100 @@
+<h5>Folders</h5>
+<h6>Game Recordings Directory</h6>
+<div>
+    <div class="custom-control custom-file" style="float: left; width: 75%">
+        <input id="customFile" type="file" webkitdirectory directory multiple class="custom-file-input">
+        <label for="customFile" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
+    </div>
+    <div>
+        <button id="sett-" class="btn btn-secondary" type="button">
+            Open Folder
+        </button>
+    </div>
+</div>
+
+<h6>&nbsp;</h6>
+<h6>Temporary Video Directory</h6>
+<div>
+    <div class="custom-control custom-file" style="float: left; width: 75%">
+        <input id="customFile" type="file" webkitdirectory directory multiple class="custom-file-input">
+        <label for="customFile" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
+    </div>
+    <div>
+        <button id="sett-" class="btn btn-secondary" type="button">
+            Open Folder
+        </button>
+    </div>
+</div>
+
+<h6>&nbsp;</h6>
+<h6>Additional Video Folders</h6>
+<a>Add folders to sync additional videos to your sessions.</a><br>
+<button id="sett-" class="btn btn-secondary" type="button">
+    Add Folder
+</button>
+
+<h5>&nbsp;</h5>
+<h5>Storage</h5>
+<div class="custom-control custom-checkbox">
+    <input id="sett-" type="checkbox" class="custom-control-input">
+    <label for="sett-" class="custom-control-label">Auto Manage Space</label><br>
+    <a>Your oldest recordings will be automatically deleted as new sessions are recorded.</a><br>
+</div>
+<div class="custom-control custom-radio" style="padding-left: 80px;">
+    <input id="sett-" type="radio" name="customRadio" class="custom-control-input">
+    <label for="sett-" class="custom-control-label">
+    <b>Default</b>
+    <br><a>Recordings will be deleted when they surpass 90% of available space.</a>
+    </label>
+</div>
+<div class="custom-control custom-radio" style="padding-left: 80px;">
+    <input id="sett-" type="radio" name="customRadio" class="custom-control-input">
+    <label for="sett-" class="custom-control-label">
+    <b>Custom</b>
+    <br><a>Set limits for storage space and how long to keep your recordings.</a>
+    </label>
+</div>
+<br>
+<div style="padding-left: 80px;">
+    <div style="float: left;padding-right: 15px;">
+        <b>Storage Space</b>
+        <br>
+        <input type="number" class="form-control" id="replyNumber" style="float: left;width: 120px;height: 35px;">
+        <div style="float:left;padding-top: 6px;padding-left: 6px;">
+            <b>GB</b>
+        </div>
+    </div>
+    <div>
+        <b>Keep Recordings for</b>
+        <br>
+        <input type="number" class="form-control" id="replyNumber" style="float: left;width: 120px;height: 35px;">
+        <div style="float:left;padding-top: 6px;padding-left: 6px;">
+            <b>Days</b>
+        </div>
+    </div>
+</div>
+<br>
+
+<h5>&nbsp;</h5>
+<h5>Manage Games</h5>
+<a>Add .exe files to these lists to manage what is and isn't recorded.</a><br>
+<p>&nbsp;</p>
+<h6>Custom Recorded Games</h6>
+<a>Indicate which games you'd like Plays to try to record. In some cases, this will solve recording issues.</a><br>
+<div class="row" style="padding-left: 15px;">
+    <div>
+        <button id="sett-" class="btn btn-secondary" type="button">
+            Add Game
+        </button>
+    </div>
+</div>
+<p>&nbsp;</p>
+<h6>Never Record These Games</h6>
+<a>The list of games that Plays will never record.</a><br>
+<div class="row" style="padding-left: 15px;">
+    <div>
+        <button id="sett-" class="btn btn-secondary" type="button">
+            Add Game
+        </button>
+    </div>
+</div>

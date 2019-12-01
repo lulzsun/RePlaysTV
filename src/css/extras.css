@@ -1,0 +1,39 @@
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height:
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    /*border-radius: 20px;*/
+}
+
+::-webkit-scrollbar-track {
+    background: #282828;
+    /*border-radius: 20px;*/
+}
+
+.responsive-deck > div[class*='col-'] {
+    display: flex;
+    flex:1 0 auto;
+}
+
+div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
+    background: red;
+}
+
+.card-img-overlay>h5{
+    visibility: hidden;
+}
+
+.card-img-overlay:hover h5, .card-img-overlay:hover p{
+    visibility: visible;
+}

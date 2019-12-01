@@ -1,7 +1,7 @@
 # RePlaysTV
 A client modification for Plays.tv
 
-This patches over the existing Plays.tv (3.0.0) software to give it a custom user interface with plenty of upload platforms.
+This patches over the existing Plays.tv software to give it a custom user interface with plenty of upload platforms.
 
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
 
@@ -29,6 +29,10 @@ This is a non-profit, community based project to extend the life of the Plays.tv
     * [ ] Youtube
     * [ ] Gfycat
     * [ ] Imgur
+  * [ ] Deep Integration
+    * [ ] League of Legends
+    * [ ] Counter-Strike Global Offensive
+    * [ ] Dota 2
   * [ ] Clean up and delete plays.tv service related functions
     
 # Notable Issues
