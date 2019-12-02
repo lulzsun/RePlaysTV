@@ -35,40 +35,36 @@
     N/A
 </button>
 
-<button id="debugger" class="btn btn-secondary" type="button">
-    DEBUG
-</button>
-
 <h5>&nbsp;</h5>
 <h5>Replay Tools</h5>
 <h6>Clip</h6>
 <a>Save clips of what just happened while you are in game.</a><br>
-<div class="custom-control custom-checkbox">
-    <input id="sett-" type="checkbox" class="custom-control-input">
+<div class="custom-control custom-checkbox" hidden>
+    <input id="sett-" type="checkbox" class="custom-control-input" disabled>
     <label for="sett-" class="custom-control-label">Automatically Upload Clips</label>
 </div>
 <div>
     <div style="float: left; padding-right: 3px;">
         <b>Clip Length</b>
         <br>
-        <button id="sagfhdfhdhf" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button id="sett-highlightLengthSecs" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             30 Seconds
         </button>
-        <div class="dropdown-menu" aria-labelledby="autoStartApp">
-            <a id="sett-" class="dropdown-item" href="#">5 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">10 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">15 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">20 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">25 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">30 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">60 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">90 Seconds</a>
+        <div class="dropdown-menu">
+            <a id="sett-highlightLengthSecs-5" class="dropdown-item" href="#">5 Seconds</a>
+            <a id="sett-highlightLengthSecs-10" class="dropdown-item" href="#">10 Seconds</a>
+            <a id="sett-highlightLengthSecs-15" class="dropdown-item" href="#">15 Seconds</a>
+            <a id="sett-highlightLengthSecs-20" class="dropdown-item" href="#">20 Seconds</a>
+            <a id="sett-highlightLengthSecs-25" class="dropdown-item" href="#">25 Seconds</a>
+            <a id="sett-highlightLengthSecs-30" class="dropdown-item" href="#">30 Seconds</a>
+            <a id="sett-highlightLengthSecs-60" class="dropdown-item" href="#">60 Seconds</a>
+            <a id="sett-highlightLengthSecs-90" class="dropdown-item" href="#">90 Seconds</a>
         </div>
     </div>
     <div>
         <b>Save a Clip</b>
         <br>
-        <button id="sett-" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
+        <button id="sett-keybindSaveHighlight" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
             N/A
         </button>
     </div>
@@ -79,7 +75,7 @@
 <a>Bookmark a moment in game to find it later in your recording</a><br>
 <b>Add Bookmark</b>
 <br>
-<button id="sett-" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
+<button id="sett-keybindBookmark" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
     N/A
 </button>
 
@@ -90,24 +86,24 @@
     <div style="float: left; padding-right: 3px;">
         <b>Replay Length</b>
         <br>
-        <button id="sagfhdfhdhf" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button id="sett-instantReplayLengthSecs" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             30 Seconds
         </button>
-        <div class="dropdown-menu" aria-labelledby="autoStartApp">
-            <a id="sett-" class="dropdown-item" href="#">5 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">10 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">15 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">20 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">25 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">30 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">60 Seconds</a>
-            <a id="sett-" class="dropdown-item" href="#">90 Seconds</a>
+        <div class="dropdown-menu">
+            <a id="sett-instantReplayLengthSecs-5" class="dropdown-item" href="#">5 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-10" class="dropdown-item" href="#">10 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-15" class="dropdown-item" href="#">15 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-20" class="dropdown-item" href="#">20 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-25" class="dropdown-item" href="#">25 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-30" class="dropdown-item" href="#">30 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-60" class="dropdown-item" href="#">60 Seconds</a>
+            <a id="sett-instantReplayLengthSecs-90" class="dropdown-item" href="#">90 Seconds</a>
         </div>
     </div>
     <div>
         <b>Watch Replay</b>
         <br>
-        <button id="sett-" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
+        <button id="sett-keybindInstantReplay" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
             N/A
         </button>
     </div>
@@ -116,20 +112,20 @@
 <h5>&nbsp;</h5>
 <h5>Quality Presets</h5>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-qualityPresets" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Low</label>
+    <input id="sett-qualityPresets-low" type="radio" name="sett-qualityPresets" class="custom-control-input">
+    <label for="sett-qualityPresets-low" class="custom-control-label">Low</label>
 </div>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-qualityPresets" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Medium</label>
+    <input id="sett-qualityPresets-med" type="radio" name="sett-qualityPresets" class="custom-control-input">
+    <label for="sett-qualityPresets-med" class="custom-control-label">Medium</label>
 </div>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-qualityPresets" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">High</label>
+    <input id="sett-qualityPresets-high" type="radio" name="sett-qualityPresets" class="custom-control-input">
+    <label for="sett-qualityPresets-high" class="custom-control-label">High</label>
 </div>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-qualityPresets" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Custom</label>
+    <input id="sett-qualityPresets-cust" type="radio" name="sett-qualityPresets" class="custom-control-input">
+    <label for="sett-qualityPresets-cust" class="custom-control-label">Custom</label>
 </div>
 <a>&nbsp;</a>
 <br>
@@ -137,44 +133,44 @@
     <div style="float: left; padding-right: 25px;">
         <b>Video Resolution</b>
         <br>
-        <button id="sagfhdfhdhf" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button id="sett-videoResolution" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             1080p
         </button>
-        <div class="dropdown-menu" aria-labelledby="autoStartApp">
-            <a id="sett-" class="dropdown-item" href="#">480p</a>
-            <a id="sett-" class="dropdown-item" href="#">720p</a>
-            <a id="sett-" class="dropdown-item" href="#">1080p</a>
+        <div class="dropdown-menu">
+            <a id="sett-videoResolution-480" class="dropdown-item" href="#">480p</a>
+            <a id="sett-videoResolution-720" class="dropdown-item" href="#">720p</a>
+            <a id="sett-videoResolution-1080" class="dropdown-item" href="#">1080p</a>
         </div>
     </div>
     <div style="float: left; padding-right: 40px;">
         <b>Framerate</b>
         <br>
-        <button id="sagfhdfhdhf" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button id="sett-videoFramerate" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             60fps
         </button>
-        <div class="dropdown-menu" aria-labelledby="autoStartApp">
-            <a id="sett-" class="dropdown-item" href="#">15fps</a>
-            <a id="sett-" class="dropdown-item" href="#">30fps</a>
-            <a id="sett-" class="dropdown-item" href="#">60fps</a>
+        <div class="dropdown-menu">
+            <a id="sett-videoFramerate-15" class="dropdown-item" href="#">15fps</a>
+            <a id="sett-videoFramerate-30" class="dropdown-item" href="#">30fps</a>
+            <a id="sett-videoFramerate-60" class="dropdown-item" href="#">60fps</a>
         </div>
     </div>
     <div>
         <b>Bitrate</b>
         <br>
-        <button id="sagfhdfhdhf" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button id="sett-videoBitrate" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             50Mbps
         </button>
-        <div class="dropdown-menu" aria-labelledby="autoStartApp">
-            <a id="sett-" class="dropdown-item" href="#">5Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">10Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">15Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">20Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">25Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">30Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">35Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">40Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">45Mbps</a>
-            <a id="sett-" class="dropdown-item" href="#">50Mbps</a>
+        <div class="dropdown-menu">
+            <a id="sett-videoBitrate-5" class="dropdown-item" href="#">5Mbps</a>
+            <a id="sett-videoBitrate-10" class="dropdown-item" href="#">10Mbps</a>
+            <a id="sett-videoBitrate-15" class="dropdown-item" href="#">15Mbps</a>
+            <a id="sett-videoBitrate-20" class="dropdown-item" href="#">20Mbps</a>
+            <a id="sett-videoBitrate-25" class="dropdown-item" href="#">25Mbps</a>
+            <a id="sett-videoBitrate-30" class="dropdown-item" href="#">30Mbps</a>
+            <a id="sett-videoBitrate-35" class="dropdown-item" href="#">35Mbps</a>
+            <a id="sett-videoBitrate-40" class="dropdown-item" href="#">40Mbps</a>
+            <a id="sett-videoBitrate-45" class="dropdown-item" href="#">45Mbps</a>
+            <a id="sett-videoBitrate-50" class="dropdown-item" href="#">50Mbps</a>
         </div>
     </div>
 </div>
@@ -182,10 +178,10 @@
 <h5>&nbsp;</h5>
 <h5>Recording Display Options</h5>
 <div class="custom-control custom-checkbox">
-    <input id="sett-" type="checkbox" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Record Game Mouse Cursor</label>
+    <input id="sett-recordMouseCursor" type="checkbox" class="custom-control-input">
+    <label for="sett-recordMouseCursor" class="custom-control-label">Record Game Mouse Cursor</label>
 </div>
 <div class="custom-control custom-checkbox">
-    <input id="sett-" type="checkbox" class="custom-control-input" disabled>
-    <label for="sett-" class="custom-control-label">Record Webcam</label>
+    <input id="sett-webcamEnabled" type="checkbox" class="custom-control-input">
+    <label for="sett-webcamEnabled" class="custom-control-label">Record Webcam</label>
 </div>

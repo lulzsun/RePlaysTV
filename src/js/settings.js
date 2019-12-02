@@ -1,3 +1,4 @@
+import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
     SETTING_MAIN_AUTO_START_APP,
     SETTING_MAIN_DETECT_ELEVATED_PROCESSES,
@@ -26,7 +27,7 @@ import GameDVRService, {
     SETTING_AUDIO_GAME_ENABLED,
     SETTING_AUDIO_MIC_ENABLED,
     SETTING_AUDIO_MIC_RECORDING_MODE,
-    SETTING_AUDIO_SPECTATE_SFX_VOLUME,
+    //SETTING_AUDIO_SPECTATE_SFX_VOLUME, useless, but keeping for future purposes
     SETTING_AUDIO_VOLUME_GAME_AUDIO,
     SETTING_AUDIO_VOLUME_MICROPHONE,
     SETTING_AUTO_DELETE_ON_SHARE,
@@ -53,6 +54,9 @@ import GameDVRService, {
     SETTING_WEBCAM_LOCATION,
     SETTING_WEBCAM_OPACITY,
 } from '../../../../src/service/GameDVRService';
+//import { SETTING_RECORD_GAME_MOUSE_CURSOR } from '../../../../src/service/Analytics/Consts';
+const {shell} = require('electron');
+import shortid from 'shortid';
 
 var keyboardMap = [
     "", // [0]
@@ -331,9 +335,51 @@ const GENERAL = [
 ]
 
 const VIDEO = [
+    SETTING_VIDEO_RECORDING_MODE, //currently not used, but keeping it here for future purposes?
     SETTING_AUTO_RECORD,
     SETTING_MANUAL_RECORD,
     SETTING_KB_START_STOP_REC,
+    SETTING_AUTO_UPLOAD_CLIP,   //this is disabled for now, since it will try to upload to plays.
+    SETTING_HIGHLIGHT_LENGTH_SECS, //replay
+    SETTING_KB_SAVE_HIGHLIGHT,
+    SETTING_KB_BOOKMARK,
+    SETTING_IR_LENGTH_SECS,
+    SETTING_KB_INSTANT_REPLAY,
+    SETTING_VIDEO_RESOLUTION,
+    SETTING_VIDEO_FRAMERATE,
+    SETTING_VIDEO_BITRATE,
+    SETTING_RECORD_MOUSE_CURSOR,
+    //SETTING_RECORD_GAME_MOUSE_CURSOR, //what is the difference of the one above?
+    SETTING_WEBCAM_ENABLED,
+    //SETTING_WEBCAM_DEVICE_ID, //currently not used, only because lazy to make the elements for the settings, sorry!
+    //SETTING_WEBCAM_LOCATION,  //TO DO: add these later
+    //SETTING_WEBCAM_OPACITY,   //TO DO: add these later
+]
+
+const AUDIO = [
+    SETTING_AUDIO_GAME_ENABLED,
+    SETTING_KB_TOGGLE_MUTE_AUDIO,
+    SETTING_AUDIO_VOLUME_GAME_AUDIO,
+    SETTING_AUDIO_MIC_ENABLED,
+    SETTING_AUDIO_DEVICES_MICROPHONE,
+    SETTING_AUDIO_MIC_RECORDING_MODE,
+    SETTING_AUDIO_VOLUME_MICROPHONE,
+    SETTING_KB_TOGGLE_MUTE_MIC,
+    SETTING_KB_PUSH_TO_TALK,
+]
+
+const UPLOAD = [
+    
+]
+
+const ADVANCED = [
+    SETTING_MAIN_VIDEO_SAVE_DIR,
+    SETTING_MAIN_VIDEO_TMP_DIR,
+    SETTING_EXTERNAL_VIDEO_DIRS,
+    SETTING_AUTO_MANAGE_VIDEOS,
+    SETTING_AUTO_MANAGE_TYPE,
+    SETTING_AUTO_MANAGE_DISKSPACE_THRESHOLD,
+    SETTING_AUTO_MANAGE_TIMESTAMP_THRESHOLD,
 ]
 
 function init() {
@@ -346,10 +392,16 @@ function init() {
     $("#settings-news-div").load("./html/settings/news.html"); 
     $("#settings-help-div").load("./html/settings/help.html"); 
     SettingsService.init();
-    initGeneral();
-    initVideo(); 
+    setTimeout(function(){ //sometimes the html loads slower than these functions
+        initGeneral();
+        initVideo(); 
+        initAudio(); 
+        initUpload();
+        initAdvanced();
+    }, 1000);
 }
 
+var externalFolders;
 function initGeneral(){
     SettingsService.getSettings(GENERAL).then((setting) => {
         if(setting){
@@ -361,7 +413,7 @@ function initGeneral(){
             $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
             $('#sett-showRecordingTimer').prop('checked', setting.showRecordingTimer); 
             console.log(setting);
-        }else console.error("General setting missing?");
+        }else console.error("General settings missing?");
     })
 }
 
@@ -373,9 +425,113 @@ function initVideo(){
             if(!setting.manualRecord && !setting.autoRecord)
                 $('#sett-offRecord').prop('checked', true); 
             document.getElementById("sett-keybindStartStopRec").innerText = setting.keybindStartStopRec;
+            document.getElementById("sett-highlightLengthSecs").innerText = setting.highlightLengthSecs + " Seconds";
+            document.getElementById("sett-keybindSaveHighlight").innerText = setting.keybindSaveHighlight;
+            document.getElementById("sett-keybindBookmark").innerText = setting.keybindBookmark;
+            document.getElementById("sett-instantReplayLengthSecs").innerText = setting.instantReplayLengthSecs + " Seconds";
+            document.getElementById("sett-keybindInstantReplay").innerText = setting.keybindInstantReplay;
+            if(setting.videoFramerate == 30){
+                if(setting.videoResolution == 480 && setting.videoBitrate == 5) 
+                    $('#sett-qualityPresets-low').prop('checked', true); 
+                else if(setting.videoResolution == 720 && setting.videoBitrate == 10) 
+                    $('#sett-qualityPresets-med').prop('checked', true); 
+                else if(setting.videoResolution == 1080 && setting.videoBitrate == 15) 
+                    $('#sett-qualityPresets-med').prop('checked', true); 
+                else 
+                    $('#sett-qualityPresets-cust').prop('checked', true); 
+            }else $('#sett-qualityPresets-cust').prop('checked', true); 
+            document.getElementById("sett-videoResolution").innerText = setting.videoResolution + "p";
+            document.getElementById("sett-videoFramerate").innerText = setting.videoFramerate + "fps";
+            document.getElementById("sett-videoBitrate").innerText = setting.videoBitrate + "Mbps";
+            $('#sett-recordMouseCursor').prop('checked', setting.recordMouseCursor); 
+            $('#sett-webcamEnabled').prop('checked', setting.webcamEnabled); 
             // $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
             console.log(setting);
-        }else console.error("Video setting missing?");
+        }else console.error("Video settings missing?");
+    })
+}
+
+function initAudio(){
+    SettingsService.getSettings(AUDIO).then((setting) => {
+        if(setting){
+            $('#sett-audioGameEnabled').prop('checked', setting.audioGameEnabled); 
+            document.getElementById("sett-audioRecordVolumeGameAudio").value = setting.audioRecordVolumeGameAudio*100;
+            document.getElementById("gameAudioLabel").innerText = setting.audioRecordVolumeGameAudio*100 + "%"
+            document.getElementById("sett-keybindToggleMuteAudio").innerText = setting.keybindToggleMuteAudio;
+            document.getElementById("sett-audioRecordVolumeMicrophone").value = setting.audioRecordVolumeMicrophone*100;
+            document.getElementById("micAudioLabel").innerText = setting.audioRecordVolumeMicrophone*100 + "%"
+            document.getElementById("sett-audioRecordingDevices").innerText = setting.audioRecordingDevices[0].label.substring(0,35);
+            SettingsService.getAudioInputDevices().then((result) => {
+                result.forEach((device) => {
+                    const mic = document.createElement('a');
+                    mic.setAttribute('id', "sett-audioRecordingDevices-" + device.deviceId);
+                    mic.setAttribute('class', 'dropdown-item');
+                    mic.setAttribute('href', '#');
+                    mic.innerText = device.label;
+                    document.getElementById("micDeviceList").append(mic);
+                });
+            });
+            $('#sett-audioMicrophoneRecordingMode-'+setting.audioMicrophoneRecordingMode).prop('checked', setting.audioMicrophoneRecordingMode);
+            if(setting.audioMicrophoneRecordingMode == "push_to_talk") 
+                document.getElementById("sett-keybindToggleMuteMic").innerText = setting.keybindPushToTalk;
+            else
+                document.getElementById("sett-keybindToggleMuteMic").innerText = setting.keybindToggleMuteMic;
+            console.log(setting);
+        }else console.error("Audio settings missing?");
+    });
+}
+
+function initUpload(){
+
+}
+
+function initAdvanced(){
+    SettingsService.getSettings(ADVANCED).then((setting) => {
+        if(setting){
+            externalFolders = setting.externalFolders;
+            if(externalFolders.length != 0)
+                externalFolders.forEach(folder => addExternalFolder(folder));
+            $('#sett-videoSaveDirectory').next('.custom-file-label').html(setting.videoSaveDirectory);
+            $('#sett-videoTmpDirectory').next('.custom-file-label').html(setting.videoTmpDirectory);
+            $('#sett-autoManageVideos').prop('checked', setting.autoManageVideos); 
+            if(!setting.autoManageVideos)
+                document.getElementById("autoManage").style.display = "none";
+            $('#sett-autoManageType-'+setting.autoManageType).prop('checked', setting.autoManageType);
+            if(setting.autoManageType == "default")
+                document.getElementById("autoManageCustom").style.display = "none";
+            document.getElementById("sett-autoManageDiskspaceThreshold").value = setting.autoManageDiskspaceThreshold;
+            document.getElementById("sett-autoManageTimestampThreshold").value = setting.autoManageTimestampThreshold;
+            console.log(setting);
+        }else console.error("Advanced settings missing?");
+    });
+
+    $('#sett-videoSaveDirectory').on('change',function(e){
+        var fileName = e.target.files[0].path;
+        $(this).next('.custom-file-label').html(fileName);
+        SettingsService.setSetting(SETTING_MAIN_VIDEO_SAVE_DIR, fileName);
+    })
+
+    $('#sett-videoTmpDirectory').on('change',function(e){
+        var fileName = e.target.files[0].path;
+        $(this).next('.custom-file-label').html(fileName);
+        SettingsService.setSetting(SETTING_MAIN_VIDEO_TMP_DIR, fileName);
+    })
+
+    $('#sett-addExternalFolder').on('input',function(event){
+        externalFolders.push(event.target.files[0].path);
+        SettingsService.setSetting(SETTING_EXTERNAL_VIDEO_DIRS, externalFolders).then(function(){
+            addExternalFolder(event.target.files[0].path);
+        }).catch(function(error) {
+            alert(error.message);
+        });
+    })
+
+    $('#sett-autoManageDiskspaceThreshold').on('input',function(event){
+        SettingsService.setSetting(SETTING_AUTO_MANAGE_DISKSPACE_THRESHOLD, event.target.value);
+    })
+
+    $('#sett-autoManageTimestampThreshold').on('input',function(event){
+        SettingsService.setSetting(SETTING_AUTO_MANAGE_TIMESTAMP_THRESHOLD, event.target.value);
     })
 }
 
@@ -443,16 +599,216 @@ $("#settings-video-div").mousedown( function (e) {
         if(element.id.includes("keybindStartStopRec")){
             onKeybind(element, SETTING_KB_START_STOP_REC);
         }
+        if(element.id.includes("highlightLengthSecs")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_HIGHLIGHT_LENGTH_SECS, element.id.split("-")[2]);
+                document.getElementById("sett-highlightLengthSecs").innerText = element.id.split("-")[2] + " Seconds";
+            }
+        }
+        if(element.id.includes("keybindSaveHighlight")){
+            onKeybind(element, SETTING_KB_SAVE_HIGHLIGHT);
+        }
+        if(element.id.includes("keybindBookmark")){
+            onKeybind(element, SETTING_KB_BOOKMARK);
+        }
+        if(element.id.includes("instantReplayLengthSecs")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_IR_LENGTH_SECS, element.id.split("-")[2]);
+                document.getElementById("sett-instantReplayLengthSecs").innerText = element.id.split("-")[2] + " Seconds";
+            }
+        }
+        if(element.id.includes("keybindInstantReplay")){
+            onKeybind(element, SETTING_KB_INSTANT_REPLAY);
+        }
+        if(element.id.includes("qualityPresets")){
+            if(element.id.split("-")[2] == "low"){
+                SettingsService.setSetting(SETTING_VIDEO_RESOLUTION, 480);
+                SettingsService.setSetting(SETTING_VIDEO_FRAMERATE, 30);
+                SettingsService.setSetting(SETTING_VIDEO_BITRATE, 5);
+                document.getElementById("sett-videoResolution").innerText = "480p";
+                document.getElementById("sett-videoFramerate").innerText = "30fps";
+                document.getElementById("sett-videoBitrate").innerText = "5Mbps";
+            }else if(element.id.split("-")[2] == "med"){
+                SettingsService.setSetting(SETTING_VIDEO_RESOLUTION, 720);
+                SettingsService.setSetting(SETTING_VIDEO_FRAMERATE, 30);
+                SettingsService.setSetting(SETTING_VIDEO_BITRATE, 10);
+                document.getElementById("sett-videoResolution").innerText = "720p";
+                document.getElementById("sett-videoFramerate").innerText = "30fps";
+                document.getElementById("sett-videoBitrate").innerText = "10Mbps";
+            }else if(element.id.split("-")[2] == "high"){
+                SettingsService.setSetting(SETTING_VIDEO_RESOLUTION, 1080);
+                SettingsService.setSetting(SETTING_VIDEO_FRAMERATE, 30);
+                SettingsService.setSetting(SETTING_VIDEO_BITRATE, 15);
+                document.getElementById("sett-videoResolution").innerText = "1080p";
+                document.getElementById("sett-videoFramerate").innerText = "30fps";
+                document.getElementById("sett-videoBitrate").innerText = "15Mbps";
+            }
+        }
+        if(element.id.includes("videoResolution")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_VIDEO_RESOLUTION, element.id.split("-")[2]);
+                document.getElementById("sett-videoResolution").innerText = element.id.split("-")[2] + "p";
+                $('#sett-qualityPresets-cust').prop('checked', true); 
+            }
+        }
+        if(element.id.includes("videoFramerate")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_VIDEO_FRAMERATE, element.id.split("-")[2]);
+                document.getElementById("sett-videoFramerate").innerText = element.id.split("-")[2] + "fps";
+                $('#sett-qualityPresets-cust').prop('checked', true); 
+            }
+        }
+        if(element.id.includes("recordMouseCursor")){
+            SettingsService.setSetting(SETTING_RECORD_MOUSE_CURSOR, !$(element).is(":checked"));
+        }
+        if(element.id.includes("webcamEnabled")){
+            SettingsService.setSetting(SETTING_WEBCAM_ENABLED, !$(element).is(":checked"));
+            alert("If you actually use this and want to see the settings for webcam, \nthey currently do not exist. Please ask dev to add them in.");
+        }
     }
-
-    if(element.id.includes("debugger")){
-        //console.log(SettingsService.MAIN_SETTING_LIST);
-        SettingsService.getSettings(VIDEO).then((result) => {
-            console.log(result);
-        })
-    }
-    console.log("clicked on element: " + element.id);
 });
+
+$("#settings-audio-div").mouseup( function (e) { //using mouseup because of ranges
+    var element;
+    isKeybinding = false;
+    if(!$(e.target)[0].id) {
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1 && element.id.includes("sett-")) { //left click
+        if(element.id.includes("audioGameEnabled")){
+            SettingsService.setSetting(SETTING_AUDIO_GAME_ENABLED, !$(element).is(":checked"));
+        }
+        if(element.id.includes("audioRecordVolumeGameAudio")){
+            document.getElementById("gameAudioLabel").innerText = element.value + "%";
+            SettingsService.setSetting(SETTING_AUDIO_VOLUME_GAME_AUDIO, element.value / 100);
+        }
+        if(element.id.includes("keybindToggleMuteAudio")){
+            onKeybind(element, SETTING_KB_TOGGLE_MUTE_AUDIO);
+        }
+        if(element.id.includes("audioRecordVolumeMicrophone")){
+            document.getElementById("micAudioLabel").innerText = element.value + "%";
+            SettingsService.setSetting(SETTING_AUDIO_VOLUME_MICROPHONE, element.value / 100);
+        }
+        if(element.id.includes("audioRecordingDevices")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_AUDIO_DEVICES_MICROPHONE, [{"deviceId": element.id.split("-")[2], "label": element.innerText}]);
+                document.getElementById("sett-audioRecordingDevices").innerText = element.innerText.substring(0,35);
+            }
+        }
+        if(element.id.includes("audioMicrophoneRecordingMode")){
+            if(element.id.split("-")[2]){
+                if(element.id.split("-")[2] == "disabled")
+                    SettingsService.setSetting(SETTING_AUDIO_MIC_ENABLED, false);
+                else SettingsService.setSetting(SETTING_AUDIO_MIC_ENABLED, true);
+                if(element.id.split("-")[2] == "push_to_talk")
+                    SettingsService.setSetting(SETTING_KB_PUSH_TO_TALK, document.getElementById("sett-keybindToggleMuteMic").innerText);
+                else SettingsService.setSetting(SETTING_KB_PUSH_TO_TALK, "");
+                SettingsService.setSetting(SETTING_AUDIO_MIC_RECORDING_MODE, element.id.split("-")[2]);
+            }
+        }
+        if(element.id.includes("keybindToggleMuteMic")){
+            if($("#sett-audioMicrophoneRecordingMode-push_to_talk").is(":checked"))
+                onKeybind(element, SETTING_KB_PUSH_TO_TALK);
+            else{
+                onKeybind(element, SETTING_KB_TOGGLE_MUTE_MIC);
+            }
+        }
+    }
+});
+
+$("#settings-upload-div").mousedown( function (e) {
+    var element;
+    isKeybinding = false;
+    if(!$(e.target)[0].id) {
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1 && element.id.includes("sett-")) { //left click
+        if(element.id.includes("autoStartApp")){
+            SettingsService.setSetting(SETTING_MAIN_AUTO_START_APP, !$(element).is(":checked"));
+        }
+    }
+});
+
+$("#settings-advanced-div").mousedown( function (e) {
+    var element;
+    isKeybinding = false;
+    if(!$(e.target)[0].id) {
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1 && element.id.includes("sett-")) { //left click
+        if(element.id.includes("openVideoSaveDir")){
+            shell.openItem($('#sett-videoSaveDirectory').next('.custom-file-label').text());
+        }
+        if(element.id.includes("openVideoTmpDir")){
+            shell.openItem($('#sett-videoTmpDirectory').next('.custom-file-label').text());
+        }
+        if(element.id.includes("autoManageVideos")){
+            SettingsService.setSetting(SETTING_AUTO_MANAGE_VIDEOS, !$(element).is(":checked"));
+            if(!$(element).is(":checked"))
+                document.getElementById("autoManage").style.display = "inherit";
+            else document.getElementById("autoManage").style.display = "none";
+        }
+        if(element.id.includes("autoManageType")){
+            if(element.id.split("-")[2] == "default")
+                document.getElementById("autoManageCustom").style.display = "none";
+            else if(element.id.split("-")[2] == "custom")
+                document.getElementById("autoManageCustom").style.display = "inherit";
+            SettingsService.setSetting(SETTING_AUTO_MANAGE_VIDEOS, element.id.split("-")[2]);
+        }
+    }
+});
+
+function addExternalFolder(fileName){
+    var id = shortid.generate();
+
+    const folder = document.createElement('div');
+    folder.setAttribute('id', id);
+    folder.setAttribute('style', 'clear:both;')
+    const a = document.createElement('div');
+    a.setAttribute('class', 'input-group mb-3');
+    a.setAttribute('style', "float: left; width: 75%");
+    folder.append(a);
+    const b = document.createElement('input');
+    b.setAttribute('class', 'form-control');
+    b.setAttribute('type', 'text');
+    b.setAttribute('value', fileName);
+    b.setAttribute('style', 'pointer-events: none');
+    a.append(b);
+    const c = document.createElement('button');
+    c.setAttribute('class', 'btn btn-primary');
+    c.setAttribute('type', 'button');
+    c.onclick = function() { 
+        externalFolders = externalFolders.filter(e => e !== fileName);
+        SettingsService.setSetting(SETTING_EXTERNAL_VIDEO_DIRS, externalFolders);
+        $('#sett-addExternalFolder').val(null);
+        document.getElementById(id).remove();
+    };
+    c.innerText = "Delete";
+    a.append(c);
+    const d = document.createElement('div');
+    folder.append(d);
+    const e = document.createElement('button');
+    e.setAttribute('class', 'btn btn-secondary');
+    e.setAttribute('type', 'button');
+    e.onclick = function() { 
+        shell.openItem(fileName);
+    };
+    e.innerText = "Open Folder";
+    d.append(e);
+    document.getElementById("extFoldersList").append(folder);
+}
 
 $(document).on('keydown', function(event) {
     if ( event.shiftKey && event.keyCode ) {

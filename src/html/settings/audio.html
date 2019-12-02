@@ -1,20 +1,20 @@
 <h5>Audio Settings</h5>
 <div style="margin-bottom: -20px;">
     <div class="custom-control custom-checkbox" style="float: left;">
-        <input id="sett-" type="checkbox" class="custom-control-input">
-        <label for="sett-" class="custom-control-label">Record All Audio</label>
+        <input id="sett-audioGameEnabled" type="checkbox" class="custom-control-input">
+        <label for="sett-audioGameEnabled" class="custom-control-label">Record All Audio</label>
     </div>
     <div>
         <div class="custom-control col-sm-4" style="float: left;">
-            <input id="customRange2" type="range" class="custom-range" min="0" max="100">
+            <input id="sett-audioRecordVolumeGameAudio" type="range" class="custom-range" min="0" max="100">
         </div>
-        <label for="customRange2" class="col-sm-2 control-label">100%</label>
+        <label id="gameAudioLabel" for="sett-audioRecordVolumeGameAudio" class="col-sm-2 control-label">100%</label>
     </div>
 </div>
 <br>
 <b>Toggle On/Off</b>
 <br>
-<button id="sett-" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
+<button id="sett-keybindToggleMuteAudio" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
     N/A
 </button>
 
@@ -26,27 +26,36 @@
     </div>
     <div>
         <div class="custom-control col-sm-4" style="float: left;">
-            <input id="customRange2" type="range" class="custom-range" min="0" max="100">
+            <input id="sett-audioRecordVolumeMicrophone" type="range" class="custom-range" min="0" max="100">
         </div>
-        <label for="customRange2" class="col-sm-2 control-label">100%</label>
+        <label id="micAudioLabel" for="sett-audioRecordVolumeMicrophone" class="col-sm-2 control-label">100%</label>
     </div>
 </div>
 <br>
+<b>Input Source</b>
+<br>
+<button id="sett-audioRecordingDevices" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="max-width: 300px;">
+    Default - Microphone
+</button>
+<div id="micDeviceList"class="dropdown-menu">
+    <!-- <a id="sett-audioRecordingDevices-default" class="dropdown-item" href="#">Default - Microphone</a> -->
+</div>
+<br>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-microphoneType" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Open Microphone</label>
+    <input id="sett-audioMicrophoneRecordingMode-open" type="radio" name="sett-microphoneType" class="custom-control-input">
+    <label for="sett-audioMicrophoneRecordingMode-open" class="custom-control-label">Open Microphone</label>
 </div>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-microphoneType" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Push To Talk</label>
+    <input id="sett-audioMicrophoneRecordingMode-push_to_talk" type="radio" name="sett-microphoneType" class="custom-control-input">
+    <label for="sett-audioMicrophoneRecordingMode-push_to_talk" class="custom-control-label">Push To Talk</label>
 </div>
 <div class="custom-control custom-radio custom-control-inline">
-    <input id="sett-" type="radio" name="sett-microphoneType" class="custom-control-input">
-    <label for="sett-" class="custom-control-label">Microphone Off</label>
+    <input id="sett-audioMicrophoneRecordingMode-disabled" type="radio" name="sett-microphoneType" class="custom-control-input">
+    <label for="sett-audioMicrophoneRecordingMode-disabled" class="custom-control-label">Microphone Off</label>
 </div>
 <br>
 <b>Toggle On/Off</b>
 <br>
-<button id="sett-" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
+<button id="sett-keybindToggleMuteMic" class="btn btn-outline-primary" type="button" style="width: 120px;height: 35px;">
     N/A
 </button>

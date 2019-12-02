@@ -37,3 +37,8 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
 .card-img-overlay:hover h5, .card-img-overlay:hover p{
     visibility: visible;
 }
+
+.dropdown-menu>li>a {
+    word-wrap: break-word;
+    white-space: normal;
+}

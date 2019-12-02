@@ -46,8 +46,6 @@ window.onload=function(){
 function onLoader() { //this will check if the local api is online (is there a better way to do this?)
     fetch('http://localhost:9000/').then(   //hacky way to check if local filesystem is online
         function() {
-            document.getElementById("loader").style.visibility = "hidden";
-            document.getElementById("app").style.visibility = "visible";
             init();
         }
     )
@@ -80,4 +78,7 @@ function init() {
     $("#settings-div").load("./html/settings.html"); 
     $("#video-editor-div").load("./html/video-editor.html"); 
     $("#video-viewer-div").load("./html/video-viewer.html"); 
+
+    document.getElementById("loader").style.visibility = "hidden";
+    document.getElementById("app").style.visibility = "visible";
 }
