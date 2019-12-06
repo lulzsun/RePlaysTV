@@ -72,6 +72,18 @@ $("#video-editor-div").mousedown( function (e) {
             document.getElementById("sess-PlaySpeed").innerText = element.innerText;
             videoSessDom.playbackRate = parseFloat(element.id.split("-")[2]);
         }
+        if(element.id.includes("sess-Volume")){
+            element.oninput = function() {
+                videoSessDom.volume = element.value / 100;
+    
+                if(element.value > 50)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-up";
+                else if(element.value == 0)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-off";
+                else if(element.value < 50)
+                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-down";
+            } 
+        }
         if(element.id.includes("sess-AddClip"))
             addClip();
         if(element.id.includes("sess-PlayPauseClips"))
@@ -109,27 +121,6 @@ $("#video-editor-div").mousedown( function (e) {
     if(e.which == 3 && element.className == "noUi-connects")
     {
         removeClip(element);
-    }
-});
-$("#video-editor-div").mouseup( function (e) {
-    var element;
-    if($(e.target)[0].id == '' || $(e.target)[0].id =='sess-ClipsStamp'){
-        element = $(e.target)[0].parentElement;
-    }else element = $(e.target)[0];
-
-    if(e.which == 1) {
-        if(element.id.includes("sess-Volume")){
-            element.oninput = function() {
-                videoSessDom.volume = element.value / 100;
-    
-                if(element.value > 50)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-up";
-                else if(element.value == 0)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-off";
-                else if(element.value < 50)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-down";
-            } 
-        }
     }
 });
 

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RePlaysTV-Installer", "RePlaysTV-Installer\RePlaysTV-Installer.csproj", "{1CE34ED1-3F78-4FC5-9ACD-D5CD56FE688E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CE34ED1-3F78-4FC5-9ACD-D5CD56FE688E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CE34ED1-3F78-4FC5-9ACD-D5CD56FE688E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CE34ED1-3F78-4FC5-9ACD-D5CD56FE688E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CE34ED1-3F78-4FC5-9ACD-D5CD56FE688E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {209EAA9A-43BC-4106-A8E8-CEC1BA8EB0E3}
+	EndGlobalSection
+EndGlobal

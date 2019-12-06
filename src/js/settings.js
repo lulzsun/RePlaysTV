@@ -479,6 +479,17 @@ function initAudio(){
             console.log(setting);
         }else console.error("Audio settings missing?");
     });
+    $('#sett-audioRecordVolumeGameAudio').on('input',function(e){
+        var value = e.target.value;
+        document.getElementById("gameAudioLabel").innerText = value + "%";
+        SettingsService.setSetting(SETTING_AUDIO_VOLUME_GAME_AUDIO, value / 100);
+    })
+
+    $('#sett-audioRecordVolumeMicrophone').on('input',function(e){
+        var value = e.target.value;
+        document.getElementById("micAudioLabel").innerText = value + "%";
+        SettingsService.setSetting(SETTING_AUDIO_VOLUME_MICROPHONE, value / 100);
+    })
 }
 
 function initUpload(){
@@ -668,7 +679,7 @@ $("#settings-video-div").mousedown( function (e) {
     }
 });
 
-$("#settings-audio-div").mouseup( function (e) { //using mouseup because of ranges
+$("#settings-audio-div").mousedown( function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -682,17 +693,17 @@ $("#settings-audio-div").mouseup( function (e) { //using mouseup because of rang
         if(element.id.includes("audioGameEnabled")){
             SettingsService.setSetting(SETTING_AUDIO_GAME_ENABLED, !$(element).is(":checked"));
         }
-        if(element.id.includes("audioRecordVolumeGameAudio")){
-            document.getElementById("gameAudioLabel").innerText = element.value + "%";
-            SettingsService.setSetting(SETTING_AUDIO_VOLUME_GAME_AUDIO, element.value / 100);
-        }
+        // if(element.id.includes("audioRecordVolumeGameAudio")){
+        //     document.getElementById("gameAudioLabel").innerText = element.value + "%";
+        //     SettingsService.setSetting(SETTING_AUDIO_VOLUME_GAME_AUDIO, element.value / 100);
+        // }
         if(element.id.includes("keybindToggleMuteAudio")){
             onKeybind(element, SETTING_KB_TOGGLE_MUTE_AUDIO);
         }
-        if(element.id.includes("audioRecordVolumeMicrophone")){
-            document.getElementById("micAudioLabel").innerText = element.value + "%";
-            SettingsService.setSetting(SETTING_AUDIO_VOLUME_MICROPHONE, element.value / 100);
-        }
+        // if(element.id.includes("audioRecordVolumeMicrophone")){
+        //     document.getElementById("micAudioLabel").innerText = element.value + "%";
+        //     SettingsService.setSetting(SETTING_AUDIO_VOLUME_MICROPHONE, element.value / 100);
+        // }
         if(element.id.includes("audioRecordingDevices")){
             if(element.id.split("-")[2]) {
                 SettingsService.setSetting(SETTING_AUDIO_DEVICES_MICROPHONE, [{"deviceId": element.id.split("-")[2], "label": element.innerText}]);
