@@ -5,7 +5,17 @@ This patches over the existing Plays.tv software to give it a custom user interf
 
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
 
-This is a non-profit, community-based project to extend the life of the Plays.tv client for future use.
+This is a non-profit, community-based project to extend the life of the Plays client for future use.
+
+# Installation
+You must have the latest (3.0.0) Plays client installed. Reinstalling is recommended, but not required.
+You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
+
+  1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
+  2. Close out of Plays if it is currently running
+  3. Open the installer executable (as administrator)
+  4. Locate/confirm the location of Plays
+  5. Hit install and wait for the completion message
 
 # Roadmap
   * [ ] Installer Executable
@@ -30,6 +40,7 @@ This is a non-profit, community-based project to extend the life of the Plays.tv
     * [ ] Youtube
     * [ ] Gfycat
     * [ ] Imgur
+  * [ ] Ingame HUD functionality
   * [ ] Deep Integration
     * [ ] League of Legends
     * [ ] Counter-Strike Global Offensive
@@ -39,24 +50,26 @@ This is a non-profit, community-based project to extend the life of the Plays.tv
 	* [ ] Better Documentation
 
 # Notable Issues / TO-DO
-  * Doing keybindings settings work kind of funky, needs changes
-  * Grid/Details view for Sessions/Clips tab does not exist
+  * Doing keybinding settings work kind of funky, needs changes
+  * Grid/details view for Sessions/Clips tab does not exist
   * Clip editor needs work
     * Deleting a clipped section in the clip editor does not exist
         * Work around is to back out of the editor to reset
-	* Clip editing has too many restrictions
+	* Clip editing has too many technical restrictions
   * Snapshots Tab/Viewer
   * Missing Features
 	* 'Custom Recorded Games' setting
 	* 'Never Record Games' setting
 	* Webcam settings
+	* Ingame HUD
+	  * This means instant replay shouldn't work, and any other related HUD functions
   * A lot of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
 
-# Disclaimer 
+# Disclaimer
 Please be aware that using this client modification is a violation of Plays.tv's Terms of Service. 
 
-None of the authors, contributors, or anyone else connected with RePlaysTV, in any way whatsoever, can be responsible or liable for your use of the information contained in or linked from this Github repository.
+None of the authors, contributors, or anyone else connected with RePlaysTV, in any way whatsoever, can be responsible or liable for your use of the content contained in or linked from this Github repository.
 
 # Fair Use Statement
 This Github repository may contain bits of copyrighted material, the use of which may not have been specifically authorized by the copyright owner. This material is available in an effort to provide user modifications and bug fixes to improve the quality of life of the Plays.tv client, while teaching the workings behind the Plays.tv client. The material contained in this repository is distributed without profit for personal and educational purposes. Only very small portions of the original work are being referenced and those could not be used easily to duplicate the original work.
