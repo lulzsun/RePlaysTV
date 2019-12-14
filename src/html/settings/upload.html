@@ -4,20 +4,80 @@
         <a class="nav-link active" id="streamable-tab" data-toggle="tab" href="#streamable" role="tab">Streamable</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="youtube-tab" data-toggle="tab" href="#youtube" role="tab">Youtube</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" id="gfycat-tab" data-toggle="tab" href="#gfycat" role="tab">Gfycat</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" id="youtube-tab" data-toggle="tab" href="#youtube" role="tab">Youtube</a>
+    </li>
     </ul>
-    <div class="tab-content" style="height: calc(100vh - 135px);overflow-y: auto;">
+    <div class="tab-content" style="height: calc(100vh - 145px);overflow-y: auto;margin-top: 10px;">
     <div class="tab-pane fade show active" id="streamable" role="tabpanel">
-        
-    </div>
-    <div class="tab-pane fade" id="youtube" role="tabpanel">
-        Not yet implemented
+        <!-- <div class="custom-control custom-checkbox">
+            <input id="streamableAnonymous" type="checkbox" class="custom-control-input">
+            <label for="streamableAnonymous" class="custom-control-label">Upload Anonymously</label>
+        </div>
+        <a>&nbsp;</a> -->
+        <form>
+            <div class="form-group">
+                <label for="sett-streamableEmail">Streamable Account Email</label>
+                <input id="sett-streamableEmail" type="email" class="form-control" placeholder="Email" style="width: 300px;">
+            </div>
+            <div class="form-group">
+                <label for="sett-streamablePass">Streamable Account Password</label>
+                <input id="sett-streamablePass" type="password" class="form-control" placeholder="Password" style="width: 300px;">
+            </div>
+        </form>
+        <!-- <button id="sett-streamableSave" class="btn btn-secondary">Save Account</button> 
+        <br>
+        <a>&nbsp;</a> -->
+        <div class="alert alert-dismissible alert-secondary text-white">
+            <h6 class="alert-heading">Note</h6> 
+            - Streamable deletes videos automatically after 3 months of inactivity, if not on a paid plan.<br>
+            - Max upload size of 1 GB. Max video duration of 10 minutes.
+        </div>
+        <br>
+        <button id="sett-uploadDefault-Streamable" type="submit" class="btn btn-primary">Set As Upload Default</button>
     </div>
     <div class="tab-pane fade" id="gfycat" role="tabpanel">
-        Not yet implemented
+        <div class="alert alert-dismissible alert-primary" style="width: 300px;">
+            <p class="text-center" style="padding-left: 40px;">
+                <strong>Status:</strong> Not logged in. <br>
+                <button id="streamableSave" class="btn btn-secondary">Open Authorization</button>
+            </p>
+        </div>
+        <div class="custom-control custom-checkbox">
+            <input id="streamableAnonymous" type="checkbox" class="custom-control-input">
+            <label for="streamableAnonymous" class="custom-control-label">Mute Audio</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+            <input id="streamableAnonymous" type="checkbox" class="custom-control-input" checked>
+            <label for="streamableAnonymous" class="custom-control-label">Upload as Unlisted</label>
+        </div>
+        <br>
+        <div class="alert alert-dismissible alert-secondary text-white">
+            <h6 class="alert-heading">Note</h6> 
+            - Max video duration of 1 minute.
+        </div>
+        <br>
+        <button id="sett-uploadDefault-Gfycat" class="btn btn-primary">Set As Upload Default</button>
+    </div>
+    <div class="tab-pane fade" id="youtube" role="tabpanel">
+        <div class="alert alert-dismissible alert-primary" style="width: 300px;">
+            <p class="text-center" style="padding-left: 40px;">
+                <strong>Status:</strong> Not logged in. <br>
+                <button id="streamableSave" class="btn btn-secondary">Open Authorization</button>
+            </p>
+        </div>
+        <div class="custom-control custom-checkbox">
+            <input id="streamableAnonymous" type="checkbox" class="custom-control-input" checked>
+            <label for="streamableAnonymous" class="custom-control-label">Upload as Unlisted</label>
+        </div>
+        <br>
+        <div class="alert alert-dismissible alert-secondary text-white">
+            <h6 class="alert-heading">Note</h6> 
+            - Max upload size of 128 GB.
+        </div>
+        <br>
+        <button id="sett-uploadDefault-Youtube" class="btn btn-primary">Set As Default Upload</button>
     </div>
 </div>

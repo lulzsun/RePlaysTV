@@ -57,17 +57,17 @@ function onLoader() { //this will check if the local api is online (is there a b
 }
 
 function closeWindow () {
-    var window = remote.BrowserWindow.getFocusedWindow();
+    var window = remote.getCurrentWindow();
     window.close();
 }
 
 function minimizeWindow () {  
-    var window = remote.BrowserWindow.getFocusedWindow();
+    var window = remote.getCurrentWindow();
     window.minimize();
 }
 
 function maximizeWindow () {
-    var window = remote.BrowserWindow.getFocusedWindow();
+    var window = remote.getCurrentWindow();
     window.isMaximized() ? window.unmaximize() : window.maximize();
 }
 

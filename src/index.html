@@ -2,9 +2,10 @@
 <html>
 
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-<script src="js/jquery.js"></script>    
-<script src="js/popper.js"></script>   
-<script src="js/bootstrap.js"></script>   
+<script src="./js/libs/jquery.js"></script>    
+<script src="./js/libs/popper.js"></script>   
+<script src="./js/libs/bootstrap.js"></script>  
+<script src="./js/libs/nouislider.js"></script> 
 <script src="index.js"></script>    
 <script>if (window.module) module = window.module;</script>
 
@@ -15,7 +16,6 @@
   <link rel="stylesheet" href="./css/extras.css">
   <link rel="stylesheet" href="./css/multirange.css">
   <link rel="stylesheet" href="./css/nouislider.css">
-  <script src="./js/nouislider.js"></script>
 </head>
 <body>
   <div id="loader" role="status" style="position: fixed;top: 50%;left: 50%;margin-top: -20px;margin-left: -85px;z-index: 10000;visibility: visible;">
@@ -24,15 +24,17 @@
         <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div id="app" style="height: 100vh;overflow-y: hidden;overflow-x: hidden;visibility: hidden;">
-    <div class="text-right" style="-webkit-app-region: drag;">
-        <button id="minimize" type="button" class="btn minimize" value=""><i class="fa fa-window-minimize"></i></button>
-        <button id="maximize" type="button" class="btn maximize" value=""><i class="fa fa-window-maximize"></i></button>
-        <button id="close" type="button" class="btn closebtn" onClick="window.close();" value=""><i class="fa fa-window-close"></i></button>
+  <div id="app" style="height: 100vh;overflow-y: hidden;overflow-x: hidden;visibility: hidden;border-style: solid;border-color: #15b2b1;border-width: 2px">
+    <div style="float: right;">
+      <button id="minimize" type="button" onclick="this.blur();" class="btn minimize" value=""><i class="fa fa-window-minimize"></i></button>
+      <button id="maximize" type="button" onclick="this.blur();" class="btn maximize" value=""><i class="fa fa-window-maximize"></i></button>
+      <button id="close" type="button" onclick="this.blur();" class="btn closebtn" onClick="window.close();" value=""><i class="fa fa-window-close"></i></button>
+    </div>
+    <div style="-webkit-app-region: drag;width: calc(100vw - 150px);height: 35px;">
     </div>
     <div class="bd-example bd-example-tabs" style="height: 100%">
         <div class="row">
-          <div class="col-2 col-md-auto" style="padding-left: 25px;">
+          <div class="col-2 col-md-auto" style="padding-left: 25px;margin-right: 5px;">
             <nav class="navbar" style="width: 180px;">
               <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                   <a class="navbar-brand" style="margin-right: 0px;padding-bottom: 20px;padding-top: 0px;margin-top: -20px;">
@@ -46,6 +48,26 @@
                 <a class="nav-link" id="v-pills-video-viewer-tab" data-toggle="pill" href="#v-pills-video-viewer" role="tab" aria-controls="v-pills-video-viewer" aria-selected="false" style="visibility:hidden;">Video Viewer</a>
               </div>
             </nav>
+            <div id="notifications" style="vertical-align: bottom;display: table-cell;height: calc(100vh - 337px);width: 180px;">
+
+              <!-- 
+              <div class="toast show" role="alert" style="background-color:#282828;margin-right:-25px;text-align: center;">
+                <div class="toast-header" style="background-color:#15b2b1;color:white;">
+                  <strong class="mr-auto">Uploading Clip</strong>
+                  <button type="button" class="ml-2 mb-1 close">
+                    <i class="fa fa-window-close" style="color: white;"></i></button>
+                  </button>
+                </div>
+                <div class="toast-body">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 75%"></div>
+                  </div>
+                  <small>Untitled</small>
+                </div>
+              </div> 
+              -->
+
+            </div>
           </div>
           <div class="col-10 col-md" style="padding-right: 50px;">
             <div id="recordingStatus" class="alert alert-primary" role="alert" style="position: absolute;width: calc(100vw - 250px);z-index: 100000;visibility:hidden;">

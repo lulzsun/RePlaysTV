@@ -1,3 +1,28 @@
+// import GameDetectionService from '../../../../src/service/GameDetectionService';
+// GameDetectionService.fetchRemoteDetectionsVersion().then((versionObj) => {
+//     GameDetectionService.fetchRemoteDetectionsData(versionObj).then((detectionsJson) => {
+//         console.log(detectionsJson);
+//         var fs = require('fs');
+//         fs.writeFile("D:\\gamedetections.json", JSON.stringify(detectionsJson), function(err) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//         });
+//     });
+//     console.log(versionObj);
+// });
+//
+// leftover debug code just incase... it does not have a purpose being in this file
+// this saved the remoteDetectionsData json as a local file for reverse engineering/understanding purposes
+// this was done once on 12/13, done 2 days before plays shutdown.
+// ask lulzsun on github for details on this file if you need it
+
+import ReplaysSettingsService, {
+    UPLOAD,
+    SETTING_REPLAYS_UPLOAD_DEFAULT,
+    SETTING_REPLAYS_STREAMABLE_EMAIL,
+    SETTING_REPLAYS_STREAMABLE_PASS,
+} from './replaysSettingsService';
 import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
     SETTING_MAIN_AUTO_START_APP,
@@ -368,10 +393,6 @@ const AUDIO = [
     SETTING_KB_PUSH_TO_TALK,
 ]
 
-const UPLOAD = [
-    
-]
-
 const ADVANCED = [
     SETTING_MAIN_VIDEO_SAVE_DIR,
     SETTING_MAIN_VIDEO_TMP_DIR,
@@ -493,7 +514,21 @@ function initAudio(){
 }
 
 function initUpload(){
+    ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
+        if(setting){
+            document.getElementById('sett-streamableEmail').value = setting.streamableEmail;
+            document.getElementById('sett-streamablePass').value = setting.streamablePass;
+            console.log(setting);
+        }else console.error("Upload settings missing?");
+    });
 
+    $('#sett-streamableEmail').on('change',function(e){
+        ReplaysSettingsService.setSetting(SETTING_REPLAYS_STREAMABLE_EMAIL, e.target.value);
+    })
+
+    $('#sett-streamablePass').on('change',function(e){
+        ReplaysSettingsService.setSetting(SETTING_REPLAYS_STREAMABLE_PASS, e.target.value);
+    })
 }
 
 function initAdvanced(){
@@ -504,12 +539,8 @@ function initAdvanced(){
                 externalFolders.forEach(folder => addExternalFolder(folder));
             $('#sett-videoSaveDirectory').next('.custom-file-label').html(setting.videoSaveDirectory);
             $('#sett-videoTmpDirectory').next('.custom-file-label').html(setting.videoTmpDirectory);
-            $('#sett-autoManageVideos').prop('checked', setting.autoManageVideos); 
-            if(!setting.autoManageVideos)
-                document.getElementById("autoManage").style.display = "none";
-            $('#sett-autoManageType-'+setting.autoManageType).prop('checked', setting.autoManageType);
-            if(setting.autoManageType == "default")
-                document.getElementById("autoManageCustom").style.display = "none";
+            $('#sett-autoManageType-'+setting.autoManageType).prop('checked', true); 
+            $('#sett-autoManageVideos').prop('checked', setting.autoManageVideos);
             document.getElementById("sett-autoManageDiskspaceThreshold").value = setting.autoManageDiskspaceThreshold;
             document.getElementById("sett-autoManageTimestampThreshold").value = setting.autoManageTimestampThreshold;
             console.log(setting);
@@ -669,6 +700,13 @@ $("#settings-video-div").mousedown( function (e) {
                 $('#sett-qualityPresets-cust').prop('checked', true); 
             }
         }
+        if(element.id.includes("videoBitrate")){
+            if(element.id.split("-")[2]) {
+                SettingsService.setSetting(SETTING_VIDEO_BITRATE, element.id.split("-")[2]);
+                document.getElementById("sett-videoBitrate").innerText = element.id.split("-")[2] + "Mbps";
+                $('#sett-qualityPresets-cust').prop('checked', true); 
+            }
+        }
         if(element.id.includes("recordMouseCursor")){
             SettingsService.setSetting(SETTING_RECORD_MOUSE_CURSOR, !$(element).is(":checked"));
         }
@@ -742,8 +780,11 @@ $("#settings-upload-div").mousedown( function (e) {
     }else element = $(e.target)[0];
 
     if(e.which == 1 && element.id.includes("sett-")) { //left click
-        if(element.id.includes("autoStartApp")){
-            SettingsService.setSetting(SETTING_MAIN_AUTO_START_APP, !$(element).is(":checked"));
+        if(element.id.includes("uploadDefault")){
+            if(element.id.split("-")[2]) {
+                ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPLOAD_DEFAULT, element.id.split("-")[2]);
+                alert(element.id.split("-")[2] + ' set as upload default.');
+            }
         }
     }
 });
@@ -767,16 +808,9 @@ $("#settings-advanced-div").mousedown( function (e) {
         }
         if(element.id.includes("autoManageVideos")){
             SettingsService.setSetting(SETTING_AUTO_MANAGE_VIDEOS, !$(element).is(":checked"));
-            if(!$(element).is(":checked"))
-                document.getElementById("autoManage").style.display = "inherit";
-            else document.getElementById("autoManage").style.display = "none";
         }
         if(element.id.includes("autoManageType")){
-            if(element.id.split("-")[2] == "default")
-                document.getElementById("autoManageCustom").style.display = "none";
-            else if(element.id.split("-")[2] == "custom")
-                document.getElementById("autoManageCustom").style.display = "inherit";
-            SettingsService.setSetting(SETTING_AUTO_MANAGE_VIDEOS, element.id.split("-")[2]);
+            SettingsService.setSetting(SETTING_AUTO_MANAGE_TYPE, element.id.split("-")[2]);
         }
     }
 });

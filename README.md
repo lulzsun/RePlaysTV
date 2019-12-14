@@ -17,37 +17,30 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
   4. Locate/confirm the location of Plays
   5. Hit install and wait for the completion message
 
-# Roadmap
-  * [ ] Installer Executable
+# Feature List
+  * [x] Installer Executable
   * [x] Offline functionality
-    * [x] Custom UI
-      * [x] Sessions Tab
-        * [x] Clip function
-        * [x] Playback function
-          * [ ] Deep Integration
-          * [ ] Bookmarks
-        * [x] Sorting function
-      * [x] Clips Tab
-        * [ ] Upload function
-        * [x] Playback function
-        * [x] Sorting function
-      * [x] Settings Tab
-        * [x] Read/write settings
-	  * [ ] Snapshots Tab
+  * [x] Custom UI
+	* [x] Sessions Tab
+	  * [x] Playback function
+	    * [x] Clip editor
+		  * [ ] Deep Integration
+		  * [ ] Bookmarks
+	* [x] Clips Tab
+	* [x] Upload function
+	* [x] Uploads Tab
+	* [ ] Snapshots Tab
+	* [x] Settings Tab
   * [x] Recording functionality
-  * [ ] Upload functionality
-    * [ ] Streamable
+  * [x] Upload functionality
+    * [x] Streamable
+	* [ ] Snapshots Tab
     * [ ] Youtube
-    * [ ] Gfycat
-    * [ ] Imgur
   * [ ] Ingame HUD functionality
   * [ ] Deep Integration
     * [ ] League of Legends
     * [ ] Counter-Strike Global Offensive
     * [ ] Dota 2
-  * [ ] Clean up and delete plays.tv online service related functions
-  * [ ] Make code more maintainable
-	* [ ] Better Documentation
 
 # Notable Issues / TO-DO
   * Doing keybinding settings work kind of funky, needs changes
@@ -63,8 +56,17 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
 	* Webcam settings
 	* Ingame HUD
 	  * This means instant replay shouldn't work, and any other related HUD functions
+	* Uploads Tab Sorting
   * A lot of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
+  * Installer slow
+    * Need to improve the installer's speed... not sure what to do to improve
+	* Mainly due to having the installer act as a portable/contained dev environment
+	  * Also the reason why installer's total file size is fairly large
+  * Make code more maintainable 
+  * Reimplement Game Detection Remote Database
+	* This is important for new games that come out and Plays.tv does not recognized
+	* Need better understanding as to how the original service works
 
 # Disclaimer
 Please be aware that using this client modification is a violation of Plays.tv's Terms of Service. 

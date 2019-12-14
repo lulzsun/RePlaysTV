@@ -5,6 +5,11 @@ import BaseService from '../../../../src/service/BaseService';
 import VideoService from '../../../../src/service/VideoService';
 import TranscoderService from '../../../../src/service/TranscoderService';
 import request from 'request-promise-native';
+import { makeUploadDOM } from './uploads';
+import Streamable from './libs/uploaders/streamable';
+import ReplaysSettingsService, {
+    UPLOAD
+} from './replaysSettingsService';
 
 const Settings = BaseService.getSettings();
 
@@ -33,7 +38,6 @@ return new Promise(
         });
     });
 }
-
 
 $("#video-viewer-div").mousedown( function (e) {
     var element;
@@ -71,6 +75,20 @@ $("#video-viewer-div").mousedown( function (e) {
                 else if(element.value < 50)
                     document.getElementById("clip-IcoVolume").className = "fa fa-volume-down";
             } 
+        }
+        if(element.id.includes("clip-OpenUploadModal")){
+            document.getElementById("clip-UploadPlatform").innerText = ReplaysSettingsService.getSetting("uploadDefault");
+        }
+        if(element.id.includes("clip-UploadPlatform")){
+            if(element.id.split("-")[2]) {
+                document.getElementById("clip-UploadPlatform").innerText = element.id.split("-")[2];
+            }
+        }
+        if(element.id.includes("clip-UploadClip")){
+            uploadClip(videoClipDom.id.replace("clip-play-", ""));
+        }
+        if(element.id.includes("clip-DeleteClip")){
+            deleteVideo(videoClipDom.id.replace("clip-play-", ""));
         }
     }
     //console.log("clicked on element: " + element.className);
@@ -257,6 +275,32 @@ function fetchAllClips(game=null, type=null) {
             document.getElementById("clip-TotalSize").innerText = totalSize.toFixed(2) + " GB";
         }
     );
+}
+
+function uploadClip(videoId) {
+    let title;
+    let uploadPlatform = document.getElementById("clip-UploadPlatform").innerText;
+
+    if(!document.getElementById("clip-UploadTitle").value) title = 'Untitled';  
+    else title = document.getElementById("clip-UploadTitle").value;
+
+    ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
+        if(setting){
+            if(uploadPlatform == 'Streamable'){
+                $('.modal').modal('toggle');
+                console.log("Uploading to Streamable");
+                Streamable.upload(setting.streamableEmail, setting.streamablePass, getVideoById(videoId), title).then((result) => {
+                    if(result) {
+                        console.log(result);
+                        makeUploadDOM(result);
+                    }else console.error("Unknown upload error.");
+                });
+            }
+            else{
+                alert("The selected Upload Platform is not yet implemented.");
+            }
+        }else console.error("Error retrieving Upload settings. Missing?");
+    });
 }
 
 function makeVidDOM(video) {
