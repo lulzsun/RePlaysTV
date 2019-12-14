@@ -25,10 +25,9 @@ namespace RePlaysTV_Installer {
         }
 
         private void Button1_Click(object sender, EventArgs e) {
-            DialogResult dr = MessageBox.Show("This automated process can take up to 20 minutes or more.\n" +
+            DialogResult dr = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
                                                 "Make sure the last latest version of Plays is installed and not currently open." +
-                                                "\nAre you ready to continue?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
-
+                                                "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
             if (dr == DialogResult.Yes) {
                 StartExtract();
                 button1.Enabled = false;
@@ -70,6 +69,8 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("asar pack \".\\out\\Plays-win32-ia32\\resources\\app\" \".\\out\\Plays-win32-ia32\\resources\\app.asar\"");
             SW.WriteLine("rd /s /q \".\\out\\Plays-win32-ia32\\resources\\app\"");
             SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-3.0.1\"");
+            SW.WriteLine("cd ..");
+            SW.WriteLine("rd /s /q temp");
             SW.WriteLine("exit");
         }
 
