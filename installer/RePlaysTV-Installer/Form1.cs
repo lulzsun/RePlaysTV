@@ -25,13 +25,19 @@ namespace RePlaysTV_Installer {
         }
 
         private void Button1_Click(object sender, EventArgs e) {
-            StartExtract();
-            button1.Enabled = false;
-            button2.Enabled = false;
+            DialogResult dr = MessageBox.Show("This automated process can take up to 20 minutes or more.\n" +
+                                                "Make sure the last latest version of Plays is installed and not currently open." +
+                                                "\nAre you ready to continue?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
+
+            if (dr == DialogResult.Yes) {
+                StartExtract();
+                button1.Enabled = false;
+                button2.Enabled = false;
+            }
         }
         private void StartExtract() { //part one of installation
             SW.WriteLine("nodejs-portable.exe");
-            if(Directory.Exists(Directory.GetCurrentDirectory() + "\\temp"))
+            if (Directory.Exists(Directory.GetCurrentDirectory() + "\\temp"))
                 SW.WriteLine("rd /s /q temp");
             SW.WriteLine("mkdir temp");
             SW.WriteLine("asar extract \"" + playsDirectory + "\\app-3.0.0\\resources\\app.asar\" temp");
@@ -54,8 +60,9 @@ namespace RePlaysTV_Installer {
             }
             ModifyFileAtLine("window.loadURL(path.join(__dirname, '/../../resources/auger', augerRouteUrl), urlOptions);", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\AugerWindow.js", 38);
             ModifyFileAtLine("nodeIntegration: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\AugerWindow.js", 53);
-            ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);
-            //modifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 313);
+            ModifyFileAtLine("if (false) {", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Updater.js", 62);    //disables updater by code
+            ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);  //custom hud
+            ModifyFileAtLine("return true;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
             SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-3.0.1\"");
@@ -143,7 +150,7 @@ namespace RePlaysTV_Installer {
                             startImport = true;
                             enterThread.Start();
                         } else {
-                            if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package")) {
+                            if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
