@@ -1,11 +1,9 @@
 # RePlaysTV
 A client modification for Plays.tv
 
-This patches over the existing Plays.tv software to give it a custom user interface with plenty of upload platforms and additional features.
-
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
 
-This is a non-profit, community-based project to extend the life of the Plays client for future use.
+This is a non-profit, community-based project that patches over the existing Plays.tv software to give it a custom user interface with plenty of upload platforms and additional features.
 
 You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX) to discuss about development, report bugs, etc.
 
