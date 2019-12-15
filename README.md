@@ -7,7 +7,7 @@ This is a non-profit, community-based project that patches over the existing Pla
 
 You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX) to discuss about development, report bugs, etc.
 
-![Preview](/preview.png)
+![Preview](/resources/preview.png)
 
 # Installation
 You must have the latest (3.0.0) Plays client installed. Reinstalling is recommended, but not required.
