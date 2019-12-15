@@ -64,6 +64,7 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("return true;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
+            SW.WriteLine("rename " + playsDirectory + "\\Update.exe noUpdate.exe");
             SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-3.0.1\"");
             SW.WriteLine("mkdir \"" + playsDirectory + "\\app-3.0.1\"");
             SW.WriteLine("asar pack \".\\out\\Plays-win32-ia32\\resources\\app\" \".\\out\\Plays-win32-ia32\\resources\\app.asar\"");
