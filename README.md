@@ -25,11 +25,11 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
   * [x] Custom UI
 	* [x] Sessions Tab
 	  * [x] Playback function
-	    * [x] Clip editor
-		  * [ ] Deep Integration
-		  * [ ] Bookmarks
+	  * [x] Clip editor
+	  * [ ] Deep Integration
+	  * [ ] Bookmarks
 	* [x] Clips Tab
-	* [x] Upload function
+	  * [x] Upload function
 	* [x] Uploads Tab
 	* [ ] Snapshots Tab
 	* [x] Settings Tab
