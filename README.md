@@ -36,7 +36,7 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
   * [x] Recording functionality
   * [x] Upload functionality
     * [x] Streamable
-	* [ ] Snapshots Tab
+	* [ ] Gfycat
     * [ ] Youtube
   * [ ] Ingame HUD functionality
   * [ ] Deep Integration
