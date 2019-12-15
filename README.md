@@ -67,7 +67,7 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
 	  * Also the reason why installer's total file size is fairly large
   * Make code more maintainable 
   * Reimplement Game Detection Remote Database
-	* This is important for new games that come out and Plays.tv does not recognized
+	* This is important for new games that come out and Plays.tv does not recognize them
 	* Need better understanding as to how the original service works
 
 # Disclaimer
