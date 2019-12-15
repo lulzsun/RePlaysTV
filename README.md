@@ -7,6 +7,8 @@ On 12/15/19, Plays.tv discontinued support to their website and desktop applicat
 
 This is a non-profit, community-based project to extend the life of the Plays client for future use.
 
+You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX) to discuss about development, report bugs, etc.
+
 ![Preview](/preview.png)
 
 # Installation
