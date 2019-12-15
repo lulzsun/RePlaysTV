@@ -7,6 +7,8 @@ On 12/15/19, Plays.tv discontinued support to their website and desktop applicat
 
 This is a non-profit, community-based project to extend the life of the Plays client for future use.
 
+![Preview](/preview.png)
+
 # Installation
 You must have the latest (3.0.0) Plays client installed. Reinstalling is recommended, but not required.
 You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
