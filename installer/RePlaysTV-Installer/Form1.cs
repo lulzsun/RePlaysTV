@@ -50,6 +50,8 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("rd /s /q \".\\temp\\.cache\"");
             SW.WriteLine("mkdir \".\\temp\\resources\\auger\\replays\"");
             SW.WriteLine("robocopy /E /NP /MT \".\\src\" \".\\temp\\resources\\auger\\replays\"");
+
+            //start modifying original plays files
             ModifyFileAtLine("const showurl = '/replays/index.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 571);
             for (int i = 608; i <= 634; i++) {
                 ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", i);
@@ -62,6 +64,19 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("if (false) {", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Updater.js", 62);    //disables updater by code
             ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);  //custom hud
             ModifyFileAtLine("return true;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
+            ModifyFileAtLine("return null;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\BaseService.js", 48);     //disables online user check
+            ModifyFileAtLine("return {};", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Settings.js", 239);     //disables online user check
+            for (int i = 159; i <= 166; i++) {
+                ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);
+            }
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);
+            //end modifying
+
+            StartPackage();
+        }
+
+        private void StartPackage() { //part four of installation
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
             SW.WriteLine("rename " + playsDirectory + "\\Update.exe noUpdate.exe");
