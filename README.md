@@ -11,13 +11,14 @@ You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX)
 
 # Installation
 You must have the latest (3.0.0) Plays client installed. Reinstalling is recommended, but not required.
+
 You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
 
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
   2. Close out of Plays if it is currently running
   3. Open the installer executable (as administrator)
   4. Locate/confirm the location of Plays
-  5. Hit install and wait for the completion message
+  5. Hit install and wait for the completion message popup.
 
 # Feature List
   * [x] Installer Executable
@@ -33,11 +34,13 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
 	* [x] Uploads Tab
 	* [ ] Snapshots Tab
 	* [x] Settings Tab
+	  * [ ] Themes
   * [x] Recording functionality
   * [x] Upload functionality
     * [x] Streamable
 	* [ ] Gfycat
     * [ ] Youtube
+	* [ ] Shared folders
   * [ ] Ingame HUD functionality
   * [ ] Deep Integration
     * [ ] League of Legends
@@ -45,13 +48,6 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
     * [ ] Dota 2
 
 # Notable Issues / TO-DO
-  * Doing keybinding settings work kind of funky, needs changes
-  * Grid/details view for Sessions/Clips tab does not exist
-  * Clip editor needs work
-    * Deleting a clipped section in the clip editor does not exist
-        * Work around is to back out of the editor to reset
-	* Clip editing has too many technical restrictions
-  * Snapshots Tab/Viewer
   * Missing Features
 	* 'Custom Recorded Games' setting
 	* 'Never Record Games' setting
@@ -59,16 +55,22 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
 	* Ingame HUD
 	  * This means instant replay shouldn't work, and any other related HUD functions
 	* Uploads Tab Sorting
+	* Snapshots Tab/Viewer
+	* Grid/details view for Sessions/Clips tab does not exist
+	* Game Detection Remote Database
+	  * This is important for new games that come out and Plays.tv does not recognize them
+	  * Need better understanding as to how the original service works
+  * Doing keybinding settings work kind of funky, needs changes
+	* Some keys are unsupported, but app does not tell the user that it isn't
+  * Clip editor needs work
+    * Deleting a clipped section in the clip editor does not exist
+        * Work around is to back out of the editor to reset
   * A lot of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
-  * Installer slow
-    * Need to improve the installer's speed... not sure what to do to improve
+  * Slow install/update process
 	* Mainly due to having the installer act as a portable/contained dev environment
 	  * Also the reason why installer's total file size is fairly large
-  * Make code more maintainable 
-  * Reimplement Game Detection Remote Database
-	* This is important for new games that come out and Plays.tv does not recognize them
-	* Need better understanding as to how the original service works
+  * Make code more maintainable
 
 # Disclaimer
 Please be aware that using this client modification is a violation of Plays.tv's Terms of Service. 

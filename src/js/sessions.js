@@ -102,7 +102,7 @@ $("#video-editor-div").mousedown( function (e) {
             else index -= 1;
         }
         else if(element.id.includes("sess-ZoomIn")){
-            if((index+1) > ZOOM.length) index = ZOOM.length;
+            if((index+1) >= ZOOM.length) index = ZOOM.length-1;
             else index += 1;
         }
 
@@ -112,10 +112,9 @@ $("#video-editor-div").mousedown( function (e) {
         document.getElementById("sess-Zoomer").className = "index-" + (index);
         document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
 
-        //scroll to zoomer, needs work
-        //var offset = document.getElementById("sess-Seeker").firstChild.childNodes[1].offsetLeft;
-        //document.getElementById("sess-SeekBar").scrollLeft = offset;
-        //console.log(offset);
+        var offset = $(document.getElementById("sess-Seeker").firstChild.childNodes[1]).position().left+(85*(ZOOM[index]/100));
+        document.getElementById("sess-SeekBar").scrollLeft = offset;
+        console.log(offset);
     }
 
     if(e.which == 3 && element.className == "noUi-connects")
@@ -177,21 +176,24 @@ function addClip(){
 
     for(var i=1; i<=starts.length+1; i+=2) {
         if(starts[i] == null && starts[i+1] == null){ //when no other clips exist
-            console.log(starts[i] + ", " + starts[i+1]);
+            //console.log(starts[i] + ", " + starts[i+1]);
             starts.push(seekPos, seekPos+10);
             connects.push(true, false);
             break;
         }
         else if((seekPos < starts[0]) && starts[1] != null){ //at the start, when another clip exists
-            alert("Currently, you cannot create a clip at the start when another clip exists\nClips must be created at the end\nSorry for the technical downgrade, issue is being worked on");
-            //pretty much the same issue as the issue below
+            starts.splice(0, 0, seekPos);
+            starts.splice(1, 0, seekPos+10);
+            connects.push(true, false);
             break;
         }
         else if((seekPos > starts[i]) && (seekPos < starts[i+1])) { //when there is space between 2 clips
-            alert("Currently, you cannot create a clips between 2 clips\nClips must be created at the end\nSorry for the technical downgrade, issue is being worked on");
-            //console.log(starts[i] + ", " + starts[i+1]);
-            //starts.splice(i, 0, [seekPos, starts[i+1]]); why wont it splice?
-            //connects.push(true, false);
+            starts.splice(i+1, 0, seekPos);
+            if(seekPos+10 > starts[i+2])
+                starts.splice(i+2, 0, starts[i+2]);
+            else
+                starts.splice(i+2, 0, seekPos+10);
+            connects.push(true, false);
             break;
         }
         else if((seekPos > starts[i-1]) && (seekPos < starts[i])) { //in the middle of a clip
@@ -199,7 +201,6 @@ function addClip(){
             break;
         }
         else if(starts[i] != null && starts[i+1] == null){ //at the end
-            console.log(starts[i] + ", " + starts[i+1]);
             starts.push(seekPos, seekPos+10);
             connects.push(true, false);
             break;

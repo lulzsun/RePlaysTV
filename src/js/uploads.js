@@ -138,11 +138,11 @@ export function createUploadNotification(video, vtitle) {
     dom.setAttribute('class', 'toast show');
     dom.setAttribute('id', "noti-u-" + video.id);
     dom.setAttribute('role', 'alert');
-    dom.setAttribute('style', 'background-color:#282828;margin-right:-25px;text-align: center;');
+    dom.setAttribute('style', 'background-color:var(--secondary);margin-right:-25px;text-align: center;');
 
     const header = document.createElement('div');
     header.setAttribute('class', 'toast-header');
-    header.setAttribute('style', 'background-color:#15b2b1;color:white;');
+    header.setAttribute('style', 'background-color:var(--primary);');
     dom.append(header);
 
     const h1 = document.createElement('strong');

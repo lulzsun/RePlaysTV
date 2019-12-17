@@ -4,6 +4,7 @@ import { GameDVRService } from '../../../../src/service/GameDVRService';
 import Config from '../../../../src/model/Config';
 import { log } from '../../../../src/core/Logger';
 
+export const SETTING_REPLAYS_THEME = 'theme';
 export const SETTING_REPLAYS_UPLOADED_VIDEOS = 'uploadedVideos';
 export const SETTING_REPLAYS_UPLOAD_DEFAULT = 'uploadDefault';
 //maybe its not a good idea to store in plain text... oh well, basic auth consequence
@@ -18,6 +19,7 @@ export const SETTING_REPLAYS_YOUTUBE_TOKEN = 'youtubeToken';
 export const SETTING_REPLAYS_YOUTUBE_UNLISTED = 'youtubeUnlisted';
 
 export const UPLOAD = [
+    SETTING_REPLAYS_THEME,
     SETTING_REPLAYS_UPLOAD_DEFAULT,
     SETTING_REPLAYS_STREAMABLE_EMAIL,
     SETTING_REPLAYS_STREAMABLE_PASS,
@@ -29,8 +31,9 @@ export const UPLOAD = [
 ]
 
 const defaultSettings = {
+    [SETTING_REPLAYS_THEME]: "Default",
     [SETTING_REPLAYS_UPLOADED_VIDEOS]: {},
-    [SETTING_REPLAYS_UPLOAD_DEFAULT]: '',
+    [SETTING_REPLAYS_UPLOAD_DEFAULT]: 'None',
     [SETTING_REPLAYS_STREAMABLE_EMAIL]: '',
     [SETTING_REPLAYS_STREAMABLE_PASS]: '',
     [SETTING_REPLAYS_GFYCAT_TOKEN]: '',

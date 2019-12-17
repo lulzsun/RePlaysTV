@@ -11,6 +11,19 @@
 //     });
 //     console.log(versionObj);
 // });
+// import NongameDetectionService from '../../../../src/service/NongameDetectionService';
+// NongameDetectionService.fetchRemoteDetectionsVersion().then((versionObj) => {
+//     NongameDetectionService.fetchRemoteDetectionsData(versionObj).then((detectionsJson) => {
+//         console.log(detectionsJson);
+//         var fs = require('fs');
+//         fs.writeFile("D:\\nongamedetections.json", JSON.stringify(detectionsJson), function(err) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//         });
+//     });
+//     console.log(versionObj);
+// });
 //
 // leftover debug code just incase... it does not have a purpose being in this file
 // this saved the remoteDetectionsData json as a local file for reverse engineering/understanding purposes
@@ -19,6 +32,7 @@
 
 import ReplaysSettingsService, {
     UPLOAD,
+    SETTING_REPLAYS_THEME,
     SETTING_REPLAYS_UPLOAD_DEFAULT,
     SETTING_REPLAYS_STREAMABLE_EMAIL,
     SETTING_REPLAYS_STREAMABLE_PASS,
@@ -608,6 +622,12 @@ $("#settings-general-div").mousedown( function (e) {
         }
         if(element.id.includes("showRecordingTimer")){
             SettingsService.setSetting(SETTING_SHOW_RECORDING_TIMER, !$(element).is(":checked"));
+        }
+        if(element.id.includes("theme")){
+            if(element.id.split("-")[2]) {
+                ReplaysSettingsService.setSetting(SETTING_REPLAYS_THEME, element.id.split("-")[2]);
+                document.getElementById("sett-theme").innerText = element.id.split("-")[2];
+            }
         }
     }
 });
