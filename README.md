@@ -20,7 +20,7 @@ Instructions
   2. Close out of Plays if it is currently running
   3. Open the installer executable 
   4. Locate/confirm the location of Plays
-    * Should be located at `~/AppData/Local/Plays`
+     * Should be located at `~/AppData/Local/Plays`
   5. Hit install and wait for the completion message popup
 
 # Feature List
