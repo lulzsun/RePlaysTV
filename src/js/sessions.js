@@ -92,34 +92,64 @@ $("#video-editor-div").mousedown( function (e) {
             saveClips();
         if(element.id.includes("sess-Bookmark"))
             alert("Bookmarks and deep integration pins are work in progress");
+        if(element.id.includes("sess-Zoom")){
+            var index = parseInt(document.getElementById("sess-Zoomer").className.split("-")[1]);
+    
+            if(element.id.includes("sess-ZoomOut")){
+                if((index-1) < 0) index = 0;
+                else index -= 1;
+            }
+            else if(element.id.includes("sess-ZoomIn")){
+                if((index+1) >= ZOOM.length) index = ZOOM.length-1;
+                else index += 1;
+            }
+    
+            document.getElementById("sess-Segments").style.width = ZOOM[index] + "%";
+            document.getElementById("sess-Seeker").style.width = ZOOM[index] + "%";
+    
+            document.getElementById("sess-Zoomer").className = "index-" + (index);
+            document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
+    
+            var offset = $(document.getElementById("sess-Seeker").firstChild.childNodes[1]).position().left+(85*(ZOOM[index]/100));
+            document.getElementById("sess-SeekBar").scrollLeft = offset;
+            console.log(offset);
+        }
+        if(element.id == "sess-SeekBar" || element.className == "noUi-base") {
+            var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
+            var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) )
+                            .toFixed(2);
+            videoSessDom.currentTime = result;
+        }
     }
 
-    if(element.id.includes("sess-Zoom")){
-        var index = parseInt(document.getElementById("sess-Zoomer").className.split("-")[1]);
-
-        if(element.id.includes("sess-ZoomOut")){
-            if((index-1) < 0) index = 0;
-            else index -= 1;
-        }
-        else if(element.id.includes("sess-ZoomIn")){
-            if((index+1) >= ZOOM.length) index = ZOOM.length-1;
-            else index += 1;
-        }
-
-        document.getElementById("sess-Segments").style.width = ZOOM[index] + "%";
-        document.getElementById("sess-Seeker").style.width = ZOOM[index] + "%";
-
-        document.getElementById("sess-Zoomer").className = "index-" + (index);
-        document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
-
-        var offset = $(document.getElementById("sess-Seeker").firstChild.childNodes[1]).position().left+(85*(ZOOM[index]/100));
-        document.getElementById("sess-SeekBar").scrollLeft = offset;
-        console.log(offset);
+    if(e.which == 3 && element.className == "noUi-connects") {
+        removeClip();
     }
 
-    if(e.which == 3 && element.className == "noUi-connects")
-    {
-        removeClip(element);
+    //console.log(element);
+});
+
+$("#video-editor-div").dblclick(function(e){
+    var element = $(e.target)[0];
+
+    if(element.className.includes("noUi-handle") || element.className.includes("noUi-connect") ) {
+        var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
+        var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) )
+                        .toFixed(2);
+        videoSessDom.currentTime = result;
+    }
+}); 
+
+//clip editor key controls
+$("#video-editor-div").on('keydown', function(event) {
+    if(event.keyCode == 32) { //SPACEBAR
+        (videoSessDom.paused) ? videoSessDom.play() : videoSessDom.pause();
+    }
+    if(event.keyCode == 37) { //LEFT
+        videoSessDom.currentTime -= 5;
+    }
+    if(event.keyCode == 39) { //RIGHT
+        videoSessDom.currentTime += 5;
     }
 });
 
@@ -154,29 +184,109 @@ $("#sessions-div").mousedown( function (e) {
     }
 });
 
-function removeClip(element) {
+function removeClip() {
+    $(".noUi-connects").contextMenu({
+        menuSelector: "#contextMenu",
+        menuSelected: function (invokedOn, selectedMenu) {
+            if(selectedMenu.text() == "Delete") {
+                var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
+                var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) ).toFixed(2);
 
+                var starts = segments.noUiSlider.get();
+                var connects = segments.noUiSlider.options.connect;
+
+                var toDelete = closest(starts, result); //gets closest value, returns index
+
+                for(var i=0; i<starts.length; i++) {
+                    if(starts[toDelete] == starts[i]) {
+                        if(toDelete % 2 == 0) 
+                            starts.splice(i, 2);
+                        else
+                            starts.splice(i-1, 2);
+                        connects.pop();
+                        connects.pop();
+                        break;
+                    }
+                }
+
+                if(starts.length == 0) {
+                    starts.push(0, 0);
+                    connects.push(true, false);
+
+                    document.getElementById("sess-Segments").style.visibility = "hidden";
+                    document.getElementById("sess-ClipAndSave").style.visibility = "hidden";
+                }
+
+                var options = {
+                    start: starts,
+                    connect: connects,
+                    behaviour: 'drag', //-unconstrained
+                    range: {
+                        'min': [0],
+                        'max': [videoSessDom.duration]
+                    }
+                }
+                segments.noUiSlider.destroy();
+                noUiSlider.create(segments, options);
+            
+                segments.noUiSlider.off('update'); //reset to prevent memory leaks
+                segments.noUiSlider.on('update', function () {
+                    var numOfClips = segments.noUiSlider.get().length / 2;
+                    var txt;
+                    var duration = 0;
+            
+                    for(var i=0; i<segments.noUiSlider.get().length-1; i+=2) {
+                        //console.log(segments.noUiSlider.get()[i+1] - segments.noUiSlider.get()[i]);
+                        duration += (segments.noUiSlider.get()[i+1] - segments.noUiSlider.get()[i]);
+                    }
+            
+                    duration = moment("2019-12-15 00:00:00").seconds(duration).format('HH:mm:ss').toString();
+                
+                    if(duration.startsWith("00:")){
+                        duration = duration.slice(3);
+                    }else if(duration.startsWith("0")){
+                        duration = duration.slice(1);
+                    }
+            
+                    (numOfClips>1) ? txt=" Clips: " : txt=" Clip: ";
+                    document.getElementById("sess-ClipsStamp").innerText = numOfClips + txt + duration;
+                });
+            }
+        }
+    });
+}
+
+function closest(array, num) {
+    var i = 0;
+    var minDiff = 1000;
+    var ans;
+    for (i in array) {
+      var m = Math.abs(num - array[i]);
+      if (m < minDiff) {
+        minDiff = m;
+        ans = i;
+      }
+    }
+    return ans;
 }
 
 function addClip(){
-    const element = document.getElementById("sess-Segments");
     var starts = segments.noUiSlider.get();
     var connects = segments.noUiSlider.options.connect;
 
-    if(element.style.visibility == "hidden"){ //that means no clips exist, so we will prepare first clip
+    if(document.getElementById("sess-Segments").style.visibility == "hidden"){ //that means no clips exist, so we will prepare first clip
         starts.pop();
         starts.pop();
         connects.pop();
         connects.pop();
         
-        element.style.visibility = "visible";
+        document.getElementById("sess-Segments").style.visibility = "visible";
         document.getElementById("sess-ClipAndSave").style.visibility = "visible";
     }
     const seekPos = parseFloat(seeker.noUiSlider.get());
 
     for(var i=1; i<=starts.length+1; i+=2) {
         if(starts[i] == null && starts[i+1] == null){ //when no other clips exist
-            //console.log(starts[i] + ", " + starts[i+1]);
             starts.push(seekPos, seekPos+10);
             connects.push(true, false);
             break;
@@ -305,6 +415,13 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
 })
 
 videoSessDom.addEventListener('timeupdate', function(){
+    if (videoSessDom.paused){
+        document.getElementById("sess-PlayPause").innerHTML = '';
+        const clickable = document.createElement('span');
+        clickable.setAttribute('class', 'fa fa-play');
+        document.getElementById("sess-PlayPause").append(clickable);
+    }
+    
     if(!sliding && seeker){
         seeker.noUiSlider.set(videoSessDom.currentTime);
     }else if(playClipped) playPauseClips();
@@ -609,3 +726,56 @@ function deleteVideo(videoId) {
         }
     });
 }
+
+//bootstrap context menu - https://stackoverflow.com/a/18667336
+(function ($, window) {
+    $.fn.contextMenu = function (settings) {
+        return this.each(function () {
+            // Open context menu
+            $(this).on("contextmenu", function (e) {
+                // return native menu if pressing control
+                if (e.ctrlKey) return;
+                
+                //open menu
+                var $menu = $(settings.menuSelector)
+                    .data("invokedOn", $(e.target))
+                    .show()
+                    .css({
+                        position: "absolute",
+                        left: getMenuPosition(e.clientX-200, 'width', 'scrollLeft'),
+                        top: getMenuPosition(e.clientY-90, 'height', 'scrollTop')
+                    })
+                    .off('click')
+                    .on('click', 'a', function (e) {
+                        $menu.hide();
+                
+                        var $invokedOn = $menu.data("invokedOn");
+                        var $selectedMenu = $(e.target);
+                        
+                        settings.menuSelected.call(this, $invokedOn, $selectedMenu);
+                    });
+                
+                return false;
+            });
+
+            //make sure menu closes on any click
+            $('body').click(function () {
+                $(settings.menuSelector).hide();
+            });
+        });
+        
+        function getMenuPosition(mouse, direction, scrollDir) {
+            var win = $(window)[direction](),
+                scroll = $(window)[scrollDir](),
+                menu = $(settings.menuSelector)[direction](),
+                position = mouse + scroll;
+                        
+            // opening menu would pass the side of the page
+            if (mouse + menu > win && menu < mouse) 
+                position -= menu;
+            
+            return position;
+        }    
+
+    };
+})(jQuery, window);

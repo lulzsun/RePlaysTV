@@ -90,8 +90,38 @@ $("#video-viewer-div").mousedown( function (e) {
         if(element.id.includes("clip-DeleteClip")){
             deleteVideo(videoClipDom.id.replace("clip-play-", ""));
         }
+        if(element.id == "clip-SeekBar" || element.className == "noUi-base") {
+            var xpos = window.event.x + document.getElementById("clip-SeekBar").scrollLeft - 227;
+            var result = ( xpos / ( document.getElementById("clip-Seeker").clientWidth / videoClipDom.duration ) )
+                            .toFixed(2);
+            videoClipDom.currentTime = result;
+        }
     }
     //console.log("clicked on element: " + element.className);
+});
+
+$("#video-viewer-div").dblclick(function(){
+    var element = $(e.target)[0];
+
+    if(element.className.includes("noUi-handle") || element.className.includes("noUi-connect") ) {
+        var xpos = window.event.x + document.getElementById("clip-SeekBar").scrollLeft - 227;
+        var result = ( xpos / ( document.getElementById("clip-Seeker").clientWidth / videoClipDom.duration ) )
+                        .toFixed(2);
+        videoClipDom.currentTime = result;
+    }
+}); 
+
+//clip editor key controls
+$("#video-viewer-div").on('keydown', function(event) {
+    if(event.keyCode == 32) { //SPACEBAR
+        (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
+    }
+    if(event.keyCode == 37) { //LEFT
+        videoClipDom.currentTime -= 5;
+    }
+    if(event.keyCode == 39) { //RIGHT
+        videoClipDom.currentTime += 5;
+    }
 });
 
 $("#clips-div").mousedown( function (e) {
@@ -136,6 +166,13 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
 })
 
 videoClipDom.addEventListener('timeupdate', function(){
+    if (videoClipDom.paused){
+        document.getElementById("clip-PlayPause").innerHTML = '';
+        const clickable = document.createElement('span');
+        clickable.setAttribute('class', 'fa fa-play');
+        document.getElementById("clip-PlayPause").append(clickable);
+    }
+
     if(!sliding && seeker){
         seeker.noUiSlider.set(videoClipDom.currentTime);
     }
