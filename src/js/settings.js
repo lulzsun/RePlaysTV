@@ -101,24 +101,24 @@ var keyboardMap = [
     "", // [0]
     "", // [1]
     "", // [2]
-    "CANCEL", // [3]
+    "Cancel", // [3]
     "", // [4]
     "", // [5]
-    "HELP", // [6]
+    "Help", // [6]
     "", // [7]
-    "BACK_SPACE", // [8]
-    "TAB", // [9]
+    "Backspace", // [8]
+    "Tab", // [9]
     "", // [10]
     "", // [11]
-    "CLEAR", // [12]
-    "ENTER", // [13]
+    "Clear", // [12]
+    "Enter", // [13]
     "ENTER_SPECIAL", // [14]
     "", // [15]
-    "SHIFT", // [16]
-    "CONTROL", // [17]
-    "ALT", // [18]
-    "PAUSE", // [19]
-    "CAPS_LOCK", // [20]
+    "Shift", // [16]
+    "Control", // [17]
+    "Alt", // [18]
+    "Pause", // [19]
+    "Caps_Lock", // [20]
     "KANA", // [21]
     "EISU", // [22]
     "JUNJA", // [23]
@@ -130,21 +130,21 @@ var keyboardMap = [
     "NONCONVERT", // [29]
     "ACCEPT", // [30]
     "MODECHANGE", // [31]
-    "SPACE", // [32]
-    "PAGE_UP", // [33]
-    "PAGE_DOWN", // [34]
-    "END", // [35]
-    "HOME", // [36]
-    "LEFT", // [37]
-    "UP", // [38]
-    "RIGHT", // [39]
-    "DOWN", // [40]
-    "SELECT", // [41]
-    "PRINT", // [42]
-    "EXECUTE", // [43]
-    "PRINTSCREEN", // [44]
-    "INSERT", // [45]
-    "DELETE", // [46]
+    "Space", // [32]
+    "PageUp", // [33]
+    "PageDown", // [34]
+    "End", // [35]
+    "Home", // [36]
+    "Left", // [37]
+    "Up", // [38]
+    "Right", // [39]
+    "Down", // [40]
+    "Select", // [41]
+    "Print", // [42]
+    "Execute", // [43]
+    "Printscreen", // [44]
+    "Insert", // [45]
+    "Delete", // [46]
     "", // [47]
     "0", // [48]
     "1", // [49]
@@ -156,13 +156,13 @@ var keyboardMap = [
     "7", // [55]
     "8", // [56]
     "9", // [57]
-    "COLON", // [58]
-    "SEMICOLON", // [59]
-    "LESS_THAN", // [60]
-    "EQUALS", // [61]
-    "GREATER_THAN", // [62]
-    "QUESTION_MARK", // [63]
-    "AT", // [64]
+    ":", // [58]
+    ";", // [59]
+    "<", // [60]
+    "=", // [61]
+    ">", // [62]
+    "?", // [63]
+    "@", // [64]
     "A", // [65]
     "B", // [66]
     "C", // [67]
@@ -189,7 +189,7 @@ var keyboardMap = [
     "X", // [88]
     "Y", // [89]
     "Z", // [90]
-    "OS_KEY", // [91] Windows Key (Windows) or Command Key (Mac)
+    "Win", // [91] Windows Key (Windows) or Command Key (Mac)
     "", // [92]
     "CONTEXT_MENU", // [93]
     "", // [94]
@@ -242,8 +242,8 @@ var keyboardMap = [
     "", // [141]
     "", // [142]
     "", // [143]
-    "NUM_LOCK", // [144]
-    "SCROLL_LOCK", // [145]
+    "Numlock", // [144]
+    "Scrolllock", // [145]
     "WIN_OEM_FJ_JISHO", // [146]
     "WIN_OEM_FJ_MASSHOU", // [147]
     "WIN_OEM_FJ_TOUROKU", // [148]
@@ -258,23 +258,23 @@ var keyboardMap = [
     "", // [157]
     "", // [158]
     "", // [159]
-    "CIRCUMFLEX", // [160]
-    "EXCLAMATION", // [161]
-    "DOUBLE_QUOTE", // [162]
-    "HASH", // [163]
-    "DOLLAR", // [164]
-    "PERCENT", // [165]
-    "AMPERSAND", // [166]
-    "UNDERSCORE", // [167]
-    "OPEN_PAREN", // [168]
-    "CLOSE_PAREN", // [169]
-    "ASTERISK", // [170]
-    "PLUS", // [171]
-    "PIPE", // [172]
-    "HYPHEN_MINUS", // [173]
-    "OPEN_CURLY_BRACKET", // [174]
-    "CLOSE_CURLY_BRACKET", // [175]
-    "TILDE", // [176]
+    "^", // [160]
+    "!", // [161]
+    "\"", // [162]
+    "#", // [163]
+    "$", // [164]
+    "%", // [165]
+    "&", // [166]
+    "_", // [167]
+    "(", // [168]
+    ")", // [169]
+    "*", // [170]
+    "+", // [171]
+    "|", // [172]
+    "_", // [173]
+    "{", // [174]
+    "}", // [175]
+    "~", // [176]
     "", // [177]
     "", // [178]
     "", // [179]
@@ -284,13 +284,13 @@ var keyboardMap = [
     "VOLUME_UP", // [183]
     "", // [184]
     "", // [185]
-    "SEMICOLON", // [186]
-    "EQUALS", // [187]
-    "COMMA", // [188]
-    "MINUS", // [189]
-    "PERIOD", // [190]
-    "SLASH", // [191]
-    "BACK_QUOTE", // [192]
+    ";", // [186]
+    "=", // [187]
+    ",", // [188]
+    "-", // [189]
+    ".", // [190]
+    "/", // [191]
+    "`", // [192]
     "", // [193]
     "", // [194]
     "", // [195]
@@ -317,10 +317,10 @@ var keyboardMap = [
     "", // [216]
     "", // [217]
     "", // [218]
-    "OPEN_BRACKET", // [219]
-    "BACK_SLASH", // [220]
-    "CLOSE_BRACKET", // [221]
-    "QUOTE", // [222]
+    "[", // [219]
+    "\\", // [220]
+    "]", // [221]
+    "\'", // [222]
     "", // [223]
     "META", // [224]
     "ALTGR", // [225]
@@ -895,26 +895,42 @@ function addExternalFolder(fileName){
 }
 
 $(document).on('keydown', function(event) {
-    if ( event.shiftKey && event.keyCode ) {
-        if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
-            keybind = "Shift";
-        else
-            keybind = "Shift+" + keyboardMap[event.keyCode];
-    }
-    if ( event.ctrlKey && event.keyCode ) {
-        if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
-            keybind = "Control";
-        else
-            keybind = "Control+" + keyboardMap[event.keyCode];
-    }
-    if ( event.altKey && event.keyCode ) {
-        if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
-            keybind = "Alt";
-        else
-            keybind = "Alt+" + keyboardMap[event.keyCode];
-    }
-    if ( (!event.ctrlKey && !event.altKey && !event.shiftKey) && event.keyCode ) {
-        keybind = keyboardMap[event.keyCode];
+    if( isKeybinding ) {
+        if ( event.keyCode == 36 || event.keyCode == 33 ) {
+            alert(keyboardMap[event.keyCode] + " is not a supported key");
+        } else if ( (event.ctrlKey && event.shiftKey) && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Control+Shift";
+            else
+                keybind = "Control+Shift+" + keyboardMap[event.keyCode];
+        } else if ( (event.ctrlKey && event.altKey) && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Control+Alt";
+            else
+                keybind = "Control+Alt+" + keyboardMap[event.keyCode];
+        } else if ( (event.shiftKey && event.altKey) && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Shift+Alt";
+            else
+                keybind = "Shift+Alt+" + keyboardMap[event.keyCode];
+        } else if ( event.shiftKey && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Shift";
+            else
+                keybind = "Shift+" + keyboardMap[event.keyCode];
+        } else if ( event.ctrlKey && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Control";
+            else
+                keybind = "Control+" + keyboardMap[event.keyCode];
+        } else if ( event.altKey && event.keyCode ) {
+            if(event.keyCode == 16 || event.keyCode == 17 || event.keyCode == 18)
+                keybind = "Alt";
+            else
+                keybind = "Alt+" + keyboardMap[event.keyCode];
+        } else if ( (!event.ctrlKey && !event.altKey && !event.shiftKey) && event.keyCode ) {
+            keybind = keyboardMap[event.keyCode];
+        }
     }
 });
 
