@@ -42,3 +42,9 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
     word-wrap: break-word;
     white-space: normal;
 }
+
+*, *::after, *::before {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+}
