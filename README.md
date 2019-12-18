@@ -10,15 +10,17 @@ You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX)
 ![Preview](/resources/preview.png)
 
 # Installation
-You must have the latest (3.0.0) Plays client installed. Reinstalling is recommended, but not required.
+You must have the Plays client installed. Reinstalling is NOT recommended as of now. It is best if you already have Plays installed before the shutdown occurred.
 
 You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
+  * If you are coming from a completely fresh install of the original Plays client, you may run into issues. Check the Discord to get instructions for a temporary fix.
 
-  1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
+  1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases).
   2. Close out of Plays if it is currently running
-  3. Open the installer executable (as administrator)
+  3. Open the installer executable 
   4. Locate/confirm the location of Plays
-  5. Hit install and wait for the completion message popup.
+    * Should be located at `~/AppData/Local/Plays`
+  5. Hit install and wait for the completion message popup
 
 # Feature List
   * [x] Installer Executable
@@ -60,13 +62,9 @@ You can find a mirror download of the Plays setup [here.](https://drive.google.c
 	* Game Detection Remote Database
 	  * This is important for new games that come out and Plays.tv does not recognize them
 	  * Need better understanding as to how the original service works
-  * Doing keybinding settings work kind of funky, needs changes
-	* Some keys are unsupported, but app does not tell the user that it isn't
-  * Clip editor needs work
-    * Deleting a clipped section in the clip editor does not exist
-        * Work around is to back out of the editor to reset
-  * A lot of plays.tv online services still run in the background
+  * A some of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
+	* Could be a possible reason to performance losses
   * Slow install/update process
 	* Mainly due to having the installer act as a portable/contained dev environment
 	  * Also the reason why installer's total file size is fairly large
