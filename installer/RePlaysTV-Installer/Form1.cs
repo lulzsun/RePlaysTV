@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     public partial class Form1 : Form {
+        const string VERSION = "3.0.1";
         public string playsDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\Plays";
         public static Form1 form1;
         Process p;
@@ -67,10 +68,10 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("return null;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\BaseService.js", 48);     //disables online user check
             ModifyFileAtLine("return {};", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Settings.js", 239);     //disables online user check
             for (int i = 159; i <= 166; i++) {
-                ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);
+                ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);     //disables online user check
             }
-            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);
-            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);     //disables online user check
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);     //disables online user check
             //end modifying
 
             StartPackage();
@@ -80,11 +81,11 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
             SW.WriteLine("rename " + playsDirectory + "\\Update.exe noUpdate.exe");
-            SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-3.0.1\"");
-            SW.WriteLine("mkdir \"" + playsDirectory + "\\app-3.0.1\"");
+            SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-" + VERSION + "\"");
+            SW.WriteLine("mkdir \"" + playsDirectory + "\\app-" + VERSION + "\"");
             SW.WriteLine("asar pack \".\\out\\Plays-win32-ia32\\resources\\app\" \".\\out\\Plays-win32-ia32\\resources\\app.asar\"");
             SW.WriteLine("rd /s /q \".\\out\\Plays-win32-ia32\\resources\\app\"");
-            SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-3.0.1\"");
+            SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-" + VERSION + "\"");
             SW.WriteLine("cd ..");
             SW.WriteLine("rd /s /q temp");
             SW.WriteLine("exit");
@@ -177,6 +178,10 @@ namespace RePlaysTV_Installer {
                                 form1.Invoke(new MethodInvoker(delegate { form1.StartModify(); }));
                             }
                             if (outLine.Data.Contains(">exit")) {
+                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
                                 System.Windows.Forms.MessageBox.Show("Installation Complete!");
                             }
                             form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
