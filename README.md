@@ -13,7 +13,7 @@ You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX)
 You must have the Plays client installed. Reinstalling is NOT recommended as of now. It is best if you already have Plays installed before the shutdown occurred.
 
 You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
-  * If you are coming from a completely fresh install of the original Plays client, you may run into issues. Check this [issue]https://github.com/lulzsun/RePlaysTV/issues/3).
+  * If you are coming from a completely fresh install of the original Plays client, you may run into issues. Check this [issue](https://github.com/lulzsun/RePlaysTV/issues/3).
 
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases).
   2. Close out of Plays if it is currently running
