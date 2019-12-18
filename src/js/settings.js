@@ -447,9 +447,22 @@ function initGeneral(){
             document.getElementById("sett-keybindTakeScreenshot").innerText = setting.keybindTakeScreenshot;
             $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
             $('#sett-showRecordingTimer').prop('checked', setting.showRecordingTimer); 
+
             console.log(setting);
         }else console.error("General settings missing?");
     })
+
+    ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
+        if(setting){
+            if(setting.theme == "Dark")
+                document.getElementById("css-theme").href = "./css/bootstrap-dark.css";
+            else if(setting.theme == "Light")
+                document.getElementById("css-theme").href = "./css/bootstrap-light.css";
+            else
+                document.getElementById("css-theme").href = "./css/bootstrap.css";
+            console.log(setting);
+        }else console.error("Theme setting missing?");
+    });
 }
 
 function initVideo(){
@@ -627,6 +640,12 @@ $("#settings-general-div").mousedown( function (e) {
             if(element.id.split("-")[2]) {
                 ReplaysSettingsService.setSetting(SETTING_REPLAYS_THEME, element.id.split("-")[2]);
                 document.getElementById("sett-theme").innerText = element.id.split("-")[2];
+                if(element.id.split("-")[2] == "Dark")
+                    document.getElementById("css-theme").href = "./css/bootstrap-dark.css";
+                else if(element.id.split("-")[2] == "Light")
+                    document.getElementById("css-theme").href = "./css/bootstrap-light.css";
+                else
+                    document.getElementById("css-theme").href = "./css/bootstrap.css";
             }
         }
     }
