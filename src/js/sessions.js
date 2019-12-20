@@ -210,6 +210,7 @@ $("#sessions-div").mousedown( function (e) {
                     });
                     document.getElementById("sess-SelectionToolbar").style.visibility = "hidden";
                     document.getElementById("session-list-div").style.marginTop = "0rem";
+                    fetchAllClips(sortGame, sortType);
                 }
             }
             if(element.id.includes("SelectAll")) {
@@ -836,6 +837,7 @@ function deleteVideo(videoId, confirmation=true) {
                     document.getElementById(videoId).remove();
                 }
                 );
+                fetchAllClips(sortGame, sortType);
             }
         }
         else {
