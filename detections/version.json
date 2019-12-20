@@ -1,0 +1,8 @@
+{
+	"game_detections_version": {
+		"version": "20191115.2"
+	},
+	"nongame_detection_version": {
+		"version": "20191031.5"
+	}
+}
