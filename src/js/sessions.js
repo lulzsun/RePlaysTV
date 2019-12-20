@@ -55,66 +55,68 @@ $("#video-editor-div").mousedown( function (e) {
     }else element = $(e.target)[0];
 
     if(e.which == 1) {
-        if(element.id.includes("sess-play-") || element.id.includes("sess-PlayPause")){
-            (videoSessDom.paused) ? continuePlay=true : continuePlay=false;
-            (videoSessDom.paused) ? videoSessDom.play() : videoSessDom.pause();
-            document.getElementById("sess-PlayPause").innerHTML = '';
-            const clickable = document.createElement('span');
-            (videoSessDom.paused) ? clickable.setAttribute('class', 'fa fa-play') : clickable.setAttribute('class', 'fa fa-pause');
-            document.getElementById("sess-PlayPause").append(clickable);
-        }
-        if(element.id.includes("sess-Rewind5")){
-            if(!(videoSessDom.currentTime < 5))
-                videoSessDom.currentTime -= 5;
-            else videoSessDom.currentTime = 0;
-        }
-        if(element.id.includes("sess-PlaySpeed")){
-            document.getElementById("sess-PlaySpeed").innerText = element.innerText;
-            videoSessDom.playbackRate = parseFloat(element.id.split("-")[2]);
-        }
-        if(element.id.includes("sess-Volume")){
-            element.oninput = function() {
-                videoSessDom.volume = element.value / 100;
-    
-                if(element.value > 50)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-up";
-                else if(element.value == 0)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-off";
-                else if(element.value < 50)
-                    document.getElementById("sess-IcoVolume").className = "fa fa-volume-down";
-            } 
-        }
-        if(element.id.includes("sess-AddClip"))
-            addClip();
-        if(element.id.includes("sess-PlayPauseClips"))
-            playPauseClips();
-        if(element.id.includes("sess-SaveClips"))
-            saveClips();
-        if(element.id.includes("sess-Bookmark"))
-            alert("Bookmarks and deep integration pins are work in progress");
-        if(element.id.includes("sess-Zoom")){
-            var index = parseInt(document.getElementById("sess-Zoomer").className.split("-")[1]);
-    
-            if(element.id.includes("sess-ZoomOut")){
-                if((index-1) < 0) index = 0;
-                else index -= 1;
+        if(element.id.includes("sess-")) {
+            if(element.id.includes("play-") || element.id.includes("PlayPause")){
+                (videoSessDom.paused) ? continuePlay=true : continuePlay=false;
+                (videoSessDom.paused) ? videoSessDom.play() : videoSessDom.pause();
+                document.getElementById("sess-PlayPause").innerHTML = '';
+                const clickable = document.createElement('span');
+                (videoSessDom.paused) ? clickable.setAttribute('class', 'fa fa-play') : clickable.setAttribute('class', 'fa fa-pause');
+                document.getElementById("sess-PlayPause").append(clickable);
             }
-            else if(element.id.includes("sess-ZoomIn")){
-                if((index+1) >= ZOOM.length) index = ZOOM.length-1;
-                else index += 1;
+            if(element.id.includes("Rewind5")){
+                if(!(videoSessDom.currentTime < 5))
+                    videoSessDom.currentTime -= 5;
+                else videoSessDom.currentTime = 0;
             }
-    
-            document.getElementById("sess-Segments").style.width = ZOOM[index] + "%";
-            document.getElementById("sess-Seeker").style.width = ZOOM[index] + "%";
-    
-            document.getElementById("sess-Zoomer").className = "index-" + (index);
-            document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
-    
-            var offset = $(document.getElementById("sess-Seeker").firstChild.childNodes[1]).position().left+(85*(ZOOM[index]/100));
-            document.getElementById("sess-SeekBar").scrollLeft = offset;
-            console.log(offset);
+            if(element.id.includes("PlaySpeed")){
+                document.getElementById("sess-PlaySpeed").innerText = element.innerText;
+                videoSessDom.playbackRate = parseFloat(element.id.split("-")[2]);
+            }
+            if(element.id.includes("Volume")){
+                element.oninput = function() {
+                    videoSessDom.volume = element.value / 100;
+        
+                    if(element.value > 50)
+                        document.getElementById("sess-IcoVolume").className = "fa fa-volume-up";
+                    else if(element.value == 0)
+                        document.getElementById("sess-IcoVolume").className = "fa fa-volume-off";
+                    else if(element.value < 50)
+                        document.getElementById("sess-IcoVolume").className = "fa fa-volume-down";
+                } 
+            }
+            if(element.id.includes("AddClip"))
+                addClip();
+            if(element.id.includes("PlayPauseClips"))
+                playPauseClips();
+            if(element.id.includes("SaveClips"))
+                saveClips();
+            if(element.id.includes("Bookmark"))
+                alert("Bookmarks and deep integration pins are work in progress");
+            if(element.id.includes("Zoom")){
+                var index = parseInt(document.getElementById("sess-Zoomer").className.split("-")[1]);
+        
+                if(element.id.includes("ZoomOut")){
+                    if((index-1) < 0) index = 0;
+                    else index -= 1;
+                }
+                else if(element.id.includes("ZoomIn")){
+                    if((index+1) >= ZOOM.length) index = ZOOM.length-1;
+                    else index += 1;
+                }
+        
+                document.getElementById("sess-Segments").style.width = ZOOM[index] + "%";
+                document.getElementById("sess-Seeker").style.width = ZOOM[index] + "%";
+        
+                document.getElementById("sess-Zoomer").className = "index-" + (index);
+                document.getElementById("sess-Zoomer").innerText = document.getElementById("sess-Seeker").style.width;
+        
+                var offset = $(document.getElementById("sess-Seeker").firstChild.childNodes[1]).position().left+(85*(ZOOM[index]/100));
+                document.getElementById("sess-SeekBar").scrollLeft = offset;
+                console.log(offset);
+            }
         }
-        if(element.id == "sess-SeekBar" || element.className == "noUi-base") {
+        if(element.className == "noUi-base") {
             var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
             var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) )
                             .toFixed(2);
@@ -170,16 +172,21 @@ $("#sessions-div").mousedown( function (e) {
         }
         if(element.id.includes("-CBOX"))
             console.log("clicked on video: " + element.id.split("-")[0]);
-        if(element.id.includes("sess-Sort-")) {
-            if(!element.id.split("-")[2].includes("Game|")) {
-                sortType = element.id.split("-")[2];
-                document.getElementById("sess-SortType").innerText = sortType + " First";
+        if(element.id.includes("sess-")) {
+            if(element.id.includes("Sort-")) {
+                if(!element.id.split("-")[2].includes("Game|")) {
+                    sortType = element.id.split("-")[2];
+                    document.getElementById("sess-SortType").innerText = sortType + " First";
+                }
+                else {
+                    sortGame = element.id.split("|")[1];
+                    document.getElementById("sess-SortGame").innerText = sortGame;
+                }
+                fetchAllVideos(sortGame, sortType);
             }
-            else {
-                sortGame = element.id.split("|")[1];
-                document.getElementById("sess-SortGame").innerText = sortGame;
+            if(element.id.includes("Refresh")) {
+                fetchAllVideos(sortGame, sortType);
             }
-            fetchAllVideos(sortGame, sortType);
         }
     }
 });
@@ -215,6 +222,7 @@ function removeClip() {
 
                     document.getElementById("sess-Segments").style.visibility = "hidden";
                     document.getElementById("sess-ClipAndSave").style.visibility = "hidden";
+                    document.getElementById("sess-Seeker").style.height = "100%";
                 }
 
                 var options = {
@@ -282,6 +290,7 @@ function addClip(){
         
         document.getElementById("sess-Segments").style.visibility = "visible";
         document.getElementById("sess-ClipAndSave").style.visibility = "visible";
+        document.getElementById("sess-Seeker").style.height = "0px";
     }
     const seekPos = parseFloat(seeker.noUiSlider.get());
 
@@ -649,7 +658,7 @@ function makeVidDOM(video) {
 
     const card_hover_ctrl2 = document.createElement('div');
     card_hover_ctrl2.setAttribute('class', 'dropdown show');
-    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:15px');
+    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:25px');
     card_hover2.append(card_hover_ctrl2);
 
     const card_hover_dmenu1 = document.createElement('a');
@@ -663,7 +672,7 @@ function makeVidDOM(video) {
 
     const card_hover_dmenu1_sub1 = document.createElement('i');
     card_hover_dmenu1_sub1.setAttribute('class', 'fa fa-ellipsis-v');
-    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px');
+    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px; text-shadow:-1px -1px 0 gray, 1px -1px 0 gray, -1px 1px 0 gray, 1px 1px 0 gray;');
     card_hover_dmenu1.append(card_hover_dmenu1_sub1);
 
     const card_hover_dmenu2 = document.createElement('div');

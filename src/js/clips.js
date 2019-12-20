@@ -47,50 +47,53 @@ $("#video-viewer-div").mousedown( function (e) {
 
     if(e.which == 1) { //left click
         //viewer tab
-        if(element.id.includes("clip-play-") || element.id.includes("clip-PlayPause")){
-            (videoClipDom.paused) ? continuePlay=true : continuePlay=false;
-            (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
-            document.getElementById("clip-PlayPause").innerHTML = '';
-            const clickable = document.createElement('span');
-            (videoClipDom.paused) ? clickable.setAttribute('class', 'fa fa-play') : clickable.setAttribute('class', 'fa fa-pause');
-            document.getElementById("clip-PlayPause").append(clickable);
-        }
-        if(element.id.includes("clip-Rewind5")){
-            if(!(videoClipDom.currentTime < 5))
-                videoClipDom.currentTime -= 5;
-            else videoClipDom.currentTime = 0;
-        }
-        if(element.id.includes("clip-PlaySpeed")){
-            document.getElementById("clip-PlaySpeed").innerText = element.innerText;
-            videoClipDom.playbackRate = parseFloat(element.id.split("-")[2]);
-        }
-        if(element.id.includes("clip-Volume")){
-            element.oninput = function() {
-                videoClipDom.volume = element.value / 100;
-    
-                if(element.value > 50)
-                    document.getElementById("clip-IcoVolume").className = "fa fa-volume-up";
-                else if(element.value == 0)
-                    document.getElementById("clip-IcoVolume").className = "fa fa-volume-off";
-                else if(element.value < 50)
-                    document.getElementById("clip-IcoVolume").className = "fa fa-volume-down";
-            } 
-        }
-        if(element.id.includes("clip-OpenUploadModal")){
-            document.getElementById("clip-UploadPlatform").innerText = ReplaysSettingsService.getSetting("uploadDefault");
-        }
-        if(element.id.includes("clip-UploadPlatform")){
-            if(element.id.split("-")[2]) {
-                document.getElementById("clip-UploadPlatform").innerText = element.id.split("-")[2];
+        if(element.id.includes("clip-")) {
+            if(element.id.includes("play-") || element.id.includes("PlayPause")){
+                (videoClipDom.paused) ? continuePlay=true : continuePlay=false;
+                (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
+                document.getElementById("clip-PlayPause").innerHTML = '';
+                const clickable = document.createElement('span');
+                (videoClipDom.paused) ? clickable.setAttribute('class', 'fa fa-play') : clickable.setAttribute('class', 'fa fa-pause');
+                document.getElementById("clip-PlayPause").append(clickable);
+            }
+            if(element.id.includes("Rewind5")){
+                if(!(videoClipDom.currentTime < 5))
+                    videoClipDom.currentTime -= 5;
+                else videoClipDom.currentTime = 0;
+            }
+            if(element.id.includes("PlaySpeed")){
+                document.getElementById("clip-PlaySpeed").innerText = element.innerText;
+                videoClipDom.playbackRate = parseFloat(element.id.split("-")[2]);
+            }
+            if(element.id.includes("clip-Volume")){
+                element.oninput = function() {
+                    videoClipDom.volume = element.value / 100;
+        
+                    if(element.value > 50)
+                        document.getElementById("clip-IcoVolume").className = "fa fa-volume-up";
+                    else if(element.value == 0)
+                        document.getElementById("clip-IcoVolume").className = "fa fa-volume-off";
+                    else if(element.value < 50)
+                        document.getElementById("clip-IcoVolume").className = "fa fa-volume-down";
+                } 
+            }
+            if(element.id.includes("OpenUploadModal")){
+                document.getElementById("clip-UploadPlatform").innerText = ReplaysSettingsService.getSetting("uploadDefault");
+            }
+            if(element.id.includes("UploadPlatform")){
+                if(element.id.split("-")[2]) {
+                    document.getElementById("clip-UploadPlatform").innerText = element.id.split("-")[2];
+                }
+            }
+            if(element.id.includes("UploadClip")){
+                uploadClip(videoClipDom.id.replace("clip-play-", ""));
+            }
+            if(element.id.includes("DeleteClip")){
+                deleteVideo(videoClipDom.id.replace("clip-play-", ""));
             }
         }
-        if(element.id.includes("clip-UploadClip")){
-            uploadClip(videoClipDom.id.replace("clip-play-", ""));
-        }
-        if(element.id.includes("clip-DeleteClip")){
-            deleteVideo(videoClipDom.id.replace("clip-play-", ""));
-        }
-        if(element.id == "clip-SeekBar" || element.className == "noUi-base") {
+        
+        if(element.className == "noUi-base") {
             var xpos = window.event.x + document.getElementById("clip-SeekBar").scrollLeft - 227;
             var result = ( xpos / ( document.getElementById("clip-Seeker").clientWidth / videoClipDom.duration ) )
                             .toFixed(2);
@@ -140,16 +143,21 @@ $("#clips-div").mousedown( function (e) {
         }
         if(element.id.includes("-CBOX"))
             console.log("clicked on video: " + element.id.split("-")[0]);
-        if(element.id.includes("clip-Sort-")) {
-            if(!element.id.split("-")[2].includes("Game|")) {
-                sortType = element.id.split("-")[2];
-                document.getElementById("clip-SortType").innerText = sortType + " First";
+        if(element.id.includes("clip-")) {
+            if(element.id.includes("Sort-")) {
+                if(!element.id.split("-")[2].includes("Game|")) {
+                    sortType = element.id.split("-")[2];
+                    document.getElementById("clip-SortType").innerText = sortType + " First";
+                }
+                else {
+                    sortGame = element.id.split("|")[1];
+                    document.getElementById("clip-SortGame").innerText = sortGame;
+                }
+                fetchAllClips(sortGame, sortType);
             }
-            else {
-                sortGame = element.id.split("|")[1];
-                document.getElementById("clip-SortGame").innerText = sortGame;
+            if(element.id.includes("Refresh")) {
+                fetchAllClips(sortGame, sortType);
             }
-            fetchAllClips(sortGame, sortType);
         }
     }
     //console.log("clicked on element: " + element.className);
@@ -391,7 +399,7 @@ function makeVidDOM(video) {
 
     const card_hover_ctrl2 = document.createElement('div');
     card_hover_ctrl2.setAttribute('class', 'dropdown show');
-    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:15px');
+    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:25px');
     card_hover2.append(card_hover_ctrl2);
 
     const card_hover_dmenu1 = document.createElement('a');
@@ -405,7 +413,7 @@ function makeVidDOM(video) {
 
     const card_hover_dmenu1_sub1 = document.createElement('i');
     card_hover_dmenu1_sub1.setAttribute('class', 'fa fa-ellipsis-v');
-    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px');
+    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px; text-shadow:-1px -1px 0 gray, 1px -1px 0 gray, -1px 1px 0 gray, 1px 1px 0 gray;');
     card_hover_dmenu1.append(card_hover_dmenu1_sub1);
 
     const card_hover_dmenu2 = document.createElement('div');

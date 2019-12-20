@@ -66,7 +66,7 @@ export function makeUploadDOM(video) {
 
     const card_hover_ctrl2 = document.createElement('div');
     card_hover_ctrl2.setAttribute('class', 'dropdown show');
-    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:15px');
+    card_hover_ctrl2.setAttribute('style', 'z-index:10; width:0px; margin-right:25px');
     card_hover2.append(card_hover_ctrl2);
 
     const card_hover_dmenu1 = document.createElement('a');
@@ -80,7 +80,7 @@ export function makeUploadDOM(video) {
 
     const card_hover_dmenu1_sub1 = document.createElement('i');
     card_hover_dmenu1_sub1.setAttribute('class', 'fa fa-ellipsis-v');
-    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px');
+    card_hover_dmenu1_sub1.setAttribute('style', 'color:#fff; text-decoration:none; width:0px; text-shadow:-1px -1px 0 gray, 1px -1px 0 gray, -1px 1px 0 gray, 1px 1px 0 gray;');
     card_hover_dmenu1.append(card_hover_dmenu1_sub1);
 
     const card_hover_dmenu2 = document.createElement('div');
