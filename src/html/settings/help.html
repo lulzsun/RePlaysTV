@@ -25,4 +25,8 @@
 <h5>&nbsp;</h5>
 <h5>About</h5>
 <a href="https://github.com/lulzsun/RePlaysTV/" class="badge badge-primary" style="margin-bottom: 10px;">Github Page</a><br>
-<a>RePlays Version: 3.0.1</a><br>
+<a>RePlays Version: </a><a id="versionString">UNKNOWN</a><br>
+
+<script>
+    if(window.version) document.getElementById('versionString').innerHTML = window.version;
+</script>
