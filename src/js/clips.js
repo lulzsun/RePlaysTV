@@ -363,6 +363,9 @@ function makeVidDOM(video) {
 
     const card_img = document.createElement('img');
     card_img.setAttribute('class', 'card-img-top');
+    card_img.onerror = () => {
+        card_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
+    }
     card_img.setAttribute('src', video.posterUrl);
     card_img.setAttribute('alt', 'Missing Thumbnail');
     card.append(card_img);
