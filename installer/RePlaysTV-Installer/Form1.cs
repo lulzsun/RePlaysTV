@@ -54,8 +54,8 @@ namespace RePlaysTV_Installer {
 
             //start modifying original plays files
             ModifyFileAtLine("if (true) {", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\main.js", 682); //dev tools
-            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 418); //dev tools
-            ModifyFileAtLine("devTools: Utils.isDev(),", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 548); //dev tools
+            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 419); //dev tools
+            ModifyFileAtLine("devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 548); //dev tools
             ModifyFileAtLine("const showurl = '/replays/index.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 571);
             for (int i = 608; i <= 634; i++) {
                 ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", i);
