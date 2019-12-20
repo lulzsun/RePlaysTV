@@ -1,6 +1,7 @@
 import {shell} from 'electron';
 import urljoin from 'url-join';
 import moment from 'moment';
+import shortid from 'shortid';
 import BaseService from '../../../../src/service/BaseService';
 import VideoService from '../../../../src/service/VideoService';
 import TranscoderService from '../../../../src/service/TranscoderService';
@@ -131,6 +132,9 @@ $("#clips-div").mousedown( function (e) {
     var element;
     if($(e.target)[0].id == '' || $(e.target)[0].id =='clip-ClipsStamp'){
         element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
     }else element = $(e.target)[0];
 
     if(e.which == 1) { //left click
@@ -141,9 +145,69 @@ $("#clips-div").mousedown( function (e) {
             const id = element.id.split("-")[0];
             openVideoViewer(getVideoById(id));
         }
-        if(element.id.includes("-CBOX"))
-            console.log("clicked on video: " + element.id.split("-")[0]);
+        if(element.id.includes("-CBOX")) {
+            let clipListDiv = document.getElementById("clip-list-div");
+            let card = element.parentElement.parentElement.parentElement.parentElement;
+            if(!$(element).is(":checked")) {
+                makeSelectDOM(card);
+            }
+            else {
+                makeUnselectDOM(card);
+            }
+            let selectedLength = clipListDiv.getElementsByClassName("card border-primary h-100").length;
+            document.getElementById("clip-SelectionLength").innerText = 
+                selectedLength + ((selectedLength == 1) ? " selected clip" : " selected clips");
+
+            if(selectedLength == 1) {
+                $(element).prop('checked', true); //if this was the first checked element, sometimes it doesnt check so lets force it
+                document.getElementById("clip-SelectionToolbar").style.visibility = "visible";
+                clipListDiv.style.marginTop = "4rem";
+            } 
+            else if (selectedLength == 0) {
+                $(element).prop('checked', false); //same here on last checked element
+                document.getElementById("clip-SelectionToolbar").style.visibility = "hidden";
+                document.getElementById("clip-list-div").style.marginTop = "0rem";
+            }
+        }
         if(element.id.includes("clip-")) {
+            if(element.id.includes("DeleteSelected")) {
+                let clipListDiv = document.getElementById("clip-list-div");
+                const confirmString = `Are you certain you want to delete the ${document.getElementById("clip-SelectionLength").innerText}?\n` +
+                                    `It will also delete the file`;
+                if (window.confirm(confirmString)) {
+                    clipListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                        let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
+                        $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
+                        deleteVideo(card.parentElement.id, false);
+                    });
+                    document.getElementById("clip-SelectionToolbar").style.visibility = "hidden";
+                    document.getElementById("clip-list-div").style.marginTop = "0rem";
+                }
+            }
+            if(element.id.includes("SelectAll")) {
+                let clipListDiv = document.getElementById("clip-list-div");
+                let selectedLength = 0;
+                clipListDiv.querySelectorAll('.card:not(.border-primary)').forEach(card => {
+                    let domID = card.getElementsByClassName("stretched-link")[0].id.split("-CARD")[1];
+                    $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', true);
+                    makeSelectDOM(card);
+                    selectedLength++;
+                });
+                if(selectedLength > 0) {
+                    document.getElementById("clip-SelectionLength").innerText = 
+                    selectedLength + ((selectedLength == 1) ? " selected clip" : " selected clips");
+                }
+            }
+            if(element.id.includes("UnselectAll")) {
+                let clipListDiv = document.getElementById("clip-list-div");
+                clipListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                    let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
+                    $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
+                    makeUnselectDOM(card);
+                });
+                document.getElementById("clip-SelectionToolbar").style.visibility = "hidden";
+                document.getElementById("clip-list-div").style.marginTop = "0rem";
+            }
             if(element.id.includes("Sort-")) {
                 if(!element.id.split("-")[2].includes("Game|")) {
                     sortType = element.id.split("-")[2];
@@ -348,10 +412,48 @@ function uploadClip(videoId) {
     });
 }
 
+function makeSelectDOM(card) {
+    card.setAttribute('class', 'card border-primary h-100');
+
+    const card_hover1 = document.createElement('div');
+    card_hover1.setAttribute('class', 'card-img-overlay d-flex flex-column justify-content-between');
+    card.prepend(card_hover1);
+
+    const card_hover2 = document.createElement('b');
+    card_hover2.setAttribute('class', 'row justify-content-between');
+    card_hover1.append(card_hover2);
+
+    const clickable = document.createElement('a');
+    clickable.setAttribute('class', 'stretched-link');
+    clickable.setAttribute('href', '#');
+    card_hover1.append(clickable);
+
+    const card_hover_ctrl1 = document.createElement('div');
+    card_hover_ctrl1.setAttribute('class', 'custom-control custom-checkbox');
+    card_hover_ctrl1.setAttribute('style', 'z-index:10; width:0px; margin-left:15px');
+    card_hover2.append(card_hover_ctrl1);
+
+    const card_hover_cbox1 = document.createElement('input');
+    card_hover_cbox1.setAttribute('class', 'custom-control-input');
+    $(card_hover_cbox1).prop('checked', true); 
+    card_hover_cbox1.setAttribute('type', 'checkbox');
+    card_hover_ctrl1.append(card_hover_cbox1);
+
+    const card_hover_cbox2 = document.createElement('label');
+    card_hover_cbox2.setAttribute('class', 'custom-control-label');
+    card_hover_ctrl1.append(card_hover_cbox2);
+}
+
+function makeUnselectDOM(card) {
+    card.setAttribute('class', 'card h-100');
+    card.firstChild.remove();
+}
+
 function makeVidDOM(video) {
-    const _card_id = video.id + "-CARD";
-    const _cbox_id = video.id + "-CBOX";
-    const _dmenu_id = video.id + "-DMENU";
+    const rand = shortid.generate();
+    const _card_id = video.id + "-CARD" + rand;
+    const _cbox_id = video.id + "-CBOX" + rand;
+    const _dmenu_id = video.id + "-DMENU" + rand;
 
     const result = document.createElement('div');
     result.setAttribute('class', 'col-xl-3 col-md-5 mb-4');
@@ -459,22 +561,33 @@ function makeVidDOM(video) {
     return result;
 }
 
-function deleteVideo(videoId) {
+function deleteVideo(videoId, confirmation=true) {
     VideoService.getVideo(videoId).then(
         (video) => {
         if (!video) {
             console.log(`Did not find video ${videoId}`);
             return;
         }
-        const confirmString = `Are you certain you want to delete ${video.fileName}? It will also delete the file`;
-        // eslint-disable-next-line no-alert
-        if (window.confirm(confirmString)) {
-            console.log(`Deleting video ${video._id} - ${video.fileName}`);
-            VideoService.deleteVideos([videoId]).then(
-            (docs) => {
-                console.log(`Successfully deleted ${docs.length} documents`);
-                document.getElementById(videoId).remove();
+        const confirmString = `Are you certain you want to delete ${video.fileName}?\nIt will also delete the file`;
+
+        if (confirmation) {
+            if (window.confirm(confirmString)) {
+                console.log(`Deleting video ${video._id} - ${video.fileName}`);
+                VideoService.deleteVideos([videoId]).then(
+                (docs) => {
+                    console.log(`Successfully deleted ${docs.length} documents`);
+                    document.getElementById(videoId).remove();
+                }
+                );
             }
+        } 
+        else {
+            console.log(`Deleting video ${video._id} - ${video.fileName}`);
+                VideoService.deleteVideos([videoId]).then(
+                (docs) => {
+                    console.log(`Successfully deleted ${docs.length} documents`);
+                    document.getElementById(videoId).remove();
+                }
             );
         }
     });

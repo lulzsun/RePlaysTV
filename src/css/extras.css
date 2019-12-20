@@ -8,7 +8,6 @@ body {
 
 ::-webkit-scrollbar {
     width: 10px;
-    height:
 }
 
 ::-webkit-scrollbar-thumb {
@@ -36,6 +35,14 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
 
 .card-img-overlay:hover h5, .card-img-overlay:hover p{
     visibility: visible;
+}
+
+.card-img-overlay>{
+    background-color: #00000000;
+}
+
+.card-img-overlay:hover{
+    background-color: #00000070;
 }
 
 .dropdown-menu>li>a {

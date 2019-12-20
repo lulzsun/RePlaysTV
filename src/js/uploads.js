@@ -1,10 +1,98 @@
 import { clipboard } from 'electron';
 import moment from 'moment';
+import shortid from 'shortid';
 import ReplaysSettingsService from './replaysSettingsService';
 
 export function init(){
     fetchAllUploads();
 }
+
+$("#uploads-div").mousedown( function (e) {
+    var element;
+    if($(e.target)[0].id == '' || $(e.target)[0].id =='clip-ClipsStamp'){
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1) { //left click
+        if(element.id.includes("-CBOX")) {
+            let uploadListDiv = document.getElementById("upload-list-div");
+            let card = element.parentElement.parentElement.parentElement.parentElement;
+            if(!$(element).is(":checked")) {
+                makeSelectDOM(card);
+            }
+            else {
+                makeUnselectDOM(card);
+            }
+            let selectedLength = uploadListDiv.getElementsByClassName("card border-primary h-100").length;
+            document.getElementById("upload-SelectionLength").innerText = 
+                selectedLength + ((selectedLength == 1) ? " selected upload" : " selected uploads");
+
+            if(selectedLength == 1) {
+                $(element).prop('checked', true); //if this was the first checked element, sometimes it doesnt check so lets force it
+                document.getElementById("upload-SelectionToolbar").style.visibility = "visible";
+                uploadListDiv.style.marginTop = "4rem";
+            } 
+            else if (selectedLength == 0) {
+                $(element).prop('checked', false); //same here on last checked element
+                document.getElementById("upload-SelectionToolbar").style.visibility = "hidden";
+                document.getElementById("upload-list-div").style.marginTop = "0rem";
+            }
+        }
+        if(element.id.includes("upload-")) {
+            if(element.id.includes("DeleteSelected")) {
+                let uploadListDiv = document.getElementById("upload-list-div");
+                const confirmString = `Are you certain you want to delete the ${document.getElementById("upload-SelectionLength").innerText}?\n` +
+                                    `This will only delete the record from Uploads, the link will still be avaliable for viewing.\nDelete record?`;
+                if (window.confirm(confirmString)) {
+                    uploadListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                        let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
+                        $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
+                        let video = {
+                            id: card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[0],
+                            url: card.getElementsByClassName("stretched-link")[1].href
+                        };
+                        deleteVideo(video, false);
+                    });
+                    document.getElementById("upload-SelectionToolbar").style.visibility = "hidden";
+                    document.getElementById("upload-list-div").style.marginTop = "0rem";
+                }
+            }
+            if(element.id.includes("SelectAll")) {
+                let uploadListDiv = document.getElementById("upload-list-div");
+                let selectedLength = 0;
+                uploadListDiv.querySelectorAll('.card:not(.border-primary)').forEach(card => {
+                    let domID = card.getElementsByClassName("stretched-link")[0].id.split("-CARD")[1];
+                    $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', true);
+                    makeSelectDOM(card);
+                    selectedLength++;
+                });
+                if(selectedLength > 0) {
+                    document.getElementById("upload-SelectionLength").innerText = 
+                        selectedLength + ((selectedLength == 1) ? " selected upload" : " selected uploads");
+                }
+            }
+            if(element.id.includes("UnselectAll")) {
+                let uploadListDiv = document.getElementById("upload-list-div");
+                uploadListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                    let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
+                    $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
+                    makeUnselectDOM(card);
+                });
+                document.getElementById("upload-SelectionToolbar").style.visibility = "hidden";
+                document.getElementById("upload-list-div").style.marginTop = "0rem";
+            }
+            if(element.id.includes("Sort-")) {
+
+            }
+            if(element.id.includes("Refresh")) {
+                
+            }
+        }
+    }
+});
 
 function fetchAllUploads(game=null, type=null) {
     ReplaysSettingsService.getUploadClips().then((clips)=> {
@@ -14,10 +102,48 @@ function fetchAllUploads(game=null, type=null) {
     });
 }
 
+function makeSelectDOM(card) {
+    card.setAttribute('class', 'card border-primary h-100');
+
+    const card_hover1 = document.createElement('div');
+    card_hover1.setAttribute('class', 'card-img-overlay d-flex flex-column justify-content-between');
+    card.prepend(card_hover1);
+
+    const card_hover2 = document.createElement('b');
+    card_hover2.setAttribute('class', 'row justify-content-between');
+    card_hover1.append(card_hover2);
+
+    const clickable = document.createElement('a');
+    clickable.setAttribute('class', 'stretched-link');
+    clickable.setAttribute('href', '#');
+    card_hover1.append(clickable);
+
+    const card_hover_ctrl1 = document.createElement('div');
+    card_hover_ctrl1.setAttribute('class', 'custom-control custom-checkbox');
+    card_hover_ctrl1.setAttribute('style', 'z-index:10; width:0px; margin-left:15px');
+    card_hover2.append(card_hover_ctrl1);
+
+    const card_hover_cbox1 = document.createElement('input');
+    card_hover_cbox1.setAttribute('class', 'custom-control-input');
+    $(card_hover_cbox1).prop('checked', true); 
+    card_hover_cbox1.setAttribute('type', 'checkbox');
+    card_hover_ctrl1.append(card_hover_cbox1);
+
+    const card_hover_cbox2 = document.createElement('label');
+    card_hover_cbox2.setAttribute('class', 'custom-control-label');
+    card_hover_ctrl1.append(card_hover_cbox2);
+}
+
+function makeUnselectDOM(card) {
+    card.setAttribute('class', 'card h-100');
+    card.firstChild.remove();
+}
+
 export function makeUploadDOM(video) {
-    const _card_id = video.id + "-CARD";
-    const _cbox_id = video.id + "-CBOX";
-    const _dmenu_id = video.id + "-DMENU";
+    const rand = shortid.generate();
+    const _card_id = video.id + "-CARD" + rand;
+    const _cbox_id = "upload-" + video.id + "-CBOX" + rand;
+    const _dmenu_id = video.id + "-DMENU" + rand;
 
     const result = document.createElement('div');
     result.setAttribute('class', 'col-xl-3 col-md-5 mb-4');
@@ -29,6 +155,9 @@ export function makeUploadDOM(video) {
 
     const card_img = document.createElement('img');
     card_img.setAttribute('class', 'card-img-top');
+    card_img.onerror = () => {
+        card_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
+    }
     card_img.setAttribute('src', video.posterUrl);
     card_img.setAttribute('alt', 'Missing Thumbnail');
     card.append(card_img);
@@ -44,8 +173,7 @@ export function makeUploadDOM(video) {
     const clickable = document.createElement('a');
     clickable.setAttribute('class', 'stretched-link');
     clickable.setAttribute('id', _card_id);
-    clickable.setAttribute('href', '#');
-    clickable.onclick = () => window.open(video.url);
+    clickable.setAttribute('href', video.url);
     card_hover1.append(clickable);
 
     const card_hover_ctrl1 = document.createElement('div');
@@ -124,10 +252,15 @@ export function makeUploadDOM(video) {
     document.getElementById('upload-list-div').appendChild(result);
 }
 
-function deleteVideo(video) {
-    const confirmString = `This will only delete the record from Uploads, the link will still be avaliable for viewing. Delete record?`;
-    // eslint-disable-next-line no-alert
-    if (window.confirm(confirmString)) {
+function deleteVideo(video, confirmation=true) {
+    const confirmString = `This will only delete the record from Uploads, the link will still be avaliable for viewing.\nDelete record?`;
+    if(confirmation) {
+        if (window.confirm(confirmString)) {
+            ReplaysSettingsService.removeUploadClip(video.url);
+            document.getElementById("upload-" + video.id).remove();
+        }
+    }
+    else {
         ReplaysSettingsService.removeUploadClip(video.url);
         document.getElementById("upload-" + video.id).remove();
     }

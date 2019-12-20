@@ -30,6 +30,12 @@
     </li>
 </ul>
 <div class="container-fluid mt-4" style="height:calc(100vh - 170px); overflow-y:scroll; width:100%;padding-left: 0px;">
+    <div id="upload-SelectionToolbar" class="alert alert-secondary" role="alert" style="position: absolute;width: calc(100vw - 289px);z-index: 100000;visibility: hidden;">
+        <a id="upload-SelectionLength">0 selected uploads</a>
+        <button id="upload-DeleteSelected"type="button" class="btn btn-primary btn-sm" style="float: right; margin-top: -5px;margin-left: 10px;">Delete</button>
+        <button id="upload-SelectAll" type="button" class="btn btn-outline-primary btn-sm" style="float: right; margin-top: -5px;margin-left: 10px; color: inherit">Select All</button>
+        <button id="upload-UnselectAll" type="button" class="btn btn-outline-primary btn-sm" style="float: right; margin-top: -5px;margin-left: 10px; color: inherit">Unselect All</button>
+    </div>
     <div class="responsive-deck row justify-content-left" id="upload-list-div">
         <!--
         <div class="col-xl-3 col-md-5 mb-4">
