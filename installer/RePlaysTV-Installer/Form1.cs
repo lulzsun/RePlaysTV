@@ -72,6 +72,14 @@ namespace RePlaysTV_Installer {
             }
             ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);     //disables online user check
             ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);     //disables online user check
+
+            ModifyFileAtLine("GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Utils.js", 39); //changes gamecatalog url
+            ModifyFileAtLine("const CATALOG_GAME_DETECTION = 'game_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 6);
+            ModifyFileAtLine("const CATALOG_NONGAME_DETECTION = 'nongame_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 7);
+            ModifyFileAtLine("static getLatestVersionFileUrl() {", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 13);
+            ModifyFileAtLine("return `/version.json`;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 14);
+            ModifyFileAtLine("const url = GameCatalogRequest.getLatestVersionFileUrl();", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 27);
+            ModifyFileAtLine("return {version: response[`${catalog}_version`].version, key: `${catalog}.json`};", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 34);
             //end modifying
 
             StartPackage();
@@ -177,6 +185,9 @@ namespace RePlaysTV_Installer {
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
                                 form1.Invoke(new MethodInvoker(delegate { form1.StartModify(); }));
                             }
+                            if (outLine.Data.Contains("npm ERR!")) {
+                                System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                            }
                             if (outLine.Data.Contains(">exit")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
@@ -194,6 +205,14 @@ namespace RePlaysTV_Installer {
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
             p.Kill();
+        }
+
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            Process.Start("https://github.com/lulzsun/RePlaysTV");
+        }
+
+        private void Button3_Click(object sender, EventArgs e) {
+            Clipboard.SetText(richTextBox1.Text);
         }
     }
 }
