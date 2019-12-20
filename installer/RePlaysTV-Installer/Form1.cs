@@ -26,6 +26,7 @@ namespace RePlaysTV_Installer {
         }
 
         private void Button1_Click(object sender, EventArgs e) {
+            form1.TopMost = true;
             DialogResult dr = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
                                                 "Make sure the last latest version of Plays is installed and not currently open." +
                                                 "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
@@ -34,6 +35,7 @@ namespace RePlaysTV_Installer {
                 button1.Enabled = false;
                 button2.Enabled = false;
             }
+            form1.TopMost = false;
         }
         private void StartExtract() { //part one of installation
             SW.WriteLine("nodejs-portable.exe");
@@ -103,10 +105,12 @@ namespace RePlaysTV_Installer {
         }
 
         private void InstallComplete() {
+            form1.TopMost = true;
             DialogResult dr = MessageBox.Show("Installation Complete!\n\nOpen Replays?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes) {
                 Process.Start(playsDirectory + "\\app-" + VERSION + "\\Plays.exe");
             }
+            form1.TopMost = false;
         }
 
         private void ModifyFileAtLine(string newText, string fileName, int line_to_edit) {
@@ -196,7 +200,9 @@ namespace RePlaysTV_Installer {
                                 form1.Invoke(new MethodInvoker(delegate { form1.StartModify(); }));
                             }
                             if (outLine.Data.Contains("npm ERR!")) {
+                                form1.TopMost = true;
                                 System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                                form1.TopMost = false;
                             }
                             if (outLine.Data.Contains(">exit")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
