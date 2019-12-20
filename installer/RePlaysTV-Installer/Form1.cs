@@ -53,6 +53,9 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("robocopy /E /NP /MT \".\\src\" \".\\temp\\resources\\auger\\replays\"");
 
             //start modifying original plays files
+            ModifyFileAtLine("if (true) {", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\main.js", 682); //dev tools
+            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 418); //dev tools
+            ModifyFileAtLine("devTools: Utils.isDev(),", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 548); //dev tools
             ModifyFileAtLine("const showurl = '/replays/index.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 571);
             for (int i = 608; i <= 634; i++) {
                 ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", i);
@@ -97,6 +100,13 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("cd ..");
             SW.WriteLine("rd /s /q temp");
             SW.WriteLine("exit");
+        }
+
+        private void InstallComplete() {
+            DialogResult dr = MessageBox.Show("Installation Complete!\n\nOpen Replays?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+            if (dr == DialogResult.Yes) {
+                Process.Start(playsDirectory + "\\app-" + VERSION + "\\Plays.exe");
+            }
         }
 
         private void ModifyFileAtLine(string newText, string fileName, int line_to_edit) {
@@ -193,7 +203,8 @@ namespace RePlaysTV_Installer {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
-                                System.Windows.Forms.MessageBox.Show("Installation Complete!");
+                                form1.Invoke(new MethodInvoker(delegate { form1.InstallComplete(); }));
+
                             }
                             form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
                             form1.richTextBox1.ScrollToCaret();
