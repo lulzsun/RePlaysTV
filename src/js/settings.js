@@ -1,35 +1,3 @@
-// import GameDetectionService from '../../../../src/service/GameDetectionService';
-// GameDetectionService.fetchRemoteDetectionsVersion().then((versionObj) => {
-//     GameDetectionService.fetchRemoteDetectionsData(versionObj).then((detectionsJson) => {
-//         console.log(detectionsJson);
-//         var fs = require('fs');
-//         fs.writeFile("D:\\gamedetections.json", JSON.stringify(detectionsJson), function(err) {
-//             if (err) {
-//                 console.log(err);
-//             }
-//         });
-//     });
-//     console.log(versionObj);
-// });
-// import NongameDetectionService from '../../../../src/service/NongameDetectionService';
-// NongameDetectionService.fetchRemoteDetectionsVersion().then((versionObj) => {
-//     NongameDetectionService.fetchRemoteDetectionsData(versionObj).then((detectionsJson) => {
-//         console.log(detectionsJson);
-//         var fs = require('fs');
-//         fs.writeFile("D:\\nongamedetections.json", JSON.stringify(detectionsJson), function(err) {
-//             if (err) {
-//                 console.log(err);
-//             }
-//         });
-//     });
-//     console.log(versionObj);
-// });
-//
-// leftover debug code just incase... it does not have a purpose being in this file
-// this saved the remoteDetectionsData json as a local file for reverse engineering/understanding purposes
-// this was done once on 12/13, done 2 days before plays shutdown.
-// ask lulzsun on github for details on this file if you need it
-
 import ReplaysSettingsService, {
     UPLOAD,
     SETTING_REPLAYS_THEME,
@@ -94,7 +62,7 @@ import GameDVRService, {
     SETTING_WEBCAM_OPACITY,
 } from '../../../../src/service/GameDVRService';
 //import { SETTING_RECORD_GAME_MOUSE_CURSOR } from '../../../../src/service/Analytics/Consts';
-const {shell} = require('electron');
+const {shell, remote} = require('electron');
 import shortid from 'shortid';
 
 var keyboardMap = [
@@ -433,6 +401,7 @@ function init() {
         initAudio(); 
         initUpload();
         initAdvanced();
+        document.getElementById("sett-openDevTools").onclick = () => remote.BrowserWindow.getFocusedWindow().webContents.openDevTools();
     }, 1000);
 }
 
