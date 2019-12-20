@@ -70,12 +70,14 @@
           </div>
           <div class="col-10 col-md" style="padding-right: 50px;">
             <div id="recordingStatus" class="alert alert-primary" role="alert" style="position: absolute;width: calc(100vw - 250px);z-index: 100000;visibility:hidden;">
-                <i class="fa fa-circle text-danger"></i> Game Recording in progress! 
-                <button type="button" class="btn" style="float: right;padding: unset;padding-left: 10px;color:red" onClick="alert('The feature to manually stop recording here is not implemented yet.');" data-toggle="tooltip" data-placement="bottom" title="Stop Recording">
-                  <i class="fa fa-window-close"></i></button>
-                <button type="button" class="btn" style="float: right;padding: unset;padding-left: 10px;color:white" onClick="document.getElementById('recordingStatus').style.visibility='hidden'" data-toggle="tooltip" data-placement="bottom" title="Hide Message">
-                  <i class="fa fa-window-minimize"></i></button>
-                <a id="recordingGameTitle" style="float: right;">Detected Game: Unknown</a>
+              <i class="fa fa-circle text-danger"></i> 
+              <span id="recordingElapsedTime" class="badge badge-light">00:00</span>
+              Game Recording in progress!
+              <button type="button" class="btn" style="float: right;padding: unset;padding-left: 10px;color:red" onClick="alert('The feature to manually stop recording here is not implemented yet.');" data-toggle="tooltip" data-placement="bottom" title="Stop Recording">
+                <i class="fa fa-window-close"></i></button>
+              <button type="button" class="btn" style="float: right;padding: unset;padding-left: 10px;color:white" onClick="document.getElementById('recordingStatus').style.visibility='hidden'" data-toggle="tooltip" data-placement="bottom" title="Hide Message">
+                <i class="fa fa-window-minimize"></i></button>
+              <a id="recordingGameTitle" style="float: right;">Detected Game: Unknown</a>
             </div>
             <div class="tab-content" id="v-pills-tabContent">
               <div class="tab-pane fade show active" id="v-pills-sessions" role="tabpanel" aria-labelledby="v-pills-sessions-tab">

@@ -1,5 +1,8 @@
 const IPC = require('../../../src/core/IPCCapsule.js');
 const { remote, ipcRenderer } = require('electron');
+const moment = require('moment');
+
+window.version = "3.0.2";
 
 window.onload=function(){
     onLoader();
@@ -27,6 +30,7 @@ window.onload=function(){
         (event, payload) => {
             if(payload.isRecording == true) {
                 document.getElementById("recordingStatus").style.visibility = "visible";
+                recordingTime();
             }
             else {
                 document.getElementById("recordingStatus").style.visibility = "hidden";
@@ -41,6 +45,24 @@ window.onload=function(){
             }
         }
     );
+}
+
+var duration = 0;
+function recordingTime() {
+    if(document.getElementById('recordingStatus').style.visibility == "visible") {
+        setTimeout(function () {
+            duration++;
+            document.getElementById('recordingElapsedTime').innerText = moment.utc(duration*1000).format('HH:mm:ss').replace(/^(?:00:)?0?/, '');
+            if (document.getElementById('recordingElapsedTime').innerText.length == 4){
+                document.getElementById('recordingElapsedTime').innerText = '0' + document.getElementById('recordingElapsedTime').innerText;
+            }
+            recordingTime();
+        }, 1000);
+    }
+    else{
+        document.getElementById('recordingElapsedTime').innerText = "[00:00]";
+        duration = 0;
+    }
 }
 
 function onLoader() { //this will check if the local api is online (is there a better way to do this?)
