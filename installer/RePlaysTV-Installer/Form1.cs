@@ -73,7 +73,7 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);     //disables online user check
             ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);     //disables online user check
 
-            ModifyFileAtLine("GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Utils.js", 39); //changes gamecatalog url
+            ModifyFileAtLine("const GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Utils.js", 39); //changes gamecatalog url
             ModifyFileAtLine("const CATALOG_GAME_DETECTION = 'game_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 6);
             ModifyFileAtLine("const CATALOG_NONGAME_DETECTION = 'nongame_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 7);
             ModifyFileAtLine("static getLatestVersionFileUrl() {", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 13);
