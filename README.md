@@ -60,9 +60,6 @@ Instructions
 	* Uploads Tab Sorting
 	* Snapshots Tab/Viewer
 	* Grid/details view for Sessions/Clips tab does not exist
-	* Game Detection Remote Database
-	  * This is important for new games that come out and Plays.tv does not recognize them
-	  * Need better understanding as to how the original service works
   * A some of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
 	* Could be a possible reason to performance losses
