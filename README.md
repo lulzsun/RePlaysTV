@@ -7,14 +7,16 @@ This is a non-profit, community-based project that patches over the existing Pla
 
 You can also join the [Discord community](https://discordapp.com/invite/Qj2BmZX) to discuss about development, report bugs, etc.
 
+Installation instructions below.
+
 ![Preview](/resources/preview.png)
 
 # Installation
-You must have the last Plays client installed. Reinstalling is NOT recommended as of now. It is best if you already have Plays installed before the shutdown occurred.
+You must have the last Plays client installed (3.0.0).
 
 You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
 
-Instructions
+Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases).
   2. Close out of Plays if it is currently running
   3. Open the installer executable 
@@ -36,7 +38,7 @@ Instructions
 	* [x] Uploads Tab
 	* [ ] Snapshots Tab
 	* [x] Settings Tab
-	  * [ ] Themes
+	  * [x] Themes
   * [x] Recording functionality
   * [x] Upload functionality
     * [x] Streamable
