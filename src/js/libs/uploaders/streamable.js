@@ -1,6 +1,7 @@
 import fs from 'fs';
 import request from 'request';
 import { GameDVRService } from '../../../../../../src/service/GameDVRService';
+import { log } from '../../../../../../src/core/Logger';
 import ReplaysSettingsService from '../../replaysSettingsService';
 import {createUploadNotification} from '../../uploads';
 
@@ -36,9 +37,10 @@ function upload(email, password, video, title='untitled') {
       }
     }, function(err, response, body) {
       if (err) {
-        console.log(err);
+        log.error(`Error occured during uploading: ${title}`);
+        log.error(err);
         notfication.dom.remove();
-        alert('Error occured during uploading: ' + err);
+        alert(`Error occured during uploading: ${title}`);
         reject(err);
       }
       else {
