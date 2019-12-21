@@ -18,6 +18,8 @@ export const SETTING_REPLAYS_GFYCAT_UNLISTED = 'gfycatUnlisted';
 export const SETTING_REPLAYS_YOUTUBE_TOKEN = 'youtubeToken';
 export const SETTING_REPLAYS_YOUTUBE_UNLISTED = 'youtubeUnlisted';
 
+export const SETTING_REPLAYS_SHAREDFOLDER_DIR = 'sharedFolderDir';
+
 export const UPLOAD = [
     SETTING_REPLAYS_THEME,
     SETTING_REPLAYS_UPLOAD_DEFAULT,
@@ -28,6 +30,7 @@ export const UPLOAD = [
     SETTING_REPLAYS_GFYCAT_UNLISTED,
     SETTING_REPLAYS_YOUTUBE_TOKEN,
     SETTING_REPLAYS_YOUTUBE_UNLISTED,
+    SETTING_REPLAYS_SHAREDFOLDER_DIR,
 ]
 
 const defaultSettings = {
@@ -41,6 +44,7 @@ const defaultSettings = {
     [SETTING_REPLAYS_GFYCAT_UNLISTED]: true,
     [SETTING_REPLAYS_YOUTUBE_TOKEN]: '',
     [SETTING_REPLAYS_YOUTUBE_UNLISTED]: true,
+    [SETTING_REPLAYS_SHAREDFOLDER_DIR]: '',
 }
 
 export default class ReplaysSettingsService {

@@ -4,6 +4,7 @@ import ReplaysSettingsService, {
     SETTING_REPLAYS_UPLOAD_DEFAULT,
     SETTING_REPLAYS_STREAMABLE_EMAIL,
     SETTING_REPLAYS_STREAMABLE_PASS,
+    SETTING_REPLAYS_SHAREDFOLDER_DIR,
 } from './replaysSettingsService';
 import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
@@ -514,6 +515,7 @@ function initUpload(){
         if(setting){
             document.getElementById('sett-streamableEmail').value = setting.streamableEmail;
             document.getElementById('sett-streamablePass').value = setting.streamablePass;
+            $('#sett-sharedFolderDir').next('.custom-file-label').html(setting.sharedFolderDir);
             console.log(setting);
         }else console.error("Upload settings missing?");
     });
@@ -524,6 +526,12 @@ function initUpload(){
 
     $('#sett-streamablePass').on('change',function(e){
         ReplaysSettingsService.setSetting(SETTING_REPLAYS_STREAMABLE_PASS, e.target.value);
+    })
+
+    $('#sett-sharedFolderDir').on('change',function(e){
+        var fileName = e.target.files[0].path;
+        $(this).next('.custom-file-label').html(fileName);
+        ReplaysSettingsService.setSetting(SETTING_REPLAYS_SHAREDFOLDER_DIR, fileName);
     })
 }
 
@@ -793,6 +801,9 @@ $("#settings-upload-div").mousedown( function (e) {
                 ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPLOAD_DEFAULT, element.id.split("-")[2]);
                 alert(element.id.split("-")[2] + ' set as upload default.');
             }
+        }
+        if(element.id.includes("openSharedFolderDir")){
+            shell.openItem($('#sett-sharedFolderDir').next('.custom-file-label').text());
         }
     }
 });

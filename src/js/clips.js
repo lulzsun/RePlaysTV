@@ -13,6 +13,30 @@ import ReplaysSettingsService, {
 
 // Uploaders
 import Streamable from './libs/uploaders/streamable';
+import SharedFolder from './libs/uploaders/sharedFolder';
+//
+// example code gets a unknown cyphier error, see issue #4
+//
+// import SMB2 from './libs/uploaders/smb2/smb2';
+// var smb2Client = new SMB2({share: "\\\\DESKTOP-5IMFNUS\\sharedfolder",
+//     domain: 'WORKGROUP',
+//     username: '',
+//     password: '',
+//     //debug: true,
+//     autoCloseTimeout: 0
+// });
+
+// smb2Client.readdir('pooper', function(err, data){
+//     if(err) {
+//         console.log("Error (readdir):\n", err);
+//     } else {
+//         console.log("Connection made.");
+//         for (let i = 0; i < data.length; i++){
+//             console.log(data[i]);
+//         }
+//         smb2Client.close();
+//     }
+// });
 
 const Settings = BaseService.getSettings();
 
@@ -26,7 +50,6 @@ var sortGame = "All Games";
 
 var continuePlay, sliding;
 var seeker;
-var playClipped = false;
 const videoClipDom = document.createElement('video'); //video playback on the viewer
 
 TranscoderService.initialize();
@@ -402,6 +425,16 @@ function uploadClip(videoId) {
                 $('.modal').modal('toggle');
                 console.log("Uploading to Streamable");
                 Streamable.upload(setting.streamableEmail, setting.streamablePass, getVideoById(videoId), title).then((result) => {
+                    if(result) {
+                        console.log(result);
+                        makeUploadDOM(result);
+                    }else console.error("Unknown upload error.");
+                });
+            }
+            else if(uploadPlatform == 'Shared Folder'){
+                $('.modal').modal('toggle');
+                console.log("Uploading to Shared Folder");
+                SharedFolder.upload(setting.sharedFolderDir, getVideoById(videoId), title).then((result) => {
                     if(result) {
                         console.log(result);
                         makeUploadDOM(result);

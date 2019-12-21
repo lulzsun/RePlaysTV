@@ -9,6 +9,9 @@
     <li class="nav-item">
         <a class="nav-link" id="youtube-tab" data-toggle="tab" href="#youtube" role="tab">Youtube</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" id="sharedfolder-tab" data-toggle="tab" href="#sharedfolder" role="tab">Shared Folder</a>
+    </li>
     </ul>
     <div class="tab-content" style="height: calc(100vh - 145px);overflow-y: auto;margin-top: 10px;">
     <div class="tab-pane fade show active" id="streamable" role="tabpanel">
@@ -31,7 +34,7 @@
         <br>
         <a>&nbsp;</a> -->
         <div class="alert alert-dismissible alert-secondary text-white">
-            <h6 class="alert-heading">Note</h6> 
+            <h6 class="alert-heading">Info</h6> 
             - Streamable deletes videos automatically after 3 months of inactivity, if not on a paid plan.<br>
             - Max upload size of 1 GB. Max video duration of 10 minutes.
         </div>
@@ -55,7 +58,7 @@
         </div>
         <br>
         <div class="alert alert-dismissible alert-secondary text-white">
-            <h6 class="alert-heading">Note</h6> 
+            <h6 class="alert-heading">Info</h6> 
             - Max video duration of 1 minute.
         </div>
         <br>
@@ -74,10 +77,38 @@
         </div>
         <br>
         <div class="alert alert-dismissible alert-secondary text-white">
-            <h6 class="alert-heading">Note</h6> 
+            <h6 class="alert-heading">Info</h6> 
             - Max upload size of 128 GB.
         </div>
         <br>
         <button id="sett-uploadDefault-Youtube" class="btn btn-primary">Set As Default Upload</button>
+    </div>
+    <div class="tab-pane fade" id="sharedfolder" role="tabpanel">
+        <form>
+            <label for="sett-sharedFolderDir">Shared Folder Directory</label>
+            <div class="form-group">
+                <div class="custom-control custom-file" style="float: left; width: 75%">
+                    <input id="sett-sharedFolderDir" type="file" webkitdirectory directory class="custom-file-input">
+                    <label for="sett-sharedFolderDir" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
+                </div>
+                <div>
+                    <button id="sett-openSharedFolderDir" class="btn btn-secondary" type="button">
+                        Open Folder
+                    </button>
+                </div>
+            </div>
+            <!--
+            <div class="form-group">
+                <label>Path Preview</label>
+                <input id="sett-streamablePass" type="password" class="form-control" placeholder="\\DOMAIN\\Replays\clips" style="width: 300px;" readonly>
+            </div>
+            -->
+        </form>
+        <div class="alert alert-dismissible alert-secondary text-white">
+            <h6 class="alert-heading">Info</h6> 
+            - Creates clip at specified local folder<br>
+        </div>
+        <br>
+        <button id="sett-uploadDefault-Shared Folder" type="submit" class="btn btn-primary">Set As Upload Default</button>
     </div>
 </div>
