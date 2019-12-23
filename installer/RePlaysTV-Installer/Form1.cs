@@ -27,13 +27,23 @@ namespace RePlaysTV_Installer {
 
         private void Button1_Click(object sender, EventArgs e) {
             form1.TopMost = true;
-            DialogResult dr = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
+            DialogResult dr1 = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
                                                 "Make sure the last latest version of Plays is installed and not currently open." +
                                                 "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
-            if (dr == DialogResult.Yes) {
-                StartExtract();
-                button1.Enabled = false;
-                button2.Enabled = false;
+            if (dr1 == DialogResult.Yes) {
+                if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
+                    StartExtract();
+                    button1.Enabled = false;
+                    button2.Enabled = false;
+                }
+                else {
+                    DialogResult dr2 = MessageBox.Show("You are missing the original Plays client files.\n" +
+                                    "In order for Replays to install, it requires you to have Plays 3.0.0 installed." +
+                                    "\nWould you like to be taken to the download page?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                    if (dr2 == DialogResult.Yes) {
+                        Process.Start("https://drive.google.com/file/d/1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ/view");
+                    }
+                }
             }
             form1.TopMost = false;
         }
