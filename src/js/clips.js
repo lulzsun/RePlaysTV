@@ -143,14 +143,16 @@ $("#video-viewer-div").dblclick(function(){
 
 //clip editor key controls
 $("#video-viewer-div").on('keydown', function(event) {
-    if(event.keyCode == 32) { //SPACEBAR
-        (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
-    }
-    if(event.keyCode == 37) { //LEFT
-        videoClipDom.currentTime -= 5;
-    }
-    if(event.keyCode == 39) { //RIGHT
-        videoClipDom.currentTime += 5;
+    if(!$('.modal').is(':visible')) {
+        if(event.keyCode == 32) { //SPACEBAR
+            (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
+        }
+        if(event.keyCode == 37) { //LEFT
+            videoClipDom.currentTime -= 5;
+        }
+        if(event.keyCode == 39) { //RIGHT
+            videoClipDom.currentTime += 5;
+        }
     }
 });
 
