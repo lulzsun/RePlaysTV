@@ -48,6 +48,7 @@ function upload(location, video, title='untitled') {
             'url': location,
             'id': video.id,
             'posterUrl': thumbPath,
+            'uploadPlatform': "Shared Folder",
             'createdTime': new Date(),
         }
         ReplaysSettingsService.addUploadClip(data.url, data);

@@ -19,10 +19,10 @@
     </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-th"></i></a>
+        <a id="sess-GridView" class="nav-link" href="#"><i class="fa fa-th"></i></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-list"></i></a>
+        <a id="sess-DetailsView" class="nav-link" href="#"><i class="fa fa-list"></i></a>
     </li>
     <li class="nav-item">
         <a id="sess-TotalSize" class="nav-link disabled"></a>
@@ -39,39 +39,77 @@
         <button id="sess-UnselectAll" type="button" class="btn btn-outline-primary btn-sm" style="float: right; margin-top: -5px;margin-left: 10px; color: inherit">Unselect All</button>
     </div>
     <div class="responsive-deck row justify-content-left" id="session-list-div">
-        <!--
-        <div class="col-xl-3 col-md-5 mb-4">
-            <div class="card border-primary h-100">
-                <img class="card-img-top" src="./media/video_thumbnail_placeholder.png" alt="Missing Thumbnail">
-                <div class="card-img-overlay d-flex flex-column justify-content-between">
-                    <b class="row justify-content-between">
-                        <div class="custom-control custom-checkbox" style="z-index:10; width:0px; margin-left: 25px">
-                            <input type="checkbox" class="custom-control-input" checked>
-                            <label class="custom-control-label"></label>
-                        </div>
-                    </b>
-                </div>
+        <!-- DETAIL CARD
+        <div class="pr-3" style="padding-left: 15px;padding-bottom: 15px" id="Iupp5Hc8UldWLXIu">
+            <div class="card h-100" style="width: calc(100vw - 290px);">
                 <div class="card-img-overlay d-flex flex-column justify-content-between">
                     <h5 class="row justify-content-between">
-                        <div class="custom-control custom-checkbox" style="z-index:10; width:0px; margin-left: 25px">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1"></label>
+                        <div class="custom-control custom-checkbox" style="z-index:10; width:0px; margin-left:15px">
+                            <input class="custom-control-input" type="checkbox" id="Iupp5Hc8UldWLXIu-CBOXmAuGVmJVV">
+                            <label class="custom-control-label" for="Iupp5Hc8UldWLXIu-CBOXmAuGVmJVV">
+                            </label>
                         </div>
-                        <div class="dropdown show" style="z-index:10; width:0px; margin-right: 15px;">
-                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-ellipsis-v" style="color: #fff;text-decoration: none;width:0px"></i>
+                        <div class="dropdown show" style="z-index:10; width:0px; margin-right:25px">
+                            <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="Iupp5Hc8UldWLXIu-DMENUmAuGVmJVV">
+                                <i class="fa fa-ellipsis-v" style="color:#fff; text-decoration:none; width:0px; text-shadow:-1px -1px 0 gray, 1px -1px 0 gray, -1px 1px 0 gray, 1px 1px 0 gray;"></i>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-menu" aria-labelledby="Iupp5Hc8UldWLXIu-DMENUmAuGVmJVV">
                                 <a class="dropdown-item" href="#">Show In Folder</a>
                                 <a class="dropdown-item" href="#">Delete</a>
                             </div>
                         </div>
                     </h5>
-                    <a href="#" class="stretched-link"></a>
+                    <a class="stretched-link" id="Iupp5Hc8UldWLXIu-CARDmAuGVmJVV" href="#"></a>
                 </div>
-                <div class="card-body" style="padding-top: 10px;padding-bottom: 0px;padding-left: 10px;padding-right: 10px;">
-                    <p class="card-title" style="margin-bottom: 5px;">Game Name</p>
-                    <p class="card-subtitle mb-2 text-muted">Date | Time | 5 GB</p>
+                <div class="row no-gutters">
+                    <div class="col-auto" style="width: 25%">
+                        <img class="img-fluid" src="http://localhost:9001/s/thumbnails/Game%20Unknown/.thumbs/Iupp5Hc8UldWLXIu-thumb.jpg" alt="Missing Thumbnail">
+                        <img class="img-fluid" src="./media/video_thumbnail_placeholder.png" alt="Missing Thumbnail" style="position: absolute;">
+                    </div>
+                    <div class="col">
+                        <div class="card-block px-2" style="padding-top: 10px;">
+                            <p class="card-title" style="margin-bottom: 5px;"><i class="fa fa-video"></i> Game Unknown</p>
+                            <p class="card-subtitle mb-2 text-muted">2019/12/22 | 04:15 AM | 3.70 GB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <!-- GRID CARD
+        <div class="col-xl-3 col-md-5 mb-4" style="padding-left: 15px;padding-bottom: 15px" id="Iupp5Hc8UldWLXIu">
+            <div class="card h-100">
+                <div class="card-img-overlay d-flex flex-column justify-content-between">
+                    <h5 class="row justify-content-between">
+                        <div class="custom-control custom-checkbox" style="z-index:10; width:0px; margin-left:15px">
+                            <input class="custom-control-input" type="checkbox" id="Iupp5Hc8UldWLXIu-CBOXmAuGVmJVV">
+                            <label class="custom-control-label" for="Iupp5Hc8UldWLXIu-CBOXmAuGVmJVV">
+                            </label>
+                        </div>
+                        <div class="dropdown show" style="z-index:10; width:0px; margin-right:25px">
+                            <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="Iupp5Hc8UldWLXIu-DMENUmAuGVmJVV">
+                                <i class="fa fa-ellipsis-v" style="color:#fff; text-decoration:none; width:0px; text-shadow:-1px -1px 0 gray, 1px -1px 0 gray, -1px 1px 0 gray, 1px 1px 0 gray;"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="Iupp5Hc8UldWLXIu-DMENUmAuGVmJVV">
+                                <a class="dropdown-item" href="#">Show In Folder</a>
+                                <a class="dropdown-item" href="#">Delete</a>
+                            </div>
+                        </div>
+                    </h5>
+                    <a class="stretched-link" id="Iupp5Hc8UldWLXIu-CARDmAuGVmJVV" href="#"></a>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-auto">
+                        <img class="img-fluid" src="http://localhost:9001/s/thumbnails/Game%20Unknown/.thumbs/Iupp5Hc8UldWLXIu-thumb.jpg" alt="Missing Thumbnail">
+                        <img class="img-fluid" src="./media/video_thumbnail_placeholder.png" alt="Missing Thumbnail" style="position: absolute;">
+                    </div>
+                    <div class="col">
+                        <div class="card-block px-2" style="padding-top: 10px;">
+                            <p class="card-title" style="margin-bottom: 5px;"><i class="fa fa-video"></i> Game Unknown</p>
+                            <p class="card-subtitle mb-2 text-muted">2019/12/22 | 04:15 AM | 3.70 GB</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,12 @@ import moment from 'moment';
 import shortid from 'shortid';
 import ReplaysSettingsService from './replaysSettingsService';
 
+//const vidList = document.getElementById('upload-list-div');
+
+var sortType = "Newest";
+var sortPlatform = "All Uploads";
+var sortView = "Grid";
+
 export function init(){
     fetchAllUploads();
 }
@@ -18,7 +24,7 @@ $("#uploads-div").mousedown( function (e) {
 
     if(e.which == 1) { //left click
         if(element.id.includes("-CBOX")) {
-            let uploadListDiv = document.getElementById("upload-list-div");
+            let vidList = document.getElementById("upload-list-div");
             let card = element.parentElement.parentElement.parentElement.parentElement;
             if(!$(element).is(":checked")) {
                 makeSelectDOM(card);
@@ -26,14 +32,14 @@ $("#uploads-div").mousedown( function (e) {
             else {
                 makeUnselectDOM(card);
             }
-            let selectedLength = uploadListDiv.getElementsByClassName("card border-primary h-100").length;
+            let selectedLength = vidList.getElementsByClassName("card border-primary h-100").length;
             document.getElementById("upload-SelectionLength").innerText = 
                 selectedLength + ((selectedLength == 1) ? " selected upload" : " selected uploads");
 
             if(selectedLength == 1) {
                 $(element).prop('checked', true); //if this was the first checked element, sometimes it doesnt check so lets force it
                 document.getElementById("upload-SelectionToolbar").style.visibility = "visible";
-                uploadListDiv.style.marginTop = "4rem";
+                vidList.style.marginTop = "4rem";
             } 
             else if (selectedLength == 0) {
                 $(element).prop('checked', false); //same here on last checked element
@@ -43,11 +49,11 @@ $("#uploads-div").mousedown( function (e) {
         }
         if(element.id.includes("upload-")) {
             if(element.id.includes("DeleteSelected")) {
-                let uploadListDiv = document.getElementById("upload-list-div");
+                let vidList = document.getElementById("upload-list-div");
                 const confirmString = `Are you certain you want to delete the ${document.getElementById("upload-SelectionLength").innerText}?\n` +
                                     `This will only delete the record from Uploads, the link will still be avaliable for viewing.\nDelete record?`;
                 if (window.confirm(confirmString)) {
-                    uploadListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                    vidList.querySelectorAll('.card.border-primary').forEach(card => {
                         let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
                         $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
                         let video = {
@@ -61,9 +67,9 @@ $("#uploads-div").mousedown( function (e) {
                 }
             }
             if(element.id.includes("SelectAll")) {
-                let uploadListDiv = document.getElementById("upload-list-div");
+                let vidList = document.getElementById("upload-list-div");
                 let selectedLength = 0;
-                uploadListDiv.querySelectorAll('.card:not(.border-primary)').forEach(card => {
+                vidList.querySelectorAll('.card:not(.border-primary)').forEach(card => {
                     let domID = card.getElementsByClassName("stretched-link")[0].id.split("-CARD")[1];
                     $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', true);
                     makeSelectDOM(card);
@@ -75,8 +81,8 @@ $("#uploads-div").mousedown( function (e) {
                 }
             }
             if(element.id.includes("UnselectAll")) {
-                let uploadListDiv = document.getElementById("upload-list-div");
-                uploadListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                let vidList = document.getElementById("upload-list-div");
+                vidList.querySelectorAll('.card.border-primary').forEach(card => {
                     let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
                     $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
                     makeUnselectDOM(card);
@@ -85,7 +91,21 @@ $("#uploads-div").mousedown( function (e) {
                 document.getElementById("upload-list-div").style.marginTop = "0rem";
             }
             if(element.id.includes("Sort-")) {
-
+                if(!element.id.split("-")[2].includes("Platform|")) {
+                    sortType = element.id.split("-")[2];
+                    document.getElementById("upload-SortType").innerText = sortType + " First";
+                }
+                else {
+                    sortPlatform = element.id.split("|")[1];
+                    document.getElementById("upload-SortPlatform").innerText = sortPlatform;
+                }
+                fetchAllUploads(sortPlatform, sortType);
+            }
+            if(element.id.includes("GridView")) {
+                setGridView();
+            }
+            if(element.id.includes("DetailsView")) {
+                setDetailsView();
             }
             if(element.id.includes("Refresh")) {
                 
@@ -94,12 +114,30 @@ $("#uploads-div").mousedown( function (e) {
     }
 });
 
-function fetchAllUploads(game=null, type=null) {
-    ReplaysSettingsService.getUploadClips().then((clips)=> {
-        Object.keys(clips).forEach((clip) => {
-            makeUploadDOM(clips[clip]);
-        });
-    });
+function fetchAllUploads(uploadPlatform=null, type=null) {
+    console.log(uploadPlatform, type);
+    ReplaysSettingsService.getUploadClips().then(
+        (clips)=> {
+            let vidList = document.getElementById("upload-list-div");
+            vidList.innerHTML = '';
+            Object.keys(clips)
+            .sort(function(left, right){
+                if(type == "Oldest")
+                    return left.createdTime - right.createdTime;
+                else
+                    return right.createdTime - left.createdTime;
+            })
+            .forEach((clip) => {
+                if(uploadPlatform && uploadPlatform != "All Uploads") {
+                    if(clip.uploadPlatform && clip.uploadPlatform == uploadPlatform) {
+                        makeUploadDOM(clips[clip]);
+                    }
+                }
+                else
+                    makeUploadDOM(clips[clip]);
+            });
+        }
+    );
 }
 
 function makeSelectDOM(card) {
@@ -146,12 +184,24 @@ export function makeUploadDOM(video) {
     const _dmenu_id = video.id + "-DMENU" + rand;
 
     const result = document.createElement('div');
-    result.setAttribute('class', 'col-xl-3 col-md-5 mb-4');
+    if(sortView == "Grid") result.setAttribute('class', 'col-xl-3 col-md-5 mb-3');
+    else if(sortView == "Details") result.setAttribute('class', 'pr-3');
+    result.setAttribute('style', 'padding-left: 15px;padding-bottom: 15px');
     result.setAttribute('id', "upload-" + video.id);
     
     const card = document.createElement('div');
     card.setAttribute('class', 'card h-100');
+    if(sortView == "Details") card.setAttribute('style', 'width: calc(100vw - 290px);');
     result.append(card);
+
+    const content = document.createElement('div');
+    content.setAttribute('class', 'row no-gutters');
+    card.append(content);
+
+    const img_container = document.createElement('div');
+    img_container.setAttribute('class', 'col-auto');
+    if(sortView == "Details") img_container.setAttribute('style', 'width: 25%');
+    content.append(img_container);
 
     const card_img = document.createElement('img');
     card_img.setAttribute('class', 'card-img-top');
@@ -160,11 +210,18 @@ export function makeUploadDOM(video) {
     }
     card_img.setAttribute('src', video.posterUrl);
     card_img.setAttribute('alt', 'Missing Thumbnail');
-    card.append(card_img);
+    card_img.setAttribute('style', 'position: absolute;');
+    img_container.append(card_img);
+
+    const ph_img = document.createElement('img');
+    ph_img.setAttribute('class', 'img-fluid');
+    ph_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
+    ph_img.setAttribute('alt', 'Missing Thumbnail');
+    img_container.append(ph_img);
 
     const card_hover1 = document.createElement('div');
     card_hover1.setAttribute('class', 'card-img-overlay d-flex flex-column justify-content-between');
-    card.append(card_hover1);
+    card.prepend(card_hover1);
 
     const card_hover2 = document.createElement('h5');
     card_hover2.setAttribute('class', 'row justify-content-between');
@@ -230,10 +287,14 @@ export function makeUploadDOM(video) {
     card_hover_dmenu2_sub2.onclick = () => deleteVideo(video);
     card_hover_dmenu2.append(card_hover_dmenu2_sub2);
 
+    const card_body_container = document.createElement('div');
+    card_body_container.setAttribute('class', 'col');
+    content.append(card_body_container);
+
     const card_body = document.createElement('div');
     card_body.setAttribute('class', 'card-body');
     card_body.setAttribute('style', '10px;padding-bottom: 0px;padding-left: 10px;padding-right: 10px;');
-    card.append(card_body);
+    card_body_container.append(card_body);
 
     const card_title = document.createElement('p');
     card_title.setAttribute('class', 'card-title');
@@ -250,6 +311,26 @@ export function makeUploadDOM(video) {
     card_body.append(card_subtitle);
     
     document.getElementById('upload-list-div').appendChild(result);
+}
+
+function setGridView() {
+    sortView = "Grid";
+    let vidList = document.getElementById("upload-list-div");
+    vidList.querySelectorAll('.card').forEach(card => {
+        card.parentElement.setAttribute('class', 'col-xl-3 col-md-5 mb-3');
+        card.removeAttribute('style');
+        card.children[1].children[0].removeAttribute('style');
+    });
+}
+
+function setDetailsView() {
+    sortView = "Details";
+    let vidList = document.getElementById("upload-list-div");
+    vidList.querySelectorAll('.card').forEach(card => {
+        card.parentElement.setAttribute('class', 'pr-3');
+        card.setAttribute('style', 'width: calc(100vw - 290px);');
+        card.children[1].children[0].setAttribute('style', 'width: 25%');
+    });
 }
 
 function deleteVideo(video, confirmation=true) {

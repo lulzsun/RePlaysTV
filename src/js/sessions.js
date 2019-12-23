@@ -18,6 +18,7 @@ const baseUrl = apiBase.baseurl;
 var _videos = [];
 var sortType = "Newest";
 var sortGame = "All Games";
+var sortView = "Grid";
 
 var continuePlay, sliding;
 var seeker, segments;
@@ -174,7 +175,6 @@ $("#sessions-div").mousedown( function (e) {
             openVideoEditor(getVideoById(id));
         }
         if(element.id.includes("-CBOX")) {
-            let sessionListDiv = document.getElementById("session-list-div");
             let card = element.parentElement.parentElement.parentElement.parentElement;
             if(!$(element).is(":checked")) {
                 makeSelectDOM(card);
@@ -182,14 +182,14 @@ $("#sessions-div").mousedown( function (e) {
             else {
                 makeUnselectDOM(card);
             }
-            let selectedLength = sessionListDiv.getElementsByClassName("card border-primary h-100").length;
+            let selectedLength = vidList.getElementsByClassName("card border-primary h-100").length;
             document.getElementById("sess-SelectionLength").innerText = 
                 selectedLength + ((selectedLength == 1) ? " selected session" : " selected sessions");
 
             if(selectedLength == 1) {
                 $(element).prop('checked', true); //if this was the first checked element, sometimes it doesnt check so lets force it
                 document.getElementById("sess-SelectionToolbar").style.visibility = "visible";
-                sessionListDiv.style.marginTop = "4rem";
+                vidList.style.marginTop = "4rem";
             } 
             else if (selectedLength == 0) {
                 $(element).prop('checked', false); //same here on last checked element
@@ -199,11 +199,10 @@ $("#sessions-div").mousedown( function (e) {
         }
         if(element.id.includes("sess-")) {
             if(element.id.includes("DeleteSelected")) {
-                let sessionListDiv = document.getElementById("session-list-div");
                 const confirmString = `Are you certain you want to delete the ${document.getElementById("sess-SelectionLength").innerText}?\n` +
                                     `It will also delete the file`;
                 if (window.confirm(confirmString)) {
-                    sessionListDiv.querySelectorAll('.card.border-primary').forEach(card => {
+                    vidList.querySelectorAll('.card.border-primary').forEach(card => {
                         let domID = card.getElementsByClassName("stretched-link")[1].id.split("-CARD")[1];
                         $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
                         deleteVideo(card.parentElement.id, false);
@@ -214,9 +213,8 @@ $("#sessions-div").mousedown( function (e) {
                 }
             }
             if(element.id.includes("SelectAll")) {
-                let sessionListDiv = document.getElementById("session-list-div");
                 let selectedLength = 0;
-                sessionListDiv.querySelectorAll('.card:not(.border-primary)').forEach(card => {
+                vidList.querySelectorAll('.card:not(.border-primary)').forEach(card => {
                     let domID = card.getElementsByClassName("stretched-link")[0].id.split("-CARD")[1];
                     $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', true);
                     makeSelectDOM(card);
@@ -228,10 +226,10 @@ $("#sessions-div").mousedown( function (e) {
                 }
             }
             if(element.id.includes("UnselectAll")) {
-                let sessionListDiv = document.getElementById("session-list-div");
-                sessionListDiv.querySelectorAll('.card.border-primary').forEach(card => {
-                    $(document.getElementById(card.parentElement.id+"-CBOX")).prop('checked', false);
+                vidList.querySelectorAll('.card.border-primary').forEach(card => {
                     makeUnselectDOM(card);
+                    let domID = card.getElementsByClassName("stretched-link")[0].id.split("-CARD")[1];
+                    $(document.getElementById(card.parentElement.id+"-CBOX"+domID)).prop('checked', false);
                 });
                 document.getElementById("sess-SelectionToolbar").style.visibility = "hidden";
                 document.getElementById("session-list-div").style.marginTop = "0rem";
@@ -246,6 +244,12 @@ $("#sessions-div").mousedown( function (e) {
                     document.getElementById("sess-SortGame").innerText = sortGame;
                 }
                 fetchAllVideos(sortGame, sortType);
+            }
+            if(element.id.includes("GridView")) {
+                setGridView();
+            }
+            if(element.id.includes("DetailsView")) {
+                setDetailsView();
             }
             if(element.id.includes("Refresh")) {
                 fetchAllVideos(sortGame, sortType);
@@ -714,25 +718,44 @@ function makeVidDOM(video) {
     const _dmenu_id = video.id + "-DMENU" + rand;
 
     const result = document.createElement('div');
-    result.setAttribute('class', 'col-xl-3 col-md-5 mb-4');
+    if(sortView == "Grid") result.setAttribute('class', 'col-xl-3 col-md-5 mb-3');
+    else if(sortView == "Details") result.setAttribute('class', 'pr-3');
+    result.setAttribute('style', 'padding-left: 15px;padding-bottom: 15px');
     result.setAttribute('id', video.id);
     
     const card = document.createElement('div');
     card.setAttribute('class', 'card h-100');
+    if(sortView == "Details") card.setAttribute('style', 'width: calc(100vw - 290px);');
     result.append(card);
 
+    const content = document.createElement('div');
+    content.setAttribute('class', 'row no-gutters');
+    card.append(content);
+
+    const img_container = document.createElement('div');
+    img_container.setAttribute('class', 'col-auto');
+    if(sortView == "Details") img_container.setAttribute('style', 'width: 25%');
+    content.append(img_container);
+
     const card_img = document.createElement('img');
-    card_img.setAttribute('class', 'card-img-top');
+    card_img.setAttribute('class', 'img-fluid');
     card_img.onerror = () => {
         card_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
     }
     card_img.setAttribute('src', video.posterUrl);
     card_img.setAttribute('alt', 'Missing Thumbnail');
-    card.append(card_img);
+    card_img.setAttribute('style', 'position: absolute;');
+    img_container.append(card_img);
+
+    const ph_img = document.createElement('img');
+    ph_img.setAttribute('class', 'img-fluid');
+    ph_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
+    ph_img.setAttribute('alt', 'Missing Thumbnail');
+    img_container.append(ph_img);
 
     const card_hover1 = document.createElement('div');
     card_hover1.setAttribute('class', 'card-img-overlay d-flex flex-column justify-content-between');
-    card.append(card_hover1);
+    card.prepend(card_hover1);
 
     const card_hover2 = document.createElement('h5');
     card_hover2.setAttribute('class', 'row justify-content-between');
@@ -798,10 +821,14 @@ function makeVidDOM(video) {
     card_hover_dmenu2_sub2.onclick = () => deleteVideo(video.id);
     card_hover_dmenu2.append(card_hover_dmenu2_sub2);
 
+    const card_body_container = document.createElement('div');
+    card_body_container.setAttribute('class', 'col');
+    content.append(card_body_container);
+
     const card_body = document.createElement('div');
-    card_body.setAttribute('class', 'card-body');
-    card_body.setAttribute('style', '10px;padding-bottom: 0px;padding-left: 10px;padding-right: 10px;');
-    card.append(card_body);
+    card_body.setAttribute('class', 'card-block px-2');
+    card_body.setAttribute('style', 'padding-top: 10px;');
+    card_body_container.append(card_body);
 
     const card_title = document.createElement('p');
     card_title.setAttribute('class', 'card-title');
@@ -816,7 +843,26 @@ function makeVidDOM(video) {
     card_subtitle.setAttribute('class', 'card-subtitle mb-2 text-muted');
     card_subtitle.append(moment(video.createdTime).format('YYYY/MM/DD | hh:mm A | ' + (video.fileSizeBytes * 0.000000001).toFixed(2) + ' GB'));
     card_body.append(card_subtitle);
+
     return result;
+}
+
+function setGridView() {
+    sortView = "Grid";
+    vidList.querySelectorAll('.card').forEach(card => {
+        card.parentElement.setAttribute('class', 'col-xl-3 col-md-5 mb-3');
+        card.removeAttribute('style');
+        card.children[1].children[0].removeAttribute('style');
+    });
+}
+
+function setDetailsView() {
+    sortView = "Details";
+    vidList.querySelectorAll('.card').forEach(card => {
+        card.parentElement.setAttribute('class', 'pr-3');
+        card.setAttribute('style', 'width: calc(100vw - 290px);');
+        card.children[1].children[0].setAttribute('style', 'width: 25%');
+    });
 }
 
 function deleteVideo(videoId, confirmation=true) {

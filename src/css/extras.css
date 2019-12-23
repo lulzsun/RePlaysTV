@@ -37,12 +37,12 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
     visibility: visible;
 }
 
-.card-img-overlay>{
-    background-color: #00000000;
-}
-
 .card-img-overlay:hover{
     background-color: #00000070;
+}
+
+.card-img-overlay:hover + .no-gutters>.col-auto>img{
+    opacity: 0.5;
 }
 
 .dropdown-menu>li>a {

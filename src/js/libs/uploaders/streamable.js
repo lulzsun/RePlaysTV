@@ -49,6 +49,7 @@ function upload(email, password, video, title='untitled') {
           'url': 'https://streamable.com/' + JSON.parse(body).shortcode,
           'id': video.id,
           'posterUrl': thumbPath,
+          'uploadPlatform': "Streamable",
           'createdTime': new Date(),
         }
         ReplaysSettingsService.addUploadClip(data.url, data);
