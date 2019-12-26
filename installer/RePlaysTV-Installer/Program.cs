@@ -58,14 +58,14 @@ namespace RePlaysTV_Installer {
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine) {
             if (!String.IsNullOrEmpty(outLine.Data)) {
                 if (outLine.Data.Contains("All rights reserved.")) {
-                    Console.WriteLine("[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready");
+                    Console.WriteLine("Installer Ready");
                 } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
                     Installer.StartImport(SW, playsDirectory, VERSION);
-                    Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                    Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
                     startImport = true;
                 } else {
                     if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
-                        Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                        Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
                     }
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
                         Installer.StartModify(SW, playsDirectory, VERSION);
@@ -75,10 +75,10 @@ namespace RePlaysTV_Installer {
                         mre.Set();
                     }
                     if (outLine.Data.Contains(">exit")) {
-                        Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
+                        Console.WriteLine("Installation Complete!");
                         mre.Set();
                     }
-                    Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
+                    Console.WriteLine(outLine.Data.ToString());
                 }
             }
         }

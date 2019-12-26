@@ -393,7 +393,7 @@ function init() {
     $("#settings-audio-div").load("./html/settings/audio.html"); 
     $("#settings-upload-div").load("./html/settings/upload.html"); 
     $("#settings-advanced-div").load("./html/settings/advanced.html"); 
-    $("#settings-news-div").load("./html/settings/news.html"); 
+    $("#settings-update-div").load("./html/settings/update.html"); 
     $("#settings-help-div").load("./html/settings/help.html"); 
     SettingsService.init();
     setTimeout(function(){ //sometimes the html loads slower than these functions
@@ -417,8 +417,7 @@ function initGeneral(){
             document.getElementById("sett-keybindTakeScreenshot").innerText = setting.keybindTakeScreenshot;
             $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
             $('#sett-showRecordingTimer').prop('checked', setting.showRecordingTimer); 
-
-            console.log(setting);
+            //console.log(setting);
         }else console.error("General settings missing?");
     })
 
@@ -430,7 +429,7 @@ function initGeneral(){
                 document.getElementById("css-theme").href = "./css/bootstrap-light.css";
             else
                 document.getElementById("css-theme").href = "./css/bootstrap.css";
-            console.log(setting);
+            //console.log(setting);
         }else console.error("Theme setting missing?");
     });
 }
@@ -464,7 +463,7 @@ function initVideo(){
             $('#sett-recordMouseCursor').prop('checked', setting.recordMouseCursor); 
             $('#sett-webcamEnabled').prop('checked', setting.webcamEnabled); 
             // $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
-            console.log(setting);
+            //console.log(setting);
         }else console.error("Video settings missing?");
     })
 }
@@ -494,7 +493,7 @@ function initAudio(){
                 document.getElementById("sett-keybindToggleMuteMic").innerText = setting.keybindPushToTalk;
             else
                 document.getElementById("sett-keybindToggleMuteMic").innerText = setting.keybindToggleMuteMic;
-            console.log(setting);
+            //console.log(setting);
         }else console.error("Audio settings missing?");
     });
     $('#sett-audioRecordVolumeGameAudio').on('input',function(e){
@@ -516,7 +515,7 @@ function initUpload(){
             document.getElementById('sett-streamableEmail').value = setting.streamableEmail;
             document.getElementById('sett-streamablePass').value = setting.streamablePass;
             $('#sett-sharedFolderDir').next('.custom-file-label').html(setting.sharedFolderDir);
-            console.log(setting);
+            //console.log(setting);
         }else console.error("Upload settings missing?");
     });
 
@@ -547,7 +546,7 @@ function initAdvanced(){
             $('#sett-autoManageVideos').prop('checked', setting.autoManageVideos);
             document.getElementById("sett-autoManageDiskspaceThreshold").value = setting.autoManageDiskspaceThreshold;
             document.getElementById("sett-autoManageTimestampThreshold").value = setting.autoManageTimestampThreshold;
-            console.log(setting);
+            //console.log(setting);
         }else console.error("Advanced settings missing?");
     });
 

@@ -115,7 +115,6 @@ $("#uploads-div").mousedown( function (e) {
 });
 
 function fetchAllUploads(uploadPlatform=null, type=null) {
-    console.log(uploadPlatform, type);
     ReplaysSettingsService.getUploadClips().then(
         (clips)=> {
             let vidList = document.getElementById("upload-list-div");

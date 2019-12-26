@@ -1,0 +1,60 @@
+<h5>Update</h5>
+<h6>Update Mode</h6>
+<div class="custom-control custom-radio">
+    <input id="sett-autoUpdate" type="radio" name="updateMode" class="custom-control-input" checked>
+    <label for="sett-autoUpdate" class="custom-control-label">
+    <b>Automatic</b>
+    <br><a>Check for latest update and install in the background.</a>
+    </label>
+</div>
+<div class="custom-control custom-radio">
+    <input id="sett-manualUpdate" type="radio" name="updateMode" class="custom-control-input">
+    <label for="sett-manualUpdate" class="custom-control-label">
+    <b>Manual</b>
+    <br><a>Check for latest update and prompt user.</a>
+    </label>
+</div>
+<div class="custom-control custom-radio">
+    <input id="sett-offUpdate" type="radio" name="updateMode" class="custom-control-input">
+    <label for="sett-offUpdate" class="custom-control-label">
+    <b>Off</b>
+    <br><a>Disable updates.</a>
+    </label>
+</div>
+<h6>&nbsp;</h6>
+<h6>Update Settings</h6>
+<b>Temporary Update Directory</b>
+<div>
+    <div class="custom-control custom-file" style="float: left; width: 75%">
+        <input id="sett-" type="file" webkitdirectory directory class="custom-file-input">
+        <label for="sett-" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
+    </div>
+    <div>
+        <button id="sett-updateTempDir" class="btn btn-secondary" type="button">
+            Open Folder
+        </button>
+    </div>
+</div>
+<br>
+<div style="float: left;padding-right: 15px;">
+    <b>Check Frequency</b>
+    <br>
+    <input id="sett-updateCheckFreq" type="number" class="form-control" style="float: left;width: 120px;height: 35px;">
+    <div style="float:left;padding-top: 6px;padding-left: 6px;">
+        <b>hrs</b>
+    </div>
+</div>
+<div style="clear:both;"></div>
+<h6>&nbsp;</h6>
+
+<h6>&nbsp;</h6>
+<h5>Version</h5>
+<a>Current version: </a><a id="currentVersionStr">UNKNOWN</a><br>
+<a>Latest version: </a><a id="latestVersionStr">UNKNOWN</a><br>
+<a href="https://github.com/lulzsun/RePlaysTV/releases/" class="badge badge-primary" style="margin-bottom: 10px;">Change Logs</a><br>
+<h6>&nbsp;</h6>
+
+<script>
+    if(window.version) document.getElementById('currentVersionStr').innerHTML = window.version;
+    require('./js/updater.js');
+</script>
