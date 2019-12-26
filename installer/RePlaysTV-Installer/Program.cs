@@ -15,6 +15,7 @@ namespace RePlaysTV_Installer {
         public static Process p;
         public static StreamWriter SW;
         public static bool startImport = false;
+        public static ManualResetEvent mre = new ManualResetEvent(false);
         static void Main(string[] args) {
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
@@ -46,7 +47,7 @@ namespace RePlaysTV_Installer {
 
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
                     Installer.StartExtract(SW, playsDirectory);
-                    new ManualResetEvent(false).WaitOne();
+                    mre.WaitOne();
                 }
                 else {
                     Console.WriteLine("Missing app-3.0.0");
@@ -77,9 +78,11 @@ namespace RePlaysTV_Installer {
                     }
                     if (outLine.Data.Contains("npm ERR!")) {
                         System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                        mre.Set();
                     }
                     if (outLine.Data.Contains(">exit")) {
                         Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
+                        mre.Set();
                     }
                     Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
                 }
