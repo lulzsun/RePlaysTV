@@ -23,7 +23,7 @@ namespace RePlaysTV_Installer {
             } 
             else {
                 // run as console app
-                Console.WriteLine("fuck the world");
+                Console.WriteLine("Initializing Updater");
 
                 p = new Process();
 
@@ -46,11 +46,11 @@ namespace RePlaysTV_Installer {
 
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
                     Installer.StartExtract(SW, playsDirectory);
+                    new ManualResetEvent(false).WaitOne();
                 }
                 else {
                     Console.WriteLine("Missing app-3.0.0");
                 }
-                new ManualResetEvent(false).WaitOne();
             }
         }
 
@@ -63,9 +63,6 @@ namespace RePlaysTV_Installer {
                     new ThreadStart(
                         () => {
                             Installer.StartImport(SW, playsDirectory, VERSION);
-                            Console.WriteLine(Environment.NewLine + "=======================================");
-                            Console.WriteLine(Environment.NewLine + "=======================================");
-                            Console.WriteLine(Environment.NewLine + "=======================================");
                             Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                         }
                     ));
@@ -73,9 +70,6 @@ namespace RePlaysTV_Installer {
                     enterThread.Start();
                 } else {
                     if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
-                        Console.WriteLine(Environment.NewLine + "=======================================");
-                        Console.WriteLine(Environment.NewLine + "=======================================");
-                        Console.WriteLine(Environment.NewLine + "=======================================");
                         Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                     }
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
@@ -85,9 +79,6 @@ namespace RePlaysTV_Installer {
                         System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
                     }
                     if (outLine.Data.Contains(">exit")) {
-                        Console.WriteLine(Environment.NewLine + "=======================================");
-                        Console.WriteLine(Environment.NewLine + "=======================================");
-                        Console.WriteLine(Environment.NewLine + "=======================================");
                         Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
                     }
                     Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
