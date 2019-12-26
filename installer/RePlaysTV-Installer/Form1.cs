@@ -101,21 +101,13 @@ namespace RePlaysTV_Installer {
                         if (outLine.Data.Contains("All rights reserved.")) {
                             form1.richTextBox1.Text = "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready";
                         } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
-                            var enterThread = new Thread(
-                            new ThreadStart(
-                                () => {
-                                    Installer.StartImport(SW, form1.playsDirectory, form1.VERSION);
-                                    form1.Invoke(new MethodInvoker(delegate {
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
-                                        form1.richTextBox1.ScrollToCaret();
-                                    }));
-                                }
-                            ));
+                            Installer.StartImport(SW, form1.playsDirectory, form1.VERSION);
+                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                            form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                            form1.richTextBox1.ScrollToCaret();
                             startImport = true;
-                            enterThread.Start();
                         } else {
                             if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");

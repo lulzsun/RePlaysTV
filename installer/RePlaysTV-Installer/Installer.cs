@@ -35,10 +35,14 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("mkdir \".\\temp\\resources\\auger\\replays\"");
             SW.WriteLine("robocopy /E /NP /MT \".\\src\" \".\\temp\\resources\\auger\\replays\"");
 
+            //--------------------------------------
             //start modifying original plays files
-            ModifyFileAtLine("if (true) {", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\main.js", 682); //dev tools
-            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 419); //dev tools
-            ModifyFileAtLine("devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 548); //dev tools
+            //--------------------------------------
+            //dev tools
+            ModifyFileAtLine("if (true) {", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\main.js", 682);
+            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 419);
+            ModifyFileAtLine("devTools: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 548);
+            //replays modifications
             ModifyFileAtLine("const showurl = '/replays/index.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", 571);
             for (int i = 608; i <= 634; i++) {
                 ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\main\\UIManager.js", i);
@@ -48,25 +52,36 @@ namespace RePlaysTV_Installer {
             }
             ModifyFileAtLine("window.loadURL(path.join(__dirname, '/../../resources/auger', augerRouteUrl), urlOptions);", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\AugerWindow.js", 38);
             ModifyFileAtLine("nodeIntegration: true,", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\AugerWindow.js", 53);
-            ModifyFileAtLine("if (false) {", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Updater.js", 62);    //disables updater by code
-            ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);  //custom hud
+            //disables original plays updater
+            ModifyFileAtLine("if (false) {", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Updater.js", 62);
+            //ingame hud replacement
+            ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);
+            //disables online plays user checks
             ModifyFileAtLine("return true;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
-            ModifyFileAtLine("return null;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\BaseService.js", 48);     //disables online user check
-            ModifyFileAtLine("return {};", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Settings.js", 239);     //disables online user check
+            ModifyFileAtLine("return null;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\BaseService.js", 48); 
+            ModifyFileAtLine("return {};", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Settings.js", 239);
             for (int i = 159; i <= 166; i++) {
-                ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);     //disables online user check
+                ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);
             }
-            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);     //disables online user check
-            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);     //disables online user check
-
-            ModifyFileAtLine("const GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Utils.js", 39); //changes gamecatalog url
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 79);
+            ModifyFileAtLine("// removed", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\PresenceService.js", 94);
+            // changes gamecatalog url
+            ModifyFileAtLine("const GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Utils.js", 39);
             ModifyFileAtLine("const CATALOG_GAME_DETECTION = 'game_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 6);
             ModifyFileAtLine("const CATALOG_NONGAME_DETECTION = 'nongame_detections';", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 7);
             ModifyFileAtLine("static getLatestVersionFileUrl() {", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 13);
             ModifyFileAtLine("return `/version.json`;", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 14);
             ModifyFileAtLine("const url = GameCatalogRequest.getLatestVersionFileUrl();", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 27);
             ModifyFileAtLine("return {version: response[`${catalog}_version`].version, key: `${catalog}.json`};", Directory.GetCurrentDirectory() + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 34);
-            //end modifying
+            // repurposed presence logger for update logs
+            ModifyFileAtLine("const UPDATERLOGPATH = path.join(USERDATAPATH, 'updater.log');", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Logger.js", 18);
+            ModifyFileAtLine("touch.sync(UPDATERLOGPATH);", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Logger.js", 28);
+            ModifyFileAtLine("const updaterLogger = winston.createLogger({", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Logger.js", 256);
+            ModifyFileAtLine("filename: UPDATERLOGPATH,", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Logger.js", 265);
+            ModifyFileAtLine("export const updaterLog = Loggify(updaterLogger);", Directory.GetCurrentDirectory() + "\\temp\\src\\core\\Logger.js", 278);
+            //--------------------------------------
+            //end modifying original plays files
+            //--------------------------------------
 
             StartPackage(SW, playsDirectory, VERSION);
         }

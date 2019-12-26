@@ -60,15 +60,9 @@ namespace RePlaysTV_Installer {
                 if (outLine.Data.Contains("All rights reserved.")) {
                     Console.WriteLine("[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready");
                 } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
-                    var enterThread = new Thread(
-                    new ThreadStart(
-                        () => {
-                            Installer.StartImport(SW, playsDirectory, VERSION);
-                            Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
-                        }
-                    ));
+                    Installer.StartImport(SW, playsDirectory, VERSION);
+                    Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                     startImport = true;
-                    enterThread.Start();
                 } else {
                     if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
                         Console.WriteLine(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
@@ -77,7 +71,7 @@ namespace RePlaysTV_Installer {
                         Installer.StartModify(SW, playsDirectory, VERSION);
                     }
                     if (outLine.Data.Contains("npm ERR!")) {
-                        System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                        Console.WriteLine("An unhandled error has occurred during the install.");
                         mre.Set();
                     }
                     if (outLine.Data.Contains(">exit")) {
