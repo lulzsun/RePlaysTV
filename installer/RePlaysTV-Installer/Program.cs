@@ -54,12 +54,20 @@ namespace RePlaysTV_Installer {
             }
         }
 
+        private static bool startImport = false;
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine) {
             if (!String.IsNullOrEmpty(outLine.Data)) {
                 if (outLine.Data.Contains("All rights reserved.")) {
                     Console.WriteLine("Installer Ready");
-                } else if (outLine.Data.Contains("We will now attempt to import: ")) { //part two of installation
-                    Installer.StartImport(SW, playsDirectory);
+                } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
+                    var enterThread = new Thread(
+                    new ThreadStart(
+                        () => {
+                            Installer.StartImport(SW, playsDirectory);
+                        }
+                    ));
+                    startImport = true;
+                    enterThread.Start();
                 } else {
                     if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
                         Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
