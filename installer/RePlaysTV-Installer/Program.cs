@@ -9,7 +9,9 @@ using System.Windows.Forms;
 namespace RePlaysTV_Installer {
 
     static class Program {
+        public const string VERSION = "3.0.2";
         public static string playsDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\Plays";
+        public static string workDirectory = null;
 
         public static Process p;
         public static StreamWriter SW;
@@ -18,7 +20,7 @@ namespace RePlaysTV_Installer {
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1(playsDirectory));
+                Application.Run(new Form1(playsDirectory, VERSION));
             } 
             else {
                 // run as console app
@@ -44,7 +46,8 @@ namespace RePlaysTV_Installer {
                 p.BeginErrorReadLine();
 
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
-                    Installer.StartExtract(SW, playsDirectory, args[0]); //args[0] - working dir passed from replays client
+                    workDirectory = args[0];  //args[0] - working dir passed from replays client
+                    Installer.StartExtract(SW, playsDirectory, workDirectory);
                     mre.WaitOne();
                 }
                 else {
@@ -70,10 +73,10 @@ namespace RePlaysTV_Installer {
                     enterThread.Start();
                 } else {
                     if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
-                        Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
+                        //Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
                     }
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                        Installer.StartModify(SW, playsDirectory);
+                        Installer.StartModify(SW, playsDirectory, VERSION, workDirectory);
                     }
                     if (outLine.Data.Contains("npm ERR!")) {
                         Console.WriteLine("An unhandled error has occurred during the install.");

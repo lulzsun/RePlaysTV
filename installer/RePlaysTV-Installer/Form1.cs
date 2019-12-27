@@ -13,13 +13,15 @@ using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     public partial class Form1 : Form {
+        public string VERSION;
         public string playsDirectory;
 
         public static Process p;
         public static StreamWriter SW;
         public static Form1 form1;
-        public Form1(string _playsDirectory) {
+        public Form1(string _playsDirectory, string _VERSION) {
             playsDirectory = _playsDirectory;
+            VERSION = _VERSION;
 
             InitializeComponent();
             form1 = this;
@@ -123,7 +125,7 @@ namespace RePlaysTV_Installer {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                             }
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                                Installer.StartModify(SW, form1.playsDirectory);
+                                Installer.StartModify(SW, form1.playsDirectory, form1.VERSION);
                             }
                             if (outLine.Data.Contains("npm ERR!")) {
                                 form1.TopMost = true;
@@ -141,7 +143,6 @@ namespace RePlaysTV_Installer {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
                                 form1.Invoke(new MethodInvoker(delegate { form1.InstallComplete(); }));
-
                             }
                             form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
                             form1.richTextBox1.ScrollToCaret();
