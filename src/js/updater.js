@@ -5,49 +5,18 @@ import {updaterLog} from '../../../../src/core/Logger';
 //Uses node.js process manager
 const request = require('request');
 const child_process = require('child_process');
-
 let dir;
 
-//checkForUpdate();
+init();
 
-// This function will output the lines from the script 
-// and will return the full combined output
-// as well as exit code when it's done (using the callback).
-function run_script(command, args, callback) {
-    var child = child_process.spawn(command, args, {
-        encoding: 'utf8',
-        shell: true
-    });
-
-    // You can also use a variable to save the output for when the script closes later
-    child.on('error', (error) => {
-        updaterLog.error(error);  
-        callback(error);
-    });
-
-    child.stdout.setEncoding('utf8');
-    child.stdout.on('data', (data) => {
-        //Here is the output
-        data=data.toString();   
-        updaterLog.debug(data);      
-    });
-
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', (data) => {
-        //Here is the output from the command
-        updaterLog.debug(data);  
-    });
-
-    child.on('close', (code) => {
-        updaterLog.debug(`exit code: ${code}`);  
-        callback(null, {"exitCode": code});
-    });
-}
-
-function checkForUpdate() {
+function init() {
     if(Utils.isDev()) dir = "F:\\Documents\\RePlaysTV\\RePlays-Updater";
     else dir = require('electron').remote.app.getAppPath().replace('app-3.0.1\\resources\\app.asar', 'Replays-Updater');
 
+    checkForUpdate();
+}
+
+function checkForUpdate() {
     const options = {
         url: 'https://api.github.com/repos/lulzsun/RePlaysTV/releases/latest',
         method: 'GET',
@@ -59,12 +28,13 @@ function checkForUpdate() {
     };
     
     request(options, function(err, res, body) {
-        if(err) updaterLog.error("Unable to update: ", err);
+        if(err) return updaterLog.error("Unable to update: ", err);
         let json = JSON.parse(body);
 
-        //'json.body' is the change log
+        document.getElementById('currentVersionStr').innerHTML = window.version;
+        document.getElementById('latestVersionStr').innerHTML = json.tag_name;
 
-        if(json.tag_name != window.version) {
+        if(window.version != json.tag_name) {
             updaterLog.debug(`Current RePlaysTV version '${window.version}' does not match remote version '${json.tag_name}'`);
             if (true) {;
                 downloadUpdate(json.assets[0].browser_download_url, json.tag_name);
@@ -122,6 +92,8 @@ function downloadUpdate(download_url, version) {
 }
 
 function extractUpdate(zipFilePath) {
+    updaterLog.debug(`Extracing ReplaysTV update '${zipFilePath}'`);
+
     const _7z = require('7zip')['7z']; //path to 7zip
     run_script(`"${_7z}"`, [`x "${zipFilePath}"`, `-o"${dir}"`, '-y'], function(err, result) {
         if(err) return updaterLog.error(err);
@@ -132,10 +104,46 @@ function extractUpdate(zipFilePath) {
 }
 
 function installUpdate() {
-    run_script(`${dir}\\RePlaysTV-Installer.exe`, ["hehehehehe"], function(err, result) {
+    updaterLog.debug(`Running ReplaysTV installer '${dir}\\RePlaysTV-Installer.exe'`);
+
+    run_script(`"${dir}\\RePlaysTV-Installer.exe"`, [`"${dir}"`], function(err, result) {
         if(err) return updaterLog.error(err);
         if(result) {
-            console.log("Update successful!");
+            if(result.exitCode == -1) return updaterLog.error("An Unhandled error has occured during the install.");
+            updaterLog.debug("Update completed!");
         }
+    });
+}
+
+// This function will output the lines from the script 
+// and will return the full combined output
+// as well as exit code when it's done (using the callback).
+function run_script(command, args, callback) {
+    var child = child_process.spawn(command, args, {
+        encoding: 'utf8',
+        shell: true
+    });
+
+    child.on('error', (error) => {
+        updaterLog.error(error);  
+        callback(error);
+    });
+
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', (data) => {
+        //Here is the output
+        data=data.toString();   
+        updaterLog.debug(data);      
+    });
+
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', (data) => {
+        //Here is the output from the command
+        updaterLog.debug(data);  
+    });
+
+    child.on('close', (code) => {
+        updaterLog.debug(`exit code: ${code}`);  
+        callback(null, {"exitCode": code});
     });
 }
