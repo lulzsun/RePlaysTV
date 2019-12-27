@@ -1,7 +1,7 @@
 # RePlaysTV-Installer
 The Installer for RePlays
 
-It is only required to run this installer once. RePlaysTV can update without this once it is properly installed.
+If you are reading this, this is not the proper installer for end-users. This is meant for developers. Please look at the releases page for proper downloads.
 
 # Note for Contributors
 Close your eyes when looking at the code. This is code unmaintainable, but hey, at least it works?
