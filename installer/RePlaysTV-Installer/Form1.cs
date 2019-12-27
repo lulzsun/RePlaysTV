@@ -13,15 +13,12 @@ using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     public partial class Form1 : Form {
-        public string VERSION;
         public string playsDirectory;
 
         public static Process p;
         public static StreamWriter SW;
         public static Form1 form1;
-        public static bool startImport = false;
-        public Form1(string _VERSION, string _playsDirectory) {
-            VERSION = _VERSION;
+        public Form1(string _playsDirectory) {
             playsDirectory = _playsDirectory;
 
             InitializeComponent();
@@ -90,7 +87,7 @@ namespace RePlaysTV_Installer {
             form1.TopMost = true;
             DialogResult dr = MessageBox.Show("Installation Complete!\n\nOpen Replays?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes) {
-                Process.Start(playsDirectory + "\\app-" + VERSION + "\\Plays.exe");
+                Process.Start(playsDirectory + "\\app-3.0.1\\Plays.exe");
             }
             form1.TopMost = false;
         }
@@ -100,14 +97,9 @@ namespace RePlaysTV_Installer {
                     form1.richTextBox1.Invoke(new MethodInvoker(delegate {
                         if (outLine.Data.Contains("All rights reserved.")) {
                             form1.richTextBox1.Text = "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready";
-                        } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
-                            Installer.StartImport(SW, form1.playsDirectory, form1.VERSION);
-                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                            form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                            form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                        } else if (outLine.Data.Contains("We will now attempt to import: ")) { //part two of installation
+                            Installer.StartImport(SW, form1.playsDirectory);
                             form1.richTextBox1.ScrollToCaret();
-                            startImport = true;
                         } else {
                             if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
@@ -116,11 +108,16 @@ namespace RePlaysTV_Installer {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                             }
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                                Installer.StartModify(SW, form1.playsDirectory, form1.VERSION);
+                                Installer.StartModify(SW, form1.playsDirectory);
                             }
                             if (outLine.Data.Contains("npm ERR!")) {
                                 form1.TopMost = true;
                                 System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                                form1.TopMost = false;
+                            }
+                            if (outLine.Data.Contains("'nodejs-portable.exe' is not recognized")) {
+                                form1.TopMost = true;
+                                System.Windows.Forms.MessageBox.Show("'nodejs-portable.exe' is missing from the working directory.");
                                 form1.TopMost = false;
                             }
                             if (outLine.Data.Contains(">exit")) {

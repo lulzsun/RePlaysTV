@@ -7,7 +7,9 @@ using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     class Installer {
-        public static void StartExtract(StreamWriter SW, string playsDirectory) { //part one of installation
+        public static void StartExtract(StreamWriter SW, string playsDirectory, string workDirectory=null) { //part one of installationif(
+            if(workDirectory != null)
+                SW.WriteLine("cd /d " + workDirectory);
             SW.WriteLine("nodejs-portable.exe");
             if (Directory.Exists(Directory.GetCurrentDirectory() + "\\temp"))
                 SW.WriteLine("rd /s /q temp");
@@ -18,7 +20,7 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("npm install");
             SW.WriteLine("electron-forge import");
         }
-        public static void StartImport(StreamWriter SW, string playsDirectory, string VERSION) {
+        public static void StartImport(StreamWriter SW, string playsDirectory) {
             Thread.Sleep(5000);
             SW.WriteLine("y");
             Thread.Sleep(5000);
@@ -29,7 +31,7 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("n");
             Thread.Sleep(5000);
         }
-        public static void StartModify(StreamWriter SW, string playsDirectory, string VERSION) { //part three of installation
+        public static void StartModify(StreamWriter SW, string playsDirectory) { //part three of installation
             SW.WriteLine("cd ..");
             SW.WriteLine("rd /s /q \".\\temp\\.cache\"");
             SW.WriteLine("mkdir \".\\temp\\resources\\auger\\replays\"");
@@ -83,18 +85,18 @@ namespace RePlaysTV_Installer {
             //end modifying original plays files
             //--------------------------------------
 
-            StartPackage(SW, playsDirectory, VERSION);
+            StartPackage(SW, playsDirectory);
         }
 
-        public static void StartPackage(StreamWriter SW, string playsDirectory, string VERSION) { //part four of installation
+        public static void StartPackage(StreamWriter SW, string playsDirectory) { //part four of installation
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
-            SW.WriteLine("rename " + playsDirectory + "\\Update.exe noUpdate.exe");
-            SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-" + VERSION + "\"");
-            SW.WriteLine("mkdir \"" + playsDirectory + "\\app-" + VERSION + "\"");
+            SW.WriteLine("rename " + playsDirectory + "\\Update.exe originalUpdater.exe");
+            SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-3.0.1\"");
+            SW.WriteLine("mkdir \"" + playsDirectory + "\\app-3.0.1\"");
             SW.WriteLine("asar pack \".\\out\\Plays-win32-ia32\\resources\\app\" \".\\out\\Plays-win32-ia32\\resources\\app.asar\"");
             SW.WriteLine("rd /s /q \".\\out\\Plays-win32-ia32\\resources\\app\"");
-            SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-" + VERSION + "\"");
+            SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-3.0.1\"");
             SW.WriteLine("cd ..");
             SW.WriteLine("rd /s /q temp");
             SW.WriteLine("exit");
