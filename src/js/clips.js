@@ -73,8 +73,8 @@ $("#clips-div").mousedown( function (e) {
                 videoClipDom.removeChild(videoClipDom.firstChild); //remove src, so that new src can play
             }
             const id = element.id.split("-")[0];
-            videoClipDom = document.getElementById(`clip-play-${id}`);
             openVideoViewer(getVideoById(id));
+            videoClipDom = document.getElementById(`clip-play-${id}`);
         }
         if(element.id.includes("-CBOX")) {
             let card = element.parentElement.parentElement.parentElement.parentElement;
