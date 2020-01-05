@@ -2,7 +2,7 @@ const IPC = require('../../../src/core/IPCCapsule.js');
 const { remote, ipcRenderer } = require('electron');
 const moment = require('moment');
 
-window.version = "3.0.2";
+window.version = "3.0.3";
 
 window.onload=function(){
     onLoader();
@@ -60,7 +60,7 @@ function recordingTime() {
         }, 1000);
     }
     else{
-        document.getElementById('recordingElapsedTime').innerText = "[00:00]";
+        document.getElementById('recordingElapsedTime').innerText = "00:00";
         duration = 0;
     }
 }
