@@ -5,6 +5,9 @@ import ReplaysSettingsService, {
     SETTING_REPLAYS_STREAMABLE_EMAIL,
     SETTING_REPLAYS_STREAMABLE_PASS,
     SETTING_REPLAYS_SHAREDFOLDER_DIR,
+    SETTING_REPLAYS_UPDATE_MODE,
+    SETTING_REPLAYS_UPDATE_FOLDER_DIR,
+    SETTING_REPLAYS_UPDATE_CHECK_FREQ,
 } from './replaysSettingsService';
 import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
@@ -402,6 +405,7 @@ function init() {
         initAudio(); 
         initUpload();
         initAdvanced();
+        initUpdate();
         document.getElementById("sett-openDevTools").onclick = () => remote.BrowserWindow.getFocusedWindow().webContents.openDevTools();
     }, 1000);
 }
@@ -531,6 +535,27 @@ function initUpload(){
         var fileName = e.target.files[0].path;
         $(this).next('.custom-file-label').html(fileName);
         ReplaysSettingsService.setSetting(SETTING_REPLAYS_SHAREDFOLDER_DIR, fileName);
+    })
+}
+
+function initUpdate(){
+    ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
+        if(setting){
+            $('#sett-updateMode-'+setting.updateMode).prop('checked', true); 
+            $('#sett-updateFolderDir').next('.custom-file-label').html(setting.updateFolderDir);
+            document.getElementById('sett-updateCheckFreq').value = setting.updateCheckFreq;
+            //console.log(setting);
+        }else console.error("Update settings missing?");
+    });
+
+    $('#sett-updateFolderDir').on('change',function(e){
+        var fileName = e.target.files[0].path;
+        $(this).next('.custom-file-label').html(fileName);
+        ReplaysSettingsService.setSetting(SETTING_REPLAYS_SHAREDFOLDER_DIR, fileName);
+    })
+
+    $('#sett-updateCheckFreq').on('input',function(event){
+        ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPDATE_CHECK_FREQ, event.target.value);
     })
 }
 
@@ -803,6 +828,26 @@ $("#settings-upload-div").mousedown( function (e) {
         }
         if(element.id.includes("openSharedFolderDir")){
             shell.openItem($('#sett-sharedFolderDir').next('.custom-file-label').text());
+        }
+    }
+});
+
+$("#settings-update-div").mousedown( function (e) {
+    var element;
+    isKeybinding = false;
+    if(!$(e.target)[0].id) {
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1 && element.id.includes("sett-")) { //left click
+        if(element.id.includes("updateMode")){
+            ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPDATE_MODE, element.id.split("-")[2]);
+        }
+        if(element.id.includes("openUpdateFolderDir")){
+            shell.openItem($('#sett-updateFolderDir').next('.custom-file-label').text());
         }
     }
 });

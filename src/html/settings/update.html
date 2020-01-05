@@ -1,22 +1,22 @@
 <h5>Update</h5>
 <h6>Update Mode</h6>
 <div class="custom-control custom-radio">
-    <input id="sett-autoUpdate" type="radio" name="updateMode" class="custom-control-input" checked>
-    <label for="sett-autoUpdate" class="custom-control-label">
+    <input id="sett-updateMode-automatic" type="radio" name="updateMode" class="custom-control-input" checked>
+    <label for="sett-updateMode-automatic" class="custom-control-label">
     <b>Automatic</b>
     <br><a>Check for latest update and install in the background.</a>
     </label>
 </div>
 <div class="custom-control custom-radio">
-    <input id="sett-manualUpdate" type="radio" name="updateMode" class="custom-control-input">
-    <label for="sett-manualUpdate" class="custom-control-label">
+    <input id="sett-updateMode-manual" type="radio" name="updateMode" class="custom-control-input">
+    <label for="sett-updateMode-manual" class="custom-control-label">
     <b>Manual</b>
     <br><a>Check for latest update and prompt user.</a>
     </label>
 </div>
 <div class="custom-control custom-radio">
-    <input id="sett-offUpdate" type="radio" name="updateMode" class="custom-control-input">
-    <label for="sett-offUpdate" class="custom-control-label">
+    <input id="sett-updateMode-off" type="radio" name="updateMode" class="custom-control-input">
+    <label for="sett-updateMode-off" class="custom-control-label">
     <b>Off</b>
     <br><a>Disable updates.</a>
     </label>
@@ -26,11 +26,11 @@
 <b>Temporary Update Directory</b>
 <div>
     <div class="custom-control custom-file" style="float: left; width: 75%">
-        <input id="sett-" type="file" webkitdirectory directory class="custom-file-input">
-        <label for="sett-" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
+        <input id="sett-updateFolderDir" type="file" webkitdirectory directory class="custom-file-input">
+        <label for="sett-updateFolderDir" class="custom-file-label" style="color: black;background-color: white;">Choose folder</label>
     </div>
     <div>
-        <button id="sett-updateTempDir" class="btn btn-secondary" type="button">
+        <button id="sett-openUpdateFolderDir" class="btn btn-secondary" type="button">
             Open Folder
         </button>
     </div>
@@ -45,7 +45,6 @@
     </div>
 </div>
 <div style="clear:both;"></div>
-<h6>&nbsp;</h6>
 
 <h6>&nbsp;</h6>
 <h5>Version</h5>
