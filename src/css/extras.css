@@ -29,14 +29,6 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
     background: red;
 }
 
-div[id='sess-Seeker'] > .noUi-base {
-    border-width: 1px;
-    border-style: solid;
-    border-color: #282828;
-    border-left-width: 0px;
-    border-right-width: 0px;
-}
-
 div[id='sess-Pins'] > .noUi-base .noUi-origin .noUi-handle {
     background: gold;
 }
