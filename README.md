@@ -44,12 +44,13 @@ Instructions:
     * [x] Streamable
 	* [ ] Gfycat
     * [ ] Youtube
-	* [ ] Shared folders
+	* [x] Shared folders
   * [ ] Ingame HUD functionality
   * [ ] Deep Integration
     * [ ] League of Legends
     * [ ] Counter-Strike Global Offensive
     * [ ] Dota 2
+  * [x] Auto Update functionality
 
 # Notable Issues / TO-DO
   * Missing Features
@@ -60,13 +61,10 @@ Instructions:
 	  * This means instant replay shouldn't work, and any other related HUD functions
 	* Uploads Tab Sorting
 	* Snapshots Tab/Viewer
-	* Grid/details view for Sessions/Clips tab does not exist
   * A some of plays.tv online services still run in the background
     * Minor issue, but it would be best for memory usage to get rid of them
 	* Could be a possible reason to performance losses
-  * Slow install/update process
-	* Mainly due to having the installer act as a portable/contained dev environment
-	  * Also the reason why installer's total file size is fairly large
+  * Slow and bulky install/update process
   * Make code more maintainable
 
 # Disclaimer
