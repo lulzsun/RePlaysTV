@@ -125,7 +125,7 @@ $("#video-editor-div").mousedown( function (e) {
         removeClip();
     }
 
-    console.log(element);
+    //console.log(element);
 });
 
 $("#video-editor-div").dblclick(function(e){
