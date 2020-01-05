@@ -22,7 +22,7 @@ var sortView = "Grid";
 var videoSessDom = document.getElementById("sess-play-UNKNOWN"); //video playback on the editor
 
 TranscoderService.initialize();
-fetchAllVideos();
+fetchAllSessions();
 
 function doGet(urlPath) {
 return new Promise(
@@ -88,7 +88,7 @@ $("#sessions-div").mousedown( function (e) {
                     });
                     document.getElementById("sess-SelectionToolbar").style.visibility = "hidden";
                     document.getElementById("session-list-div").style.marginTop = "0rem";
-                    fetchAllVideos(sortGame, sortType);
+                    fetchAllSessions(sortGame, sortType);
                 }
             }
             if(element.id.includes("SelectAll")) {
@@ -122,7 +122,7 @@ $("#sessions-div").mousedown( function (e) {
                     sortGame = element.id.split("|")[1];
                     document.getElementById("sess-SortGame").innerText = sortGame;
                 }
-                fetchAllVideos(sortGame, sortType);
+                fetchAllSessions(sortGame, sortType);
             }
             if(element.id.includes("GridView")) {
                 setGridView();
@@ -131,7 +131,7 @@ $("#sessions-div").mousedown( function (e) {
                 setDetailsView();
             }
             if(element.id.includes("Refresh")) {
-                fetchAllVideos(sortGame, sortType);
+                fetchAllSessions(sortGame, sortType);
             }
         }
     }
@@ -145,7 +145,11 @@ function getVideoById(id) {
     }
 }
 
-function fetchAllVideos(game=null, type=null) {
+function fetchAllSessions(game=null, type=null) {
+    if(game==null && type==null) {
+        game = sortGame;
+        type = sortType;
+    }
     var totalSize = 0;
     document.getElementById("sess-TotalSize").innerText = '';
     doGet(urljoin(baseUrl, 'api/recordings')).then(
@@ -407,7 +411,7 @@ function deleteVideo(videoId, confirmation=true) {
                     document.getElementById(videoId).remove();
                 }
                 );
-                fetchAllVideos(sortGame, sortType);
+                fetchAllSessions(sortGame, sortType);
             }
         }
         else {
@@ -422,4 +426,4 @@ function deleteVideo(videoId, confirmation=true) {
     });
 }
 
-export {getVideoById};
+export {getVideoById, fetchAllSessions};

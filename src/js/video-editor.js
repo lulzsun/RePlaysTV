@@ -5,6 +5,7 @@ import TranscoderService from '../../../../src/service/TranscoderService';
 import * as IPC from '../../../../src/core/IPCCapsule.js';
 
 import {getVideoById} from './sessions';
+import {fetchAllClips} from './clips';
 
 var continuePlay, sliding;
 var seeker, segments;
@@ -382,6 +383,7 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
             }
         });
     }
+    fetchAllClips();
 })
 
 videoSessDom.addEventListener('timeupdate', function(){

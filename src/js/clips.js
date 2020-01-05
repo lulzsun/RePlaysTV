@@ -170,6 +170,10 @@ function getVideoById(id) {
 }
 
 function fetchAllClips(game=null, type=null) {
+    if(game==null && type==null) {
+        game = sortGame;
+        type = sortType;
+    }
     var totalSize = 0;
     document.getElementById("clip-TotalSize").innerText = '';
     doGet(urljoin(baseUrl, 'api/recordings')).then(
@@ -447,4 +451,4 @@ function deleteVideo(videoId, confirmation=true) {
     $("#v-pills-clips-tab").click();
 }
 
-export {deleteVideo};
+export {deleteVideo, fetchAllClips};
