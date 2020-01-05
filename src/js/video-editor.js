@@ -483,6 +483,8 @@ videoSessDom.addEventListener('loadeddata', function() {
         if(videoSessDom.currentTime != seeker.noUiSlider.get())
             videoSessDom.currentTime = seeker.noUiSlider.get();
     });
+
+    document.getElementById("sess-Seeker").style.height = "100%";
 }, false);
 
 //bootstrap context menu - https://stackoverflow.com/a/18667336
