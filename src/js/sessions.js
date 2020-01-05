@@ -173,7 +173,6 @@ $("#sessions-div").mousedown( function (e) {
             }
             const id = element.id.split("-")[0];
             openVideoEditor(getVideoById(id));
-            console.log(getVideoById(id));
         }
         if(element.id.includes("-CBOX")) {
             let card = element.parentElement.parentElement.parentElement.parentElement;
@@ -210,7 +209,7 @@ $("#sessions-div").mousedown( function (e) {
                     });
                     document.getElementById("sess-SelectionToolbar").style.visibility = "hidden";
                     document.getElementById("session-list-div").style.marginTop = "0rem";
-                    fetchAllVideos(sortGame, sortType);
+                    fetchAllClips(sortGame, sortType);
                 }
             }
             if(element.id.includes("SelectAll")) {
@@ -597,7 +596,7 @@ function openVideoEditor(video) {
     const videoSource = document.createElement('source');
     videoSessDom.setAttribute('id', `sess-play-${video.id}`);
     videoSource.setAttribute('src', video.url);
-    videoSessDom.setAttribute('style', "height: calc(100vh - 190px);width: 100%");
+    videoSessDom.setAttribute('style', "height: calc(100vh - 160px);width: 100%");
     videoSessDom.setAttribute('preload', 'auto');
     videoSessDom.appendChild(videoSource);
     videoSessDom.setAttribute('class', 'vid-vid');
@@ -884,7 +883,7 @@ function deleteVideo(videoId, confirmation=true) {
                     document.getElementById(videoId).remove();
                 }
                 );
-                fetchAllVideos(sortGame, sortType);
+                fetchAllClips(sortGame, sortType);
             }
         }
         else {
