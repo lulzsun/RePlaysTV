@@ -752,7 +752,7 @@ $("#settings-video-div").mousedown( function (e) {
         }
         if(element.id.includes("webcamEnabled")){
             SettingsService.setSetting(SETTING_WEBCAM_ENABLED, !$(element).is(":checked"));
-            alert("If you actually use this and want to see the settings for webcam, \nthey currently do not exist. Please ask dev to add them in.");
+            //alert("If you actually use this and want to see the settings for webcam, \nthey currently do not exist. Please ask dev to add them in.");
         }
     }
 });
