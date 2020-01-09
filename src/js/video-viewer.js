@@ -135,7 +135,7 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
     }
 })
 
-videoClipDom.addEventListener('timeupdate', function(){
+videoClipDom.addEventListener('timeupdate', function() {
     if (videoClipDom.paused){
         document.getElementById("clip-PlayPause").innerHTML = '';
         const clickable = document.createElement('span');
@@ -159,7 +159,7 @@ videoClipDom.addEventListener('timeupdate', function(){
     }
 
     document.getElementById("clip-TimeStamp").innerText = currentTime + " / " + duration;
-})
+});
 
 videoClipDom.addEventListener('loadeddata', function() {
     if(!seeker) {
@@ -199,7 +199,7 @@ videoClipDom.addEventListener('loadeddata', function() {
         if(videoClipDom.currentTime != seeker.noUiSlider.get())
             videoClipDom.currentTime = seeker.noUiSlider.get();
     });
- }, false);
+}, false);
 
 function uploadClip(videoId) {
     let title;
