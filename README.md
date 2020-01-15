@@ -1,4 +1,14 @@
-# RePlaysTV
+# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link] [![Paypal][paypal-badge]][paypal-link] 
+
+[download-badge]: https://img.shields.io/github/downloads/lulzsun/RePlaysTV/total
+[download-link]: https://github.com/lulzsun/RePlaysTV/releases/
+
+[discord-badge]: https://img.shields.io/discord/654698116917886986?label=Discord&logo=discord
+[discord-link]: https://discordapp.com/invite/Qj2BmZX
+
+[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
+[paypal-link]: https://paypal.me/jminquach
+
 A community project patch for the discontinued Plays.tv client
 
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
