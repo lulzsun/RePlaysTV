@@ -1,4 +1,4 @@
-# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link] [![Paypal][paypal-badge]][paypal-link] 
+# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link] [![Paypal][paypal-badge]][paypal-link] [![Venmo][venmo-badge]][venmo-link] 
 
 [download-badge]: https://img.shields.io/github/downloads/lulzsun/RePlaysTV/total
 [download-link]: https://github.com/lulzsun/RePlaysTV/releases/
@@ -8,6 +8,9 @@
 
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/jminquach
+
+[venmo-badge]: https://img.shields.io/badge/Venmo-Donate!-informational
+[venmo-link]: https://venmo.com/jminquach
 
 A community project patch for the discontinued Plays.tv client
 
