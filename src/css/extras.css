@@ -27,10 +27,16 @@ body {
 
 div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
     background: red;
+    border-color: red;
+}
+
+div[id='sess-Pins'] {
+    cursor: default !important;
 }
 
 div[id='sess-Pins'] > .noUi-base .noUi-origin .noUi-handle {
     background: gold;
+    cursor: pointer !important;
 }
 
 .card-img-overlay>h5{

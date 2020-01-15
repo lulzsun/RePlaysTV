@@ -9,9 +9,9 @@
     
 </div>
 <div id="sess-SeekBar" style="display: grid;overflow-x: scroll;overflow-y: hidden;width: 100%;height: 80px;">
-    <div id="sess-Pins" style="grid-column: 1;grid-row: 1;height: 100%;visibility: hidden;padding-top: 23px;"></div>
     <div id="sess-Segments" style="grid-column: 1;grid-row: 1;height: 100%;visibility: hidden;padding-top: 23px;"></div>
-    <div id="sess-Seeker" style="grid-column: 1;grid-row: 1;height: 100%;visibility: visible;padding-top: 23px;"></div>
+    <div id="sess-Pins" style="grid-column: 1;grid-row: 1;height: 100%;visibility: visible;padding-top: 23px;"></div>
+    <div id="sess-Seeker" style="grid-column: 1;grid-row: 1;height: 0px;visibility: visible;padding-top: 23px;"></div>
     <div style="width:calc(100vw - 264px);height: 25px;position: absolute;border-width: 1px;border-style: solid;border-color: #282828;"></div>
 </div>
 <nav class="navbar navbar-dark bg-dark">
@@ -63,9 +63,15 @@
         <button type="button" class="btn btn-primary" id="sess-AddClip" data-toggle="tooltip" title="Clip">
             <span class="fa fa-cut" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-secondary" id="sess-Bookmark" data-toggle="tooltip" title="Bookmark">
-            <span class="fa fa-bookmark" aria-hidden="true"></span>
-        </button>
+        <div class="btn-group dropup" role="group">
+            <button class="btn btn-secondary dropdown" type="button" id="sess-Bookmark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-toggle="tooltip" title="Bookmarks">
+                <span class="fa fa-bookmark" aria-hidden="true"></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="sess-Bookmark" id="sess-Bookmark-Show">
+                <div id="sess-Dropdown-Pins"></div>
+                <a class="dropdown-item" href="#" id="sess-Bookmark-Add">Add Bookmark</a>
+            </div>
+        </div>
         <button type="button" class="btn btn-secondary" id="sess-ZoomOut" data-toggle="tooltip" title="Zoom out">
             <span class="fa fa-minus" aria-hidden="true"></span>
         </button>

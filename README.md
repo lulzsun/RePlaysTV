@@ -1,5 +1,5 @@
 # RePlaysTV
-A client modification for Plays.tv
+A community project patch for the discontinued Plays.tv client
 
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
 
@@ -12,12 +12,10 @@ Installation instructions below.
 ![Preview](/resources/preview.png)
 
 # Installation
-You must have the last Plays client installed (3.0.0).
-
-You can find a mirror download of the Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
+You must have the last Plays client installed (3.0.0). You can find a mirror download of the original Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
 
 Instructions:
-  1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases).
+  1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
   2. Close out of Plays if it is currently running
   3. Open the installer executable 
   4. Locate/confirm the location of Plays
@@ -29,10 +27,7 @@ Instructions:
   * [x] Offline functionality
   * [x] Custom UI
 	* [x] Sessions Tab
-	  * [x] Playback function
 	  * [x] Clip editor
-	  * [ ] Deep Integration
-	  * [ ] Bookmarks
 	* [x] Clips Tab
 	  * [x] Upload function
 	* [x] Uploads Tab
@@ -46,9 +41,9 @@ Instructions:
     * [ ] Youtube
 	* [x] Shared folders
   * [ ] Ingame HUD functionality
-  * [ ] Deep Integration
+  * [x] Deep Integration
     * [ ] League of Legends
-    * [ ] Counter-Strike Global Offensive
+    * [x] Counter-Strike Global Offensive
     * [ ] Dota 2
   * [x] Auto Update functionality
 
