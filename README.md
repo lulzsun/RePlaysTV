@@ -7,7 +7,7 @@
 [discord-link]: https://discordapp.com/invite/Qj2BmZX
 
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
-[paypal-link]: https://paypal.me/jminquach
+[paypal-link]: https://www.paypal.com/donate/?token=mEjM0Da51XHXGFyJsGl3znL5HaXeZD_SBkat2QYunexelqZ1idcj0S_hm2HHKtJOubZv4G&country.x=US&locale.x=
 
 [venmo-badge]: https://img.shields.io/badge/Venmo-Donate!-informational
 [venmo-link]: https://venmo.com/jminquach
@@ -25,7 +25,7 @@ Installation instructions below.
 ![Preview](/resources/preview.png)
 
 # Installation
-You must have the last Plays client installed (3.0.0). You can find a mirror download of the original Plays setup [here.](https://drive.google.com/open?id=1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ)
+You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here.(https://web.archive.org/web/20191212211927/https://app-updates.plays.tv/builds/PlaysSetup.exe)
 
 Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
