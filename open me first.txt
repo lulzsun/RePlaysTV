@@ -1,0 +1,7 @@
+If you are reading this, this is not the proper installer for end users. This is meant for developers. 
+
+Please revisit the home page of Replays' Github and scroll down until you see the installation instructions.
+
+If there is something you don't understand, there is a short YouTube video walkthrough on how to install ReplaysTV below:
+
+https://www.youtube.com/watch?v=GyWTfz2uYTM
