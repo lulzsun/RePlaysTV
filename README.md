@@ -7,7 +7,7 @@
 [discord-link]: https://discordapp.com/invite/Qj2BmZX
 
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
-[paypal-link]: https://www.paypal.com/donate/?token=mEjM0Da51XHXGFyJsGl3znL5HaXeZD_SBkat2QYunexelqZ1idcj0S_hm2HHKtJOubZv4G&country.x=US&locale.x=
+[paypal-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AC6XUC2KNBLNN&item_name=Support+ReplaysTV+Development&currency_code=USD&source=url
 
 [venmo-badge]: https://img.shields.io/badge/Venmo-Donate!-informational
 [venmo-link]: https://venmo.com/jminquach
@@ -56,6 +56,7 @@ A user-made video is also [here](https://www.youtube.com/watch?v=GyWTfz2uYTM) to
     * [ ] Youtube
 	* [x] Shared folders
   * [ ] Ingame HUD functionality
+    * [ ] Instant Replay 
   * [x] Deep Integration
     * [ ] League of Legends
     * [x] Counter-Strike Global Offensive
