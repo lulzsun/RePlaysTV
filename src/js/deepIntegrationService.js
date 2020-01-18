@@ -5,19 +5,15 @@ import BaseService from '../../../../src/service/BaseService';
 export const DI_CS_GLOBAL_OFFENSIVE = '04094bf1f162594b28707b50c4e8349e';
 export const DI_LEAGUE_OF_LEGENDS = 'b179585c6b68a2791eea4a1ad3d7ef72';
 
-const VideoNeDB = BaseService.getModel('Video');
-
-var currentVideo = null; //the current video object passed in from openVideoEditor()
-var tempAddPins = [], tempRemovePins = []; //exists for bookmarks added manually
-
 export const GAMES = [
     DI_CS_GLOBAL_OFFENSIVE,
     DI_LEAGUE_OF_LEGENDS,
 ]
 
-require("electron").remote.app.on('before-quit', () => {
-    //get tempAddPins and add them here using VideoService
-})
+const VideoNeDB = BaseService.getModel('Video');
+
+var currentVideo = null; //the current video object passed in from openVideoEditor()
+var tempAddPins = [], tempRemovePins = []; //exists for bookmarks added manually
 
 function initPinSettings(video) {
     currentVideo = video;
