@@ -326,7 +326,7 @@ var keyboardMap = [
     "PA1", // [253]
     "WIN_OEM_CLEAR", // [254]
     "" // [255]
-  ];
+];
 
 $( document ).ready(function() {
     init();
@@ -346,7 +346,7 @@ const GENERAL = [
 ]
 
 const VIDEO = [
-    SETTING_VIDEO_RECORDING_MODE, //currently not used, but keeping it here for future purposes?
+    SETTING_VIDEO_RECORDING_MODE,
     SETTING_AUTO_RECORD,
     SETTING_MANUAL_RECORD,
     SETTING_KB_START_STOP_REC,
@@ -411,7 +411,7 @@ function init() {
 }
 
 var externalFolders;
-function initGeneral(){
+function initGeneral() {
     SettingsService.getSettings(GENERAL).then((setting) => {
         if(setting){
             $('#sett-autoStartApp').prop('checked', setting.autoStartApp); 
@@ -438,7 +438,7 @@ function initGeneral(){
     });
 }
 
-function initVideo(){
+function initVideo() {
     SettingsService.getSettings(VIDEO).then((setting) => {
         if(setting){
             $('#sett-autoRecord').prop('checked', setting.autoRecord); 
@@ -472,7 +472,7 @@ function initVideo(){
     })
 }
 
-function initAudio(){
+function initAudio() {
     SettingsService.getSettings(AUDIO).then((setting) => {
         if(setting){
             $('#sett-audioGameEnabled').prop('checked', setting.audioGameEnabled); 
@@ -513,7 +513,7 @@ function initAudio(){
     })
 }
 
-function initUpload(){
+function initUpload() {
     ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
         if(setting){
             document.getElementById('sett-streamableEmail').value = setting.streamableEmail;
@@ -538,7 +538,7 @@ function initUpload(){
     })
 }
 
-function initUpdate(){
+function initUpdate() {
     ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
         if(setting){
             $('#sett-updateMode-'+setting.updateMode).prop('checked', true); 
@@ -559,7 +559,7 @@ function initUpdate(){
     })
 }
 
-function initAdvanced(){
+function initAdvanced() {
     SettingsService.getSettings(ADVANCED).then((setting) => {
         if(setting){
             externalFolders = setting.externalFolders;
@@ -605,7 +605,7 @@ function initAdvanced(){
     })
 }
 
-$("#settings-general-div").mousedown( function (e) {
+$("#settings-general-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -652,7 +652,7 @@ $("#settings-general-div").mousedown( function (e) {
     }
 });
 
-$("#settings-video-div").mousedown( function (e) {
+$("#settings-video-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -664,17 +664,20 @@ $("#settings-video-div").mousedown( function (e) {
 
     if(e.which == 1 && element.id.includes("sett-")) { //left click
         if(element.id.includes("autoRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "automatic");
             SettingsService.setSetting(SETTING_AUTO_RECORD, !$(element).is(":checked"));
             SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
         }
         if(element.id.includes("manualRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "manual");
             SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
             SettingsService.setSetting(SETTING_MANUAL_RECORD, !$(element).is(":checked"));
         }
         if(element.id.includes("desktopRecord")){
-            alert("This feature is not implemented, if you wish to have this feature, request it on Github.");
+            alert("This feature is not reimplemented yet.");
         }
         if(element.id.includes("offRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "off");
             SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
             SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
         }
@@ -757,7 +760,7 @@ $("#settings-video-div").mousedown( function (e) {
     }
 });
 
-$("#settings-audio-div").mousedown( function (e) {
+$("#settings-audio-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -809,7 +812,7 @@ $("#settings-audio-div").mousedown( function (e) {
     }
 });
 
-$("#settings-upload-div").mousedown( function (e) {
+$("#settings-upload-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -832,7 +835,7 @@ $("#settings-upload-div").mousedown( function (e) {
     }
 });
 
-$("#settings-update-div").mousedown( function (e) {
+$("#settings-update-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
@@ -852,7 +855,7 @@ $("#settings-update-div").mousedown( function (e) {
     }
 });
 
-$("#settings-advanced-div").mousedown( function (e) {
+$("#settings-advanced-div").mousedown(function (e) {
     var element;
     isKeybinding = false;
     if(!$(e.target)[0].id) {
