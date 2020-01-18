@@ -5,7 +5,7 @@ import TranscoderService from '../../../../src/service/TranscoderService';
 import * as IPC from '../../../../src/core/IPCCapsule.js';
 import {getVideoById} from './sessions';
 import {fetchAllClips} from './clips';
-import {initPinSettings, setPinTooltip} from './deepIntegrationService';
+import {initPinSettings, setPinTooltip, addPin, removePin, tempAddPins, tempRemovePins} from './deepIntegrationService';
 
 var continuePlay, sliding;
 var seeker, segments, pins;
@@ -93,8 +93,10 @@ $("#video-editor-div").on('click', function (e) { //left click functions
             saveClips();
         if(element.id.includes("Bookmark")) {
             if(element.id.split('-')[2]) {
-                //if(element.id.split('-')[3])
-                //    console.log(element.id.split('-')[3]);
+                if(element.id.split('-')[2] == "Add") {
+                    addPin('bookmark', videoSessDom.currentTime * 1000);
+                    createPins(currentVideo.allPins, true);
+                }
                 if(element.id.split('-')[2] == "Show") //this is a checkbox object, 
                     e.stopPropagation();               //do not close dropdown if it is changed
             }
@@ -144,12 +146,15 @@ $("#video-editor-div").mousedown(function (e) { //right click functions
         }else element = $(e.target)[0];
     
         if (element.className == "noUi-connects") {
-            removeClip();
+            var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
+            var target = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) ).toFixed(2);
+            removeClip(target); 
         }
-        if (element.className == "noUi-tooltip" || $(element.firstChild).find('.noUi-tooltip').length) {
-            alert('delete bookmark');
+        if (element.className == "noUi-tooltip" || element.classList.contains("pinObject") || $(element.firstChild).find('.noUi-tooltip').length) { 
+            var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
+            var target = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) ).toFixed(2);
+            deletePin(target); //rightclicking on a pin/bookmark
         }
-    
         //console.log(element);
     }
 });
@@ -178,13 +183,33 @@ $("#video-editor-div").on('keydown', function(event) { //clip editor key control
     }
 });
 
-function addPins(allPins, update=false) {
+function createPins(allPins, update=false) {
     var sliderPins = [];
 
     Object.keys(allPins).forEach(function(key) {
         //console.log(key + ':', allPins[key]);
         sliderPins.push(allPins[key].time/1000);
     });
+
+    if(tempAddPins) {
+        tempAddPins.forEach(pin => {
+            if(pin[currentVideo.id]) //if there is a temp pin for the current video
+                sliderPins.push(pin[currentVideo.id].time/1000);
+        });
+    }
+
+    if(tempRemovePins) {
+        tempRemovePins.forEach(pin => {
+            if(pin[currentVideo.id]) { //if there is a temp pin for the current video
+                for(var sliderPin in sliderPins){
+                    if(sliderPins[sliderPin] == pin[currentVideo.id].time/1000){
+                        sliderPins.splice(sliderPin,1);
+                        break;
+                    }
+                }
+            }
+        });
+    }
 
     if(sliderPins.length == 0) {
         sliderPins.push(0);
@@ -199,6 +224,8 @@ function addPins(allPins, update=false) {
     if(update) pins.noUiSlider.destroy();
     initPinSettings(currentVideo);
 
+    sliderPins.sort(function(a, b){return a-b;});
+
     pins = $('#sess-Pins')[0];
     noUiSlider.create(pins, {
         start: sliderPins,
@@ -210,11 +237,33 @@ function addPins(allPins, update=false) {
         },
         format: {
             from: Number,
-            to: (value) => setPinTooltip(Object.keys(currentVideo.allPins).find(    //leading zeros cause problems
-                                            key => (currentVideo.allPins[key].time/1000).toFixed(4) === value.toFixed(4)))
+            to: (value) => setPinTooltip(value.toFixed(4))
         }
     });
     pins.setAttribute('disabled', true);
+}
+
+function deletePin(target) {
+    $(".noUi-origin").contextMenu({
+        menuSelector: "#contextMenu",
+        menuSelected: function (invokedOn, selectedMenu) {
+            if(selectedMenu.text() == "Delete") {
+                var starts = pins.noUiSlider.get();
+                
+                if(starts[0] != "<") {
+                    for (var i in starts) {
+                        starts[i] = $(starts[i]).attr('id')/1000; //removes the formatting and gives us the time only
+                    }
+                    var toDelete = closest(starts, target); //gets closest value, returns index
+                    removePin('bookmark', starts[toDelete]*1000);
+                } else {
+                    starts = $(starts).attr('id')/1000;
+                    removePin('bookmark', starts*1000);
+                }
+                createPins(currentVideo.allPins, true);
+            }
+        }
+    });
 }
 
 function addClip() {
@@ -304,18 +353,15 @@ function addClip() {
     });
 }
 
-function removeClip() {
+function removeClip(target) {
     $(".noUi-connects").contextMenu({
         menuSelector: "#contextMenu",
         menuSelected: function (invokedOn, selectedMenu) {
             if(selectedMenu.text() == "Delete") {
-                var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
-                var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) ).toFixed(2);
-
                 var starts = segments.noUiSlider.get();
                 var connects = segments.noUiSlider.options.connect;
 
-                var toDelete = closest(starts, result); //gets closest value, returns index
+                var toDelete = closest(starts, target); //gets closest value, returns index
 
                 for(var i=0; i<starts.length; i++) {
                     if(starts[toDelete] == starts[i]) {
@@ -516,7 +562,7 @@ videoSessDom.addEventListener('loadeddata', function() {
                 'max': [videoSessDom.duration]
             }
         });
-        addPins(currentVideo.allPins);
+        createPins(currentVideo.allPins);
     } else {
         seeker.noUiSlider.off();
         seeker.noUiSlider.updateOptions({
@@ -533,7 +579,7 @@ videoSessDom.addEventListener('loadeddata', function() {
                 'max': [videoSessDom.duration]
             }
         });
-        addPins(currentVideo.allPins, true);
+        createPins(currentVideo.allPins, true);
     }
     
     seeker.noUiSlider.on('start', function () {

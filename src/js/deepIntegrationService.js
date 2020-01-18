@@ -1,40 +1,58 @@
-var currentVideo = null; //the current video object passed in from openVideoEditor()
+import VideoService from '../../../../src/service/VideoService';
+import Pin from '../../../../src/service/Pins/Pin';
+import BaseService from '../../../../src/service/BaseService';
 
 export const DI_CS_GLOBAL_OFFENSIVE = '04094bf1f162594b28707b50c4e8349e';
 export const DI_LEAGUE_OF_LEGENDS = 'b179585c6b68a2791eea4a1ad3d7ef72';
+
+const VideoNeDB = BaseService.getModel('Video');
+
+var currentVideo = null; //the current video object passed in from openVideoEditor()
+var tempAddPins = [], tempRemovePins = []; //exists for bookmarks added manually
 
 export const GAMES = [
     DI_CS_GLOBAL_OFFENSIVE,
     DI_LEAGUE_OF_LEGENDS,
 ]
 
+require("electron").remote.app.on('before-quit', () => {
+    //get tempAddPins and add them here using VideoService
+})
+
 function initPinSettings(video) {
     currentVideo = video;
 
     if(currentVideo.game.id == DI_CS_GLOBAL_OFFENSIVE) {
-        makeSettingDOM("K", "Kills");
-        makeSettingDOM("D", "Deaths");
-        makeSettingDOM("A", "Assists");
-        makeSettingDOM("R", "Round Status");
-        makeSettingDOM("B", "Bomb Status", true);
+        makeSettingDOM("di:player:kill", "Kills");
+        makeSettingDOM("di:player:death", "Deaths");
+        makeSettingDOM("di:player:assist", "Assists");
+        makeSettingDOM("di:round", "Round Status");
+        makeSettingDOM("di:objective", "Bomb Status", true);
+    }
+    else{
+        document.getElementById("sess-Dropdown-Pins").innerHTML = '';
     }
 }
 
-function setPinTooltip(key) {
-    let icon = '<span class="fa fa-bookmark" aria-hidden="true"></span>';
+function setPinTooltip(value) {
+    const exists = Object.keys(currentVideo.allPins).find(key => (currentVideo.allPins[key].time/1000).toFixed(4) === value);
+    if(exists) value = exists;
+    else return `<span id="${value*1000}" class="pinObject fa fa-bookmark" aria-hidden="true"></span>`; //this must be a tempAddPins array object
+
+    let icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject fa fa-bookmark" aria-hidden="true"></span>`;
 
     if(currentVideo.game.id == DI_CS_GLOBAL_OFFENSIVE) {
-        if(key && currentVideo.allPins[key].type == "di") {
-            if(currentVideo.allPins[key].group == "di:player:kill")
-                icon = '<span class="fa fa-crosshairs" aria-hidden="true"></span>';
-            else if(currentVideo.allPins[key].group == "di:player:death")
-                icon = '<span class="fa fa-skull-crossbones" aria-hidden="true"></span>';
-            else if(currentVideo.allPins[key].group == "di:player:assist")
-                icon = '<span class="fa fa-hands-helping" aria-hidden="true"></span>';
-            else if(currentVideo.allPins[key].group.includes("di:objective:")) 
-                icon = '<span class="fa fa-bomb" aria-hidden="true"></span>';
-            else if(currentVideo.allPins[key].group.includes("di:round:")) 
-                icon = '<span class="fa fa-stopwatch" aria-hidden="true"></span>';
+        if(value && currentVideo.allPins[value].type == "di") {
+            if(currentVideo.allPins[value].group == "di:player:kill")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:kill fa fa-crosshairs" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "di:player:death")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:death fa fa-skull-crossbones" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "di:player:assist")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:assist fa fa-hands-helping" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group.includes("di:objective")) 
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:objective fa fa-bomb" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group.includes("di:round")) 
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:round fa fa-stopwatch" aria-hidden="true"></span>`;
         }
     }
 
@@ -69,7 +87,65 @@ function makeSettingDOM(id, innerText, divider=false) {
 }
 
 function onCheckboxChange(e) {
-    console.log(e.target.id, e.target.checked);
+    let id = e.target.id.replace('sess-Bookmark-Show-', '');
+    let pinObjects = document.getElementsByClassName(id);
+    for(var i = 0; i != pinObjects.length; ++i) {
+        if(e.target.checked)
+            pinObjects[i].parentElement.parentElement.style.visibility = "visible";
+        else
+            pinObjects[i].parentElement.parentElement.style.visibility = "hidden";
+    }
+    //console.log(id, e.target.checked);
 }
 
-export {initPinSettings, setPinTooltip};
+function addPin(type, time) {
+    const newPin = new Pin(type, time);
+    VideoService.addPins(currentVideo.id, [newPin]).then(
+        (result) => {
+            //console.log(result);
+        }
+    ).catch(
+        (err) => {
+            console.error(err);
+        }
+    );
+    tempAddPins.push({[currentVideo.id]: newPin}); //video pins do not actually update until restart, we store these so we can fake an add
+}
+
+function removePin(type, time) { //VideoService does not have removePin(), I'm not exactly sure how original plays did it, but this way works fine.
+    //refactor this lol
+    const newPin = new Pin(type, time);
+    const pinToSet = [newPin].reduce(
+        (acc, item) => {
+          const pinId = Pin.getId(item, currentVideo.id);
+          acc[`pins.${pinId}`] = item;
+          return acc;
+        },
+        {}
+      );
+    const update = {
+        $unset: pinToSet,
+    };
+    //end of lol
+
+    VideoNeDB.updateOne(currentVideo.id, update).then(
+        (result) => {
+            //console.log(result);
+        }
+    ).catch(
+        (err) => {
+            console.error(err);
+        }
+    );
+
+    //check to see if this is a tempAddPin before adding it as a tempRemovePin
+    for(var pin in tempAddPins){
+        if(tempAddPins[pin][currentVideo.id].time == time) {
+            tempAddPins.splice(pin,1); //remove from temp array
+            return; //exit before push
+        }
+    }
+    tempRemovePins.push({[currentVideo.id]: newPin}); //video pins do not actually update until restart, we store these so we can fake a removal
+}
+
+export {initPinSettings, setPinTooltip, addPin, removePin, tempAddPins, tempRemovePins};
