@@ -3,7 +3,7 @@ import { makeUploadDOM } from './uploads';
 import ReplaysSettingsService, {
     UPLOAD
 } from './replaysSettingsService';
-import {deleteVideo} from './clips';
+import {deleteVideo, getVideoById} from './clips';
 
 // Uploaders
 import Streamable from './libs/uploaders/streamable';
@@ -211,7 +211,7 @@ function uploadClip(videoId) {
     ReplaysSettingsService.getSettings(UPLOAD).then((setting) => {
         if(setting){
             if(uploadPlatform == 'Streamable'){
-                $('.modal').modal('toggle');
+                $('#upload-modal').modal('toggle');
                 console.log("Uploading to Streamable");
                 Streamable.upload(setting.streamableEmail, setting.streamablePass, getVideoById(videoId), title).then((result) => {
                     if(result) {
@@ -221,7 +221,7 @@ function uploadClip(videoId) {
                 });
             }
             else if(uploadPlatform == 'Shared Folder'){
-                $('.modal').modal('toggle');
+                $('#upload-modal').modal('toggle');
                 console.log("Uploading to Shared Folder");
                 SharedFolder.upload(setting.sharedFolderDir, getVideoById(videoId), title).then((result) => {
                     if(result) {
