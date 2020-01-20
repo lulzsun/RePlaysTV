@@ -108,6 +108,8 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("const updaterLogger = winston.createLogger({", workDirectory + "\\temp\\src\\core\\Logger.js", 256);
             ModifyFileAtLine("filename: UPDATERLOGPATH,", workDirectory + "\\temp\\src\\core\\Logger.js", 265);
             ModifyFileAtLine("export const updaterLog = Loggify(updaterLogger);", workDirectory + "\\temp\\src\\core\\Logger.js", 278);
+            // autoLaunch correction
+            ModifyFileAtLine("const autoLaunch = new AutoLaunch({ name: \"ReplaysTV\", path: require(\"electron\").remote.app.getPath('exe') });", workDirectory + "\\temp\\src\\service\\SettingsService.js", 457);
             //--------------------------------------
             //end modifying original plays files
             //--------------------------------------
@@ -118,6 +120,7 @@ namespace RePlaysTV_Installer {
         public static void StartPackage(StreamWriter SW, string playsDirectory, string VERSION) { //part four of installation
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
+            SW.WriteLine("rename " + playsDirectory + "\\app-3.0.0\\Plays.exe noPlays.exe");
             SW.WriteLine("rename " + playsDirectory + "\\Update.exe originalUpdater.exe");
             SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-" + VERSION + "\"");
             SW.WriteLine("mkdir \"" + playsDirectory + "\\app-" + VERSION + "\"");
