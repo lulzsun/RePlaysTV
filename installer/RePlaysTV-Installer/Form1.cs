@@ -94,7 +94,7 @@ namespace RePlaysTV_Installer {
             form1.TopMost = true;
             DialogResult dr = MessageBox.Show("Installation Complete!\n\nOpen Replays?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes) {
-                Process.Start(playsDirectory + "\\app-3.0.1\\Plays.exe");
+                Process.Start(playsDirectory + "\\app-" + VERSION + "\\Plays.exe");
             }
             form1.TopMost = false;
         }
