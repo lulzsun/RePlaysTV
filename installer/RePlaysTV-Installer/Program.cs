@@ -16,6 +16,8 @@ namespace RePlaysTV_Installer {
         public static Process p;
         public static StreamWriter SW;
         public static ManualResetEvent mre = new ManualResetEvent(false);
+
+        [STAThread]
         static void Main(string[] args) {
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
@@ -47,6 +49,7 @@ namespace RePlaysTV_Installer {
 
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
                     workDirectory = args[0];  //args[0] - working dir passed from replays client
+                    Installer.ListInstalledAntivirusProducts();
                     Installer.StartExtract(SW, playsDirectory, workDirectory);
                     mre.WaitOne();
                 }

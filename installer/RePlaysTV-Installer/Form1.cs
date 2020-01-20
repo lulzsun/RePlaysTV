@@ -56,6 +56,7 @@ namespace RePlaysTV_Installer {
                                                 "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
             if (dr1 == DialogResult.Yes) {
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
+                    Installer.ListInstalledAntivirusProducts(form1.richTextBox1);
                     Installer.StartExtract(SW, playsDirectory);
                     button1.Enabled = false;
                     button2.Enabled = false;
@@ -84,6 +85,10 @@ namespace RePlaysTV_Installer {
                     playsDirectory = fbd.SelectedPath;
                 }
             }
+        }
+
+        private void Button3_Click(object sender, EventArgs e) {
+            Clipboard.SetText(form1.richTextBox1.Text);
         }
         private void InstallComplete() {
             form1.TopMost = true;
@@ -158,10 +163,6 @@ namespace RePlaysTV_Installer {
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             Process.Start("https://github.com/lulzsun/RePlaysTV");
-        }
-
-        private void Button3_Click(object sender, EventArgs e) {
-            Clipboard.SetText(richTextBox1.Text);
         }
     }
 }

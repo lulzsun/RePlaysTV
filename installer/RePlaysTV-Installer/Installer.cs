@@ -1,12 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Management;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     class Installer {
+        public static void ListInstalledAntivirusProducts(RichTextBox richTextBox1 = null) {
+            using (var searcher = new ManagementObjectSearcher(@"\\" +
+                                                Environment.MachineName +
+                                                @"\root\SecurityCenter2",
+                                                "SELECT * FROM AntivirusProduct")) {
+                var searcherInstance = searcher.Get();
+                var msg = "Detected installed antivirus(es), may conflict with the installation: ";
+                if(searcherInstance.Count < 1) {
+                    foreach (var instance in searcherInstance) {
+                        msg = msg + instance["displayName"].ToString() + ", ";
+                    }
+                }
+                else {
+                    msg = "No installed antivirus detected.";
+                }
+
+                if (richTextBox1 != null) {
+                    richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
+                    richTextBox1.ScrollToCaret();
+                } else Console.WriteLine(msg);
+            }
+        }
+
         public static void StartExtract(StreamWriter SW, string playsDirectory, string workDirectory=null) { //part one of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
             else SW.WriteLine("cd /d " + workDirectory);
