@@ -1,14 +1,14 @@
 <h5>Update</h5>
 <h6>Update Mode</h6>
 <div class="custom-control custom-radio">
-    <input id="sett-updateMode-automatic" type="radio" name="updateMode" class="custom-control-input" checked>
+    <input id="sett-updateMode-automatic" type="radio" name="updateMode" class="custom-control-input">
     <label for="sett-updateMode-automatic" class="custom-control-label">
     <b>Automatic</b>
     <br><a>Check for latest update and install in the background.</a>
     </label>
 </div>
 <div class="custom-control custom-radio">
-    <input id="sett-updateMode-manual" type="radio" name="updateMode" class="custom-control-input">
+    <input id="sett-updateMode-manual" type="radio" name="updateMode" class="custom-control-input" checked>
     <label for="sett-updateMode-manual" class="custom-control-label">
     <b>Manual</b>
     <br><a>Check for latest update and prompt user.</a>
@@ -45,6 +45,11 @@
     </div>
 </div>
 <div style="clear:both;"></div>
+<br>
+<div class="custom-control custom-checkbox">
+    <input id="sett-deleteOldVersion" type="checkbox" class="custom-control-input" checked>
+    <label for="sett-deleteOldVersion" class="custom-control-label">Delete last version after update</label>
+</div>
 
 <h6>&nbsp;</h6>
 <h5>Version</h5>
