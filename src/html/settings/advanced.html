@@ -82,26 +82,29 @@
 </div>
 <br>
 <div style="clear:both;"></div>
-<h5>&nbsp;</h5>
+<h6>&nbsp;</h6>
 <h5>Manage Games</h5>
 <a>Add .exe files to these lists to manage what is and isn't recorded.</a><br>
-<p>&nbsp;</p>
+<h6>&nbsp;</h6>
 <h6>Custom Recorded Games</h6>
 <a>Indicate which games you'd like Plays to try to record. In some cases, this will solve recording issues.</a><br>
 <div class="row" style="padding-left: 15px;">
-    <div>
-        <button id="sett-asdf1" class="btn btn-secondary" type="button" onclick="alert('This feature hasn\'t been reimplemented yet.');">
-            Add Game
-        </button>
+    <div id="exeWhitelist">
+        <label class="btn btn-secondary" style="cursor:pointer" >
+            Add Game <input id="sett-addToWhitelist" style="display:none;" type="file">
+        </label>
     </div>
 </div>
-<p>&nbsp;</p>
+<h6>&nbsp;</h6>
 <h6>Never Record These Games</h6>
 <a>The list of games that Plays will never record.</a><br>
 <div class="row" style="padding-left: 15px;">
-    <div>
-        <button id="sett-asdf2" class="btn btn-secondary" type="button" onclick="alert('This feature hasn\'t been reimplemented yet.');">
-            Add Game
-        </button>
+    <div id="exeBlacklist">
+        <label class="btn btn-outline-secondary" style="cursor:pointer">
+            Overcooked2.exe
+        </label>
+        <label class="btn btn-secondary" style="cursor:pointer" >
+            Add Game <input id="sett-addToBlacklist" style="display:none;" type="file">
+        </label>
     </div>
 </div>

@@ -87,8 +87,8 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", workDirectory + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);
             //disables online plays user checks
             ModifyFileAtLine("return true;", workDirectory + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
-            ModifyFileAtLine("return null;", workDirectory + "\\temp\\src\\service\\BaseService.js", 48); 
-            ModifyFileAtLine("return {};", workDirectory + "\\temp\\src\\core\\Settings.js", 239);
+            //ModifyFileAtLine("return null;", workDirectory + "\\temp\\src\\service\\BaseService.js", 48); 
+            ModifyFileAtLine("return {userId: \"REPLAYSTV\"};", workDirectory + "\\temp\\src\\core\\Settings.js", 239);
             for (int i = 159; i <= 166; i++) {
                 ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);
             }

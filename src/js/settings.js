@@ -65,9 +65,13 @@ import GameDVRService, {
     SETTING_WEBCAM_LOCATION,
     SETTING_WEBCAM_OPACITY,
 } from '../../../../src/service/GameDVRService';
+import GameDetectionService from '../../../../src/service/GameDetectionService.js';
+import UserDetectionService from '../../../../src/service/UserDetectionService.js';
+import { log } from '../../../../src/core/Logger.js';
+import to from 'await-to-js';
+import shortid from 'shortid';
 //import { SETTING_RECORD_GAME_MOUSE_CURSOR } from '../../../../src/service/Analytics/Consts';
 const {shell, remote} = require('electron');
-import shortid from 'shortid';
 
 var keyboardMap = [
     "", // [0]
@@ -398,6 +402,7 @@ function init() {
     $("#settings-advanced-div").load("./html/settings/advanced.html"); 
     $("#settings-update-div").load("./html/settings/update.html"); 
     $("#settings-help-div").load("./html/settings/help.html"); 
+    $("#settings-about-div").load("./html/settings/about.html"); 
     SettingsService.init();
     setTimeout(function(){ //sometimes the html loads slower than these functions
         initGeneral();
@@ -571,6 +576,7 @@ function initAdvanced() {
             $('#sett-autoManageVideos').prop('checked', setting.autoManageVideos);
             document.getElementById("sett-autoManageDiskspaceThreshold").value = setting.autoManageDiskspaceThreshold;
             document.getElementById("sett-autoManageTimestampThreshold").value = setting.autoManageTimestampThreshold;
+            updateUserDetectionList();
             //console.log(setting);
         }else console.error("Advanced settings missing?");
     });
@@ -881,7 +887,117 @@ $("#settings-advanced-div").mousedown(function (e) {
     }
 });
 
-function addExternalFolder(fileName){
+//userDetections
+async function addUserDetection(fileList, type) {
+    //const fileList = document.getElementById('input-game-exe').files;
+    const fileArray = [];
+    for (let fIdx = 0; fIdx < fileList.length; fIdx++) {
+      fileArray.push({
+        name: fileList[fIdx].name,
+        path: fileList[fIdx].path,
+      });
+    }
+    const gameExePath = fileArray[0].path;
+  
+    const payload = {
+      gameExePath,
+    };
+    const [errGetDet, gameDetection] = await to(GameDetectionService.getDetectionByLTCData(payload));
+    
+    const gameTitle = (!errGetDet && gameDetection && gameDetection.detection.title)
+      ? gameDetection.detection.title
+      : fileArray[0].name;
+  
+    const userDetectionData = {
+      det_exe: gameExePath,
+      title: gameTitle,
+      type: type,
+    };
+    log.debug(`Creating detection: ${JSON.stringify(userDetectionData)}`);
+    const [err] = await to(UserDetectionService.createUserDetection(userDetectionData));
+    if (err) {
+        log.error(`createUserDetection err: ${err}`);
+    }
+    updateUserDetectionList();
+}
+
+async function removeUserDetection(id) {
+    const detId = id;
+    const [err] = await to(UserDetectionService.deleteUserDetection(detId));
+    if (err) {
+      log.error(`deleteUserDetection err: ${err}`);
+      return;
+    }
+    log.debug(`deleted user detection _id: ${detId}`);
+    updateUserDetectionList();
+}
+
+async function updateUserDetectionList() {
+    const [err, userDetections] = await to(UserDetectionService.getUserDetections());
+    if (err) {
+        log.error(`getUserDetections err: ${err}`);
+      return;
+    }
+    log.debug(`user detections: ${JSON.stringify(userDetections)}`);
+
+    //update dom objects
+    document.getElementById("exeWhitelist").innerHTML = '';
+    document.getElementById("exeBlacklist").innerHTML = '';
+
+    for (var key in userDetections) {
+        let id = userDetections[key]._id;
+        let title = userDetections[key].title;
+        const dom = document.createElement('label');
+        dom.setAttribute('id', id);
+        dom.setAttribute('class', 'btn btn-outline-secondary m-1');
+        dom.setAttribute('style', 'cursor:pointer');
+        dom.onmouseover = function(){dom.setAttribute('class', 'btn btn-outline-danger m-1');};
+        dom.onmouseout = function(){dom.setAttribute('class', 'btn btn-outline-secondary m-1');};
+        dom.onclick = function(){removeUserDetection(id);};
+        dom.innerText = title;
+        //userDetections[key].det_exe - if need full directory
+
+        if(userDetections[key].type == "whitelist")
+            document.getElementById("exeWhitelist").append(dom);
+        else 
+            document.getElementById("exeBlacklist").append(dom);
+    }
+
+    const addGameBtn1 = document.createElement('label');
+    addGameBtn1.setAttribute('class', 'btn btn-secondary m-1');
+    addGameBtn1.setAttribute('style', 'cursor:pointer');
+    addGameBtn1.innerText = 'Add Game';
+
+    const input1 = document.createElement('input');
+    input1.setAttribute('id', 'sett-addToBlacklist');
+    input1.setAttribute('style', 'display:none');
+    input1.setAttribute('type', 'file');
+    addGameBtn1.append(input1);
+    document.getElementById("exeBlacklist").append(addGameBtn1);
+
+    const addGameBtn2 = document.createElement('label');
+    addGameBtn2.setAttribute('class', 'btn btn-secondary m-1');
+    addGameBtn2.setAttribute('style', 'cursor:pointer');
+    addGameBtn2.innerText = 'Add Game';
+
+    const input2 = document.createElement('input');
+    input2.setAttribute('id', 'sett-addToWhitelist');
+    input2.setAttribute('style', 'display:none');
+    input2.setAttribute('type', 'file');
+    addGameBtn2.append(input2);
+    document.getElementById("exeWhitelist").append(addGameBtn2);
+
+    $('#sett-addToWhitelist').on('change',function(e){
+        addUserDetection(e.target.files, 'whitelist');
+    })
+
+    $('#sett-addToBlacklist').on('change',function(e){
+        addUserDetection(e.target.files, 'blacklist');
+    })
+}
+
+//external folders
+function addExternalFolder(fileName) {
     var id = shortid.generate();
 
     const folder = document.createElement('div');
@@ -961,7 +1077,8 @@ $(document).on('keydown', function(event) {
     }
 });
 
-function onKeybind(element, setting){
+//keybinding stuff
+function onKeybind(element, setting) {
     isKeybinding = true;
     element.innerText = keybind;
 
