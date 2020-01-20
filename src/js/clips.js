@@ -451,4 +451,4 @@ function deleteVideo(videoId, confirmation=true) {
     $("#v-pills-clips-tab").click();
 }
 
-export {deleteVideo, fetchAllClips};
+export {deleteVideo, getVideoById, fetchAllClips};
