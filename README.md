@@ -41,6 +41,7 @@ A user-made video is also [here](https://www.youtube.com/watch?v=GyWTfz2uYTM) to
   * [x] Installer Executable
   * [x] Offline functionality
   * [x] Custom UI
+    * [x] Themes
 	* [x] Sessions Tab
 	  * [x] Clip editor
 	* [x] Clips Tab
@@ -48,7 +49,6 @@ A user-made video is also [here](https://www.youtube.com/watch?v=GyWTfz2uYTM) to
 	* [x] Uploads Tab
 	* [ ] Snapshots Tab
 	* [x] Settings Tab
-	  * [x] Themes
   * [x] Recording functionality
   * [x] Upload functionality
     * [x] Streamable
@@ -63,19 +63,17 @@ A user-made video is also [here](https://www.youtube.com/watch?v=GyWTfz2uYTM) to
     * [ ] Dota 2
   * [x] Auto Update functionality
 
-# Notable Issues / TO-DO
+# TO-DO
   * Missing Features
-	* 'Custom Recorded Games' setting
-	* 'Never Record Games' setting
 	* Webcam settings
 	* Ingame HUD
 	  * This means instant replay shouldn't work, and any other related HUD functions
 	* Uploads Tab Sorting
 	* Snapshots Tab/Viewer
-  * A some of plays.tv online services still run in the background
+  * Disable/remove unnecessary background services
     * Minor issue, but it would be best for memory usage to get rid of them
-	* Could be a possible reason to performance losses
   * Slow and bulky install/update process
+    * Also conflicts with some antivirus software
   * Make code more maintainable
 
 # Disclaimer
