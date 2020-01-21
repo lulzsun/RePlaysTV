@@ -109,7 +109,7 @@ namespace RePlaysTV_Installer {
             ModifyFileAtLine("filename: UPDATERLOGPATH,", workDirectory + "\\temp\\src\\core\\Logger.js", 265);
             ModifyFileAtLine("export const updaterLog = Loggify(updaterLogger);", workDirectory + "\\temp\\src\\core\\Logger.js", 278);
             // autoLaunch correction
-            ModifyFileAtLine("const autoLaunch = new AutoLaunch({ name: \"ReplaysTV\", path: require(\"electron\").remote.app.getPath('exe') });", workDirectory + "\\temp\\src\\service\\SettingsService.js", 457);
+            ModifyFileAtLine("const autoLaunch = new AutoLaunch({ name: \"Plays\", path: require(\"electron\").remote.app.getPath('exe') });", workDirectory + "\\temp\\src\\service\\SettingsService.js", 457);
             //--------------------------------------
             //end modifying original plays files
             //--------------------------------------
