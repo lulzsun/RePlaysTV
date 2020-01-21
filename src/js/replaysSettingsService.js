@@ -23,6 +23,7 @@ export const SETTING_REPLAYS_SHAREDFOLDER_DIR = 'sharedFolderDir';
 export const SETTING_REPLAYS_UPDATE_MODE = 'updateMode';
 export const SETTING_REPLAYS_UPDATE_FOLDER_DIR = 'updateFolderDir';
 export const SETTING_REPLAYS_UPDATE_CHECK_FREQ = 'updateCheckFreq';
+export const SETTING_REPLAYS_UPDATE_DELETE_OLD = 'deleteOldVersion';
 
 export const UPLOAD = [
     SETTING_REPLAYS_THEME,
@@ -38,6 +39,7 @@ export const UPLOAD = [
     SETTING_REPLAYS_UPDATE_MODE,
     SETTING_REPLAYS_UPDATE_FOLDER_DIR,
     SETTING_REPLAYS_UPDATE_CHECK_FREQ,
+    SETTING_REPLAYS_UPDATE_DELETE_OLD,
 ]
 
 const defaultSettings = {
@@ -55,6 +57,7 @@ const defaultSettings = {
     [SETTING_REPLAYS_UPDATE_MODE]: 'manual',
     [SETTING_REPLAYS_UPDATE_FOLDER_DIR]: '',
     [SETTING_REPLAYS_UPDATE_CHECK_FREQ]: 3,
+    [SETTING_REPLAYS_UPDATE_DELETE_OLD]: true,
 }
 
 export default class ReplaysSettingsService {
@@ -64,7 +67,7 @@ export default class ReplaysSettingsService {
     */
     static getSetting(key) {
         if(Config.get('replays_settings')) {
-            if(!Config.get('replays_settings')[key])
+            if(Config.get('replays_settings')[key] == null)
                 this.setSetting(key, defaultSettings[key]);
             return Config.get('replays_settings')[key];
         }

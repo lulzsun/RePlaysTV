@@ -5,7 +5,12 @@ import ReplaysSettingsService, {
     SETTING_REPLAYS_UPDATE_MODE,
     SETTING_REPLAYS_UPDATE_FOLDER_DIR,
     SETTING_REPLAYS_UPDATE_CHECK_FREQ,
+    SETTING_REPLAYS_UPDATE_DELETE_OLD,
 } from './replaysSettingsService';
+
+//important defining variables
+window.version = "3.0.3";
+window.versionToDel = "3.0.2"; //for 3.0.3, 3.0.2 folder does not exist and therefore nothing to delete
 
 //Uses node.js process manager
 const request = require('request');
@@ -15,11 +20,19 @@ var dir = "F:\\Documents\\RePlaysTV\\installer\\RePlaysTV-Installer\\bin\\RePlay
 init();
 
 function init() {
-    if(!Utils.isDev()) dir = require('electron').remote.app.getAppPath().replace('app-3.0.1\\resources\\app.asar', 'Replays-Updater');
+    if(!Utils.isDev()) dir = require('electron').remote.app.getAppPath().replace(`app-${window.version}\\resources\\app.asar`, 'Replays-Updater');
 
     if(ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_FOLDER_DIR) == '') {
         ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPDATE_FOLDER_DIR, dir);
         $('#sett-updateFolderDir').next('.custom-file-label').html(dir);
+    }
+
+    if(!Utils.isDev() && ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_DELETE_OLD) == true) {
+        let deleteDir = require('electron').remote.app.getAppPath().replace(`app-${window.version}\\resources\\app.asar`, `app-${window.versionToDel}`);
+        if (fs.existsSync(deleteDir)) {
+            updaterLog.debug(`Detected old Replays to delete: '${deleteDir}', deleting.`);
+            fs.rmdir(deleteDir, {recursive: true});
+        } else updaterLog.debug(`Did not find dir to delete: '${deleteDir}', ignoring.`);
     }
 
     if (!fs.existsSync(dir)){
@@ -134,6 +147,7 @@ function installUpdate() {
         if(err) return updaterLog.error(err);
         if(result) {
             if(result.exitCode != 0) return updaterLog.error("Update Failed: An unhandled error has occurred during the install.");
+
             updaterLog.debug("Update completed!");
             openUpdateModal("Update", "New update was installed! Restart Replays for update to take effect.", function() { 
                 $('#update-modal').modal('toggle');

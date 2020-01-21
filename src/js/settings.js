@@ -8,6 +8,7 @@ import ReplaysSettingsService, {
     SETTING_REPLAYS_UPDATE_MODE,
     SETTING_REPLAYS_UPDATE_FOLDER_DIR,
     SETTING_REPLAYS_UPDATE_CHECK_FREQ,
+    SETTING_REPLAYS_UPDATE_DELETE_OLD,
 } from './replaysSettingsService';
 import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
@@ -287,6 +288,7 @@ function initUpdate() {
         if(setting){
             $('#sett-updateMode-'+setting.updateMode).prop('checked', true); 
             $('#sett-updateFolderDir').next('.custom-file-label').html(setting.updateFolderDir);
+            $('#sett-deleteOldVersion').prop('checked', setting.deleteOldVersion); 
             document.getElementById('sett-updateCheckFreq').value = setting.updateCheckFreq;
             //console.log(setting);
         }else console.error("Update settings missing?");
@@ -591,6 +593,9 @@ $("#settings-update-div").mousedown(function (e) {
         }
         if(element.id.includes("openUpdateFolderDir")){
             shell.openItem($('#sett-updateFolderDir').next('.custom-file-label').text());
+        }
+        if(element.id.includes("deleteOldVersion")){
+            ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPDATE_DELETE_OLD, !$(element).is(":checked"));
         }
     }
 });
