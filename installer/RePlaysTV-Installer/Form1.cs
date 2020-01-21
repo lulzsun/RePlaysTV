@@ -27,6 +27,7 @@ namespace RePlaysTV_Installer {
             form1 = this;
         }
         private void Form1_Load(object sender, EventArgs e) {
+            form1.Text = "RePlaysTV " + VERSION + " Installer";
             if (Directory.Exists(playsDirectory)) {
                 textBox1.Text = playsDirectory;
             }
