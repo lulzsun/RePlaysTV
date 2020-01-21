@@ -10,13 +10,12 @@ import ReplaysSettingsService, {
 //Uses node.js process manager
 const request = require('request');
 const child_process = require('child_process');
-let dir;
+var dir = "F:\\Documents\\RePlaysTV\\installer\\RePlaysTV-Installer\\bin\\RePlays-Updater"; //dev define this
 
 init();
 
 function init() {
-    if(Utils.isDev()) dir = "F:\\Documents\\RePlaysTV\\installer\\RePlaysTV-Installer\\bin\\RePlays-Updater";
-    else dir = require('electron').remote.app.getAppPath().replace('app-3.0.1\\resources\\app.asar', 'Replays-Updater');
+    if(!Utils.isDev()) dir = require('electron').remote.app.getAppPath().replace('app-3.0.1\\resources\\app.asar', 'Replays-Updater');
 
     if(ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_FOLDER_DIR) == '') {
         ReplaysSettingsService.setSetting(SETTING_REPLAYS_UPDATE_FOLDER_DIR, dir);
@@ -53,8 +52,10 @@ function checkForUpdate() {
             if (ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_MODE) == 'automatic') {
                 downloadUpdate(json.assets[0].browser_download_url, json.tag_name);
             } else if (ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_MODE) == 'manual') {
-                if (confirm("A new version of Replays is out. Start update in background?"))
+                openUpdateModal("Update", "A new version of Replays is out. Start update in background?", function() { 
                     downloadUpdate(json.assets[0].browser_download_url, json.tag_name);
+                    $('#update-modal').modal('toggle');
+                });
             }
         }
         else {
@@ -134,13 +135,19 @@ function installUpdate() {
         if(result) {
             if(result.exitCode != 0) return updaterLog.error("Update Failed: An unhandled error has occurred during the install.");
             updaterLog.debug("Update completed!");
-            if (ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_MODE) == 'manual') {
-                alert("Update completed! Restart Replays for update to take effect.");
-            } else if (ReplaysSettingsService.getSetting(SETTING_REPLAYS_UPDATE_MODE) == 'automatic') {
-                alert("New update was installed! Restart Replays for update to take effect.");
-            }
+            openUpdateModal("Update", "New update was installed! Restart Replays for update to take effect.", function() { 
+                $('#update-modal').modal('toggle');
+            });
         }
     });
+}
+
+function openUpdateModal(title, body, onConfirm="") {
+    if(!$('#myModal').is(':visible'))
+        $('#update-modal').modal('toggle');
+    document.getElementById("update-modal-title").innerText = title;
+    document.getElementById("update-modal-body").innerText = body;
+    document.getElementById("update-model-confirm").onclick = onConfirm;
 }
 
 // This function will output the lines from the script 
