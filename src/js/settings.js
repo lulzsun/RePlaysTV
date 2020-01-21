@@ -705,6 +705,7 @@ async function updateUserDetectionList() {
     input1.setAttribute('id', 'sett-addToBlacklist');
     input1.setAttribute('style', 'display:none');
     input1.setAttribute('type', 'file');
+    input1.setAttribute('accept', '.exe');
     addGameBtn1.append(input1);
     document.getElementById("exeBlacklist").append(addGameBtn1);
 
@@ -717,6 +718,7 @@ async function updateUserDetectionList() {
     input2.setAttribute('id', 'sett-addToWhitelist');
     input2.setAttribute('style', 'display:none');
     input2.setAttribute('type', 'file');
+    input2.setAttribute('accept', '.exe');
     addGameBtn2.append(input2);
     document.getElementById("exeWhitelist").append(addGameBtn2);
 
