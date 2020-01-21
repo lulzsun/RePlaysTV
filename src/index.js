@@ -2,8 +2,6 @@ const IPC = require('../../../src/core/IPCCapsule.js');
 const { remote, ipcRenderer } = require('electron');
 const moment = require('moment');
 
-window.version = "3.0.3";
-
 window.onload=function(){
     onLoader();
     document.getElementById('close').addEventListener('click', closeWindow);
