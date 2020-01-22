@@ -17,6 +17,7 @@ var tempAddPins = [], tempRemovePins = []; //exists for bookmarks added manually
 
 function initPinSettings(video) {
     currentVideo = video;
+    document.getElementById("sess-Dropdown-Pins").innerHTML = '';
 
     if(currentVideo.game.id == DI_CS_GLOBAL_OFFENSIVE) {
         makeSettingDOM("di:player:kill", "Kills");
@@ -24,9 +25,6 @@ function initPinSettings(video) {
         makeSettingDOM("di:player:assist", "Assists");
         makeSettingDOM("di:round", "Round Status");
         makeSettingDOM("di:objective", "Bomb Status", true);
-    }
-    else{
-        document.getElementById("sess-Dropdown-Pins").innerHTML = '';
     }
 }
 
