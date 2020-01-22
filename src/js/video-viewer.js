@@ -112,7 +112,7 @@ $("#video-viewer-div").dblclick(function(){
 
 //clip editor key controls
 $("#video-viewer-div").on('keydown', function(event) {
-    if(!$('.modal').is(':visible')) {
+    if(!$('#upload-modal').is(':visible')) {
         if(event.keyCode == 32) { //SPACEBAR
             (videoClipDom.paused) ? videoClipDom.play() : videoClipDom.pause();
         }
