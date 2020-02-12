@@ -1,4 +1,4 @@
-# RePlaysTV-Installer
+# RePlaysTV/installer
 The Installer for RePlays
 
 If you are reading this, this is not the proper installer for end-users. This is meant for developers. Please look at the releases page for proper downloads.
