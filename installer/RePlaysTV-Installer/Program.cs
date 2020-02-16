@@ -76,7 +76,7 @@ namespace RePlaysTV_Installer {
                     startImport = true;
                     enterThread.Start();
                 } else {
-                    if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
+                    if (outLine.Data.Contains("npm install") || (outLine.Data.Contains("electron-forge package") && !outLine.Data.Contains("\"electron-forge package\"")) || outLine.Data.Contains("asar extract")) {
                         //Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
                     }
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
