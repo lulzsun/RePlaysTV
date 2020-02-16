@@ -125,7 +125,7 @@ namespace RePlaysTV_Installer {
                             startImport = true;
                             enterThread.Start();
                         } else {
-                            if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") && !outLine.Data.Contains("\"electron-forge package\"") || outLine.Data.Contains("asar extract")) {
+                            if (outLine.Data.Contains("npm install") || (outLine.Data.Contains("electron-forge package") && !outLine.Data.Contains("\"electron-forge package\"")) || outLine.Data.Contains("asar extract")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
