@@ -58,6 +58,7 @@ namespace RePlaysTV_Installer {
             if (dr1 == DialogResult.Yes) {
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
                     Installer.ListInstalledAntivirusProducts(form1.richTextBox1);
+                    Installer.ListFilesInDir(SW, playsDirectory, form1.richTextBox1);
                     Installer.StartExtract(SW, playsDirectory);
                     button1.Enabled = false;
                     button2.Enabled = false;
@@ -124,7 +125,7 @@ namespace RePlaysTV_Installer {
                             startImport = true;
                             enterThread.Start();
                         } else {
-                            if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") || outLine.Data.Contains("asar extract")) {
+                            if (outLine.Data.Contains("npm install") || outLine.Data.Contains("electron-forge package") && !outLine.Data.Contains("\"electron-forge package\"") || outLine.Data.Contains("asar extract")) {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                 form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
@@ -133,14 +134,14 @@ namespace RePlaysTV_Installer {
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
                                 Installer.StartModify(SW, form1.playsDirectory, form1.VERSION);
                             }
-                            if (outLine.Data.Contains("npm ERR!")) {
+                            if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
                                 form1.TopMost = true;
-                                System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has corrupted.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
+                                System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has failed.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
                                 form1.TopMost = false;
                             }
                             if (outLine.Data.Contains("'nodejs-portable.exe' is not recognized")) {
                                 form1.TopMost = true;
-                                System.Windows.Forms.MessageBox.Show("'nodejs-portable.exe' is missing from the working directory.");
+                                System.Windows.Forms.MessageBox.Show("'nodejs-portable.exe' is missing from the working directory.\n\nMake sure you properly extracted the installer to a folder.");
                                 form1.TopMost = false;
                             }
                             if (outLine.Data.Contains(">exit")) {

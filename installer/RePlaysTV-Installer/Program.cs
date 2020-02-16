@@ -50,6 +50,7 @@ namespace RePlaysTV_Installer {
                 if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
                     workDirectory = args[0];  //args[0] - working dir passed from replays client
                     Installer.ListInstalledAntivirusProducts();
+                    Installer.ListFilesInDir(SW, playsDirectory);
                     Installer.StartExtract(SW, playsDirectory, workDirectory);
                     mre.WaitOne();
                 }

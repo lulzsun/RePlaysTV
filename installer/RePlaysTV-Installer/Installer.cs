@@ -31,6 +31,15 @@ namespace RePlaysTV_Installer {
             }
         }
 
+        public static void ListFilesInDir(StreamWriter SW, string dir, RichTextBox richTextBox1 = null) {
+            var msg = "Displaying tree view of '" + dir + "' for debugging purposes:";
+            if (richTextBox1 != null) {
+                richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
+                richTextBox1.ScrollToCaret();
+            } else Console.WriteLine(msg);
+            SW.WriteLine("tree \"" + dir + "\" /f");
+        }
+
         public static void StartExtract(StreamWriter SW, string playsDirectory, string workDirectory=null) { //part one of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
             else SW.WriteLine("cd /d " + workDirectory);
