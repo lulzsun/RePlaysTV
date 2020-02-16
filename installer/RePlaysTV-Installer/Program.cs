@@ -82,7 +82,7 @@ namespace RePlaysTV_Installer {
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
                         Installer.StartModify(SW, playsDirectory, VERSION, workDirectory);
                     }
-                    if (outLine.Data.Contains("npm ERR!")) {
+                    if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
                         Console.WriteLine("An unhandled error has occurred during the install.");
                         Environment.Exit(-1);
                     }
