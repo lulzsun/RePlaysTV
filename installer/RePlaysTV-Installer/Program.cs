@@ -10,7 +10,7 @@ namespace RePlaysTV_Installer {
 
     static class Program {
         public const string VERSION = "3.0.3";
-        public static string playsDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\Plays";
+        //public static string playsDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\Plays";
         public static string workDirectory = null;
 
         public static Process p;
@@ -22,7 +22,7 @@ namespace RePlaysTV_Installer {
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1(playsDirectory, VERSION));
+                Application.Run(new Form1(VERSION));
             } 
             else {
                 // run as console app
@@ -46,18 +46,12 @@ namespace RePlaysTV_Installer {
 
                 p.BeginOutputReadLine();
                 p.BeginErrorReadLine();
-
-                if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
-                    workDirectory = args[0];  //args[0] - working dir passed from replays client
-                    Installer.ListInstalledAntivirusProducts();
-                    Installer.ListFilesInDir(SW, playsDirectory);
-                    Installer.StartExtract(SW, playsDirectory, workDirectory);
-                    mre.WaitOne();
-                }
-                else {
-                    Console.WriteLine("Missing app-3.0.0");
-                    Environment.Exit(-1);
-                }
+ 
+                workDirectory = args[0];  //args[0] - working dir passed from replays client
+                //await Installer.DownloadSetup();
+                Installer.ListInstalledAntivirusProducts();
+                Installer.StartExtract(SW, workDirectory);
+                mre.WaitOne();
             }
         }
 
@@ -70,7 +64,7 @@ namespace RePlaysTV_Installer {
                     var enterThread = new Thread(
                     new ThreadStart(
                         () => {
-                            Installer.StartImport(SW, playsDirectory);
+                            Installer.StartImport(SW);
                         }
                     ));
                     startImport = true;
@@ -80,7 +74,7 @@ namespace RePlaysTV_Installer {
                         //Console.WriteLine("This next process will take awhile (with no sign of progress)... Please be patient.");
                     }
                     if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                        Installer.StartModify(SW, playsDirectory, VERSION, workDirectory);
+                        Installer.StartModify(SW, VERSION, workDirectory);
                     }
                     if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
                         Console.WriteLine("An unhandled error has occurred during the install.");

@@ -72,8 +72,6 @@ A user-made video is also [here](https://www.youtube.com/watch?v=GyWTfz2uYTM) to
 	* Snapshots Tab/Viewer
   * Disable/remove unnecessary background services
     * Minor issue, but it would be best for memory usage to get rid of them
-  * Slow and bulky install/update process
-    * Also conflicts with some antivirus software
   * Make code more maintainable
 
 # Disclaimer

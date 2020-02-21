@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Management;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
     class Installer {
+        public static string rePlaysDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\RePlays";
         public static void ListInstalledAntivirusProducts(RichTextBox richTextBox1 = null) {
             using (var searcher = new ManagementObjectSearcher(@"\\" +
                                                 Environment.MachineName +
@@ -24,23 +28,58 @@ namespace RePlaysTV_Installer {
                     msg = "No installed antivirus detected.";
                 }
 
-                if (richTextBox1 != null) {
-                    richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
-                    richTextBox1.ScrollToCaret();
-                } else Console.WriteLine(msg);
+                Log(msg, richTextBox1);
             }
         }
 
         public static void ListFilesInDir(StreamWriter SW, string dir, RichTextBox richTextBox1 = null) {
-            var msg = "Displaying tree view of '" + dir + "' for debugging purposes:";
-            if (richTextBox1 != null) {
-                richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
-                richTextBox1.ScrollToCaret();
-            } else Console.WriteLine(msg);
+            Log("Displaying tree view of '" + dir + "' for debugging purposes:", richTextBox1);
             SW.WriteLine("tree \"" + dir + "\" /f");
         }
 
-        public static void StartExtract(StreamWriter SW, string playsDirectory, string workDirectory=null) { //part one of installation
+        public static async Task DownloadSetup(RichTextBox richTextBox1 = null, string workDirectory = null) { //part one of installation
+            if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
+
+            var correctHash = "3a7cea84d50ad2c31a79e66f5c3f3b8d";
+
+            // Checksum
+            if (File.Exists(workDirectory + "\\PlaysSetup.exe")) {
+                bool checksumPass = false;
+                using (var md5 = MD5.Create()) {
+                    using (var stream = File.OpenRead(workDirectory + "\\PlaysSetup.exe")) {
+                        var hash = md5.ComputeHash(stream);
+                        var hashAsString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+
+                        if (correctHash == hashAsString) {
+                            checksumPass = true;
+                            Log("PlaysSetup.exe passed MD5 checksum: " + BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant(), richTextBox1);
+                        } else {
+                            checksumPass = false;
+                            Log("PlaysSetup.exe did not pass MD5 checksum!!!", richTextBox1);
+                        }
+                    }
+                }
+                if (!checksumPass)
+                    File.Delete(workDirectory + "\\PlaysSetup.exe");
+                else return;
+            }
+
+            Log("PlaysSetup.exe missing or failed checksum, starting download", richTextBox1);
+            using (var client = new WebClient()) {
+                client.DownloadProgressChanged += (o, args) => {
+                    Log("Downloading PlaysSetup.exe @ web.archive.org: " + args.BytesReceived + " / 145310344 Bytes", richTextBox1);
+                };
+                client.DownloadFileCompleted += async (o, args) => {
+                    Log("Finished downloading PlaysSetup.exe, doing a checksum", richTextBox1);
+                    await DownloadSetup(richTextBox1, workDirectory);
+                };
+                await client.DownloadFileTaskAsync(
+                    new Uri("https://web.archive.org/web/20191212211927if_/https://app-updates.plays.tv/builds/PlaysSetup.exe"),
+                    workDirectory + "\\PlaysSetup.exe");
+            }
+        }
+
+        public static void StartExtract(StreamWriter SW, string workDirectory=null) { //part one of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
             else SW.WriteLine("cd /d " + workDirectory);
 
@@ -48,13 +87,16 @@ namespace RePlaysTV_Installer {
             if (Directory.Exists(workDirectory + "\\temp"))
                 SW.WriteLine("rd /s /q temp");
             SW.WriteLine("mkdir temp");
-            SW.WriteLine("asar extract \"" + playsDirectory + "\\app-3.0.0\\resources\\app.asar\" temp");
+            SW.WriteLine("7z e PlaysSetup.exe -o.\\PlaysSetup -aos");
+            SW.WriteLine("copy /Y .\\PlaysSetup\\Update.exe .\\Install.exe");
+            SW.WriteLine("7z x .\\PlaysSetup\\Plays-3.0.0-full.nupkg -o.\\PlaysSetup\\Plays-3.0.0-full -aos");
+            SW.WriteLine("asar extract .\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\app.asar temp");
             SW.WriteLine("cd temp");
             SW.WriteLine("npm init -f");
             SW.WriteLine("npm install");
             SW.WriteLine("electron-forge import");
         }
-        public static void StartImport(StreamWriter SW, string playsDirectory) {
+        public static void StartImport(StreamWriter SW) { //part two of installation
             Thread.Sleep(5000);
             SW.WriteLine("y");
             Thread.Sleep(5000);
@@ -65,13 +107,13 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("n");
             Thread.Sleep(5000);
         }
-        public static void StartModify(StreamWriter SW, string playsDirectory, string VERSION, string workDirectory = null) { //part three of installation
+        public static void StartModify(StreamWriter SW, string VERSION, string workDirectory = null) { //part three of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
 
             SW.WriteLine("cd ..");
-            SW.WriteLine("rd /s /q \".\\temp\\.cache\"");
-            SW.WriteLine("mkdir \".\\temp\\resources\\auger\\replays\"");
-            SW.WriteLine("robocopy /E /NP /MT \".\\src\" \".\\temp\\resources\\auger\\replays\"");
+            SW.WriteLine("rd /s /q .\\temp\\.cache");
+            SW.WriteLine("mkdir .\\temp\\resources\\auger\\replays");
+            SW.WriteLine("robocopy /E /NP /MT .\\src .\\temp\\resources\\auger\\replays");
 
             //--------------------------------------
             //start modifying original plays files
@@ -123,31 +165,44 @@ namespace RePlaysTV_Installer {
             //end modifying original plays files
             //--------------------------------------
 
-            StartPackage(SW, playsDirectory, VERSION);
+            StartPackage(SW, VERSION, workDirectory);
         }
 
-        public static void StartPackage(StreamWriter SW, string playsDirectory, string VERSION) { //part four of installation
+        public static void StartPackage(StreamWriter SW, string VERSION, string workDirectory = null) { //part four of installation
+            ModifyFileAtLine("<version>" + VERSION + "-full</version>", workDirectory + "\\Plays.nuspec", 5);
+            SW.WriteLine("copy /Y nuget.exe temp");
+            SW.WriteLine("copy /Y Plays.nuspec temp");
             SW.WriteLine("cd temp");
             SW.WriteLine("npm run package");
-            SW.WriteLine("rename " + playsDirectory + "\\app-3.0.0\\Plays.exe noPlays.exe");
-            SW.WriteLine("rename " + playsDirectory + "\\Update.exe originalUpdater.exe");
-            SW.WriteLine("rmdir /s /q \"" + playsDirectory + "\\app-" + VERSION + "\"");
-            SW.WriteLine("mkdir \"" + playsDirectory + "\\app-" + VERSION + "\"");
-            SW.WriteLine("asar pack \".\\out\\Plays-win32-ia32\\resources\\app\" \".\\out\\Plays-win32-ia32\\resources\\app.asar\"");
-            SW.WriteLine("rd /s /q \".\\out\\Plays-win32-ia32\\resources\\app\"");
-            SW.WriteLine("robocopy /E /NP /MT \".\\out\\Plays-win32-ia32\" \"" + playsDirectory + "\\app-" + VERSION + "\"");
+            SW.WriteLine("robocopy /E /NP /MT ..\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\ltc .\\out\\Plays-win32-ia32\\resources\\ltc");
+            SW.WriteLine("rename .\\out\\Plays-win32-ia32 net45");
+            SW.WriteLine("nuget.exe pack");
+            StartInstall(SW, VERSION, workDirectory);
+        }
+
+        public static void StartInstall(StreamWriter SW, string VERSION, string workDirectory = null) { //part five of installation
+            SW.WriteLine("copy /Y Plays." + VERSION + "-full.nupkg ..");
             SW.WriteLine("cd ..");
-            SW.WriteLine("rd /s /q temp");
+            SW.WriteLine("del /f RELEASES");
+            if (workDirectory == rePlaysDirectory) {
+                SW.WriteLine("Install.exe --install=.\\");
+            } else {
+                SW.WriteLine("echo WARNING: Current work directory is '" + workDirectory + "', proper work directory should be at '" + rePlaysDirectory + "', skipping completion install...");
+            }
             SW.WriteLine("exit");
         }
+
         public static void ModifyFileAtLine(string newText, string fileName, int line_to_edit, RichTextBox richTextBox1 = null) {
             string[] arrLine = File.ReadAllLines(fileName);
             arrLine[line_to_edit - 1] = newText;
             File.WriteAllLines(fileName, arrLine);
+            Log(fileName + ">>> Writing to line " + line_to_edit + ": " + newText, richTextBox1);
+        }
+
+        public static void Log(string msg, RichTextBox richTextBox1 = null) {
             if (richTextBox1 != null) {
-                richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + fileName + ">>> Writing to line " + line_to_edit + ": " + newText);
-                richTextBox1.ScrollToCaret();
-            } else Console.WriteLine(fileName + ">>> Writing to line " + line_to_edit + ": " + newText);
+                richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
+            } else Console.WriteLine(msg);
         }
     }
 }

@@ -14,13 +14,11 @@ using System.Windows.Forms;
 namespace RePlaysTV_Installer {
     public partial class Form1 : Form {
         public string VERSION;
-        public string playsDirectory;
 
         public static Process p;
         public static StreamWriter SW;
         public static Form1 form1;
-        public Form1(string _playsDirectory, string _VERSION) {
-            playsDirectory = _playsDirectory;
+        public Form1(string _VERSION) {
             VERSION = _VERSION;
 
             InitializeComponent();
@@ -28,9 +26,7 @@ namespace RePlaysTV_Installer {
         }
         private void Form1_Load(object sender, EventArgs e) {
             form1.Text = "RePlaysTV " + VERSION + " Installer";
-            if (Directory.Exists(playsDirectory)) {
-                textBox1.Text = playsDirectory;
-            }
+
             p = new Process();
 
             p.StartInfo.FileName = "cmd.exe";
@@ -50,43 +46,17 @@ namespace RePlaysTV_Installer {
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
         }
-        private void Button1_Click(object sender, EventArgs e) {
+        private async void Button1_Click(object sender, EventArgs e) {
             form1.TopMost = true;
             DialogResult dr1 = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
-                                                "Make sure the last latest version of Plays is installed and not currently open." +
+                                                "Please have at least ~1.5GB of disk space available." +
                                                 "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
             if (dr1 == DialogResult.Yes) {
-                if (Directory.Exists(playsDirectory + "\\app-3.0.0")) {
-                    Installer.ListInstalledAntivirusProducts(form1.richTextBox1);
-                    Installer.ListFilesInDir(SW, playsDirectory, form1.richTextBox1);
-                    Installer.StartExtract(SW, playsDirectory);
-                    button1.Enabled = false;
-                    button2.Enabled = false;
-                }
-                else {
-                    DialogResult dr2 = MessageBox.Show("You are missing the original Plays client files.\n" +
-                                    "In order for Replays to install, it requires you to have Plays 3.0.0 installed." +
-                                    "\nWould you like to be taken to the download page?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
-                    if (dr2 == DialogResult.Yes) {
-                        Process.Start("https://drive.google.com/file/d/1YlQ-EU6wW8XvGUznIBrSqTvlzBv-6tkQ/view");
-                    }
-                }
+                await Installer.DownloadSetup(form1.richTextBox1);
+                Installer.ListInstalledAntivirusProducts(form1.richTextBox1);
+                Installer.StartExtract(SW);
             }
             form1.TopMost = false;
-        }
-        private void Button2_Click(object sender, EventArgs e) {
-            var fbd = new FolderBrowserDialog {
-                RootFolder = Environment.SpecialFolder.Desktop,
-                SelectedPath = Environment.GetEnvironmentVariable("LocalAppData")
-            };
-            using (fbd) {
-                DialogResult result = fbd.ShowDialog();
-
-                if (result == DialogResult.OK) {
-                    textBox1.Text = fbd.SelectedPath;
-                    playsDirectory = fbd.SelectedPath;
-                }
-            }
         }
 
         private void Button3_Click(object sender, EventArgs e) {
@@ -94,10 +64,7 @@ namespace RePlaysTV_Installer {
         }
         private void InstallComplete() {
             form1.TopMost = true;
-            DialogResult dr = MessageBox.Show("Installation Complete!\n\nOpen Replays?", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
-            if (dr == DialogResult.Yes) {
-                Process.Start(playsDirectory + "\\app-" + VERSION + "\\Plays.exe");
-            }
+            MessageBox.Show("Installation Complete!", "RePlaysTV Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
             form1.TopMost = false;
         }
         private static bool startImport = false;
@@ -111,17 +78,15 @@ namespace RePlaysTV_Installer {
                             var enterThread = new Thread(
                             new ThreadStart(
                                 () => {
-                                    Installer.StartImport(SW, form1.playsDirectory);
+                                    Installer.StartImport(SW);
                                     form1.Invoke(new MethodInvoker(delegate {
                                         form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                         form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                         form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
                                         form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
-                                        form1.richTextBox1.ScrollToCaret();
                                     }));
                                 }
                             ));
-                            form1.richTextBox1.ScrollToCaret();
                             startImport = true;
                             enterThread.Start();
                         } else {
@@ -132,7 +97,7 @@ namespace RePlaysTV_Installer {
                                 form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                             }
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                                Installer.StartModify(SW, form1.playsDirectory, form1.VERSION);
+                                Installer.StartModify(SW, form1.VERSION);
                             }
                             if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
                                 form1.TopMost = true;
@@ -152,7 +117,6 @@ namespace RePlaysTV_Installer {
                                 form1.Invoke(new MethodInvoker(delegate { form1.InstallComplete(); }));
                             }
                             form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
-                            form1.richTextBox1.ScrollToCaret();
                         }
                     }));
                 }
