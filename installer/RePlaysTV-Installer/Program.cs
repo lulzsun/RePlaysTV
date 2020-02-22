@@ -22,7 +22,7 @@ namespace RePlaysTV_Installer {
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1(VERSION));
+                Application.Run(new Main(VERSION));
             } 
             else {
                 // run as console app

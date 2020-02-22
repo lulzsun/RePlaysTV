@@ -12,20 +12,24 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace RePlaysTV_Installer {
-    public partial class Form1 : Form {
+    public partial class Main : Form {
         public string VERSION;
 
         public static Process p;
         public static StreamWriter SW;
-        public static Form1 form1;
-        public Form1(string _VERSION) {
+        public static Main mainForm;
+        public static Options optionsForm = new Options();
+        public Main(string _VERSION) {
             VERSION = _VERSION;
 
             InitializeComponent();
-            form1 = this;
+            mainForm = this;
         }
-        private void Form1_Load(object sender, EventArgs e) {
-            form1.Text = "RePlaysTV " + VERSION + " Installer";
+        private void Main_Load(object sender, EventArgs e) {
+            mainForm.Text = "RePlaysTV " + VERSION + " Installer";
+            mainForm.WindowState = FormWindowState.Minimized;
+            mainForm.Show();
+            mainForm.WindowState = FormWindowState.Normal;
 
             p = new Process();
 
@@ -46,44 +50,49 @@ namespace RePlaysTV_Installer {
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
         }
+
         private async void Button1_Click(object sender, EventArgs e) {
-            form1.TopMost = true;
+            mainForm.TopMost = true;
             DialogResult dr1 = MessageBox.Show("This automated process can take up to 10 minutes or more.\n" +
                                                 "Please have at least ~1.5GB of disk space available." +
                                                 "\nPress Yes to start install.", "RePlaysTV Installer", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information);
             if (dr1 == DialogResult.Yes) {
-                await Installer.DownloadSetup(form1.richTextBox1);
-                Installer.ListInstalledAntivirusProducts(form1.richTextBox1);
+                await Installer.DownloadSetup(mainForm.richTextBox1);
+                Installer.ListInstalledAntivirusProducts(mainForm.richTextBox1);
                 Installer.StartExtract(SW);
             }
-            form1.TopMost = false;
+            mainForm.TopMost = false;
+        }
+
+        private void Button2_Click(object sender, EventArgs e) {
+            optionsForm.Show();
         }
 
         private void Button3_Click(object sender, EventArgs e) {
-            Clipboard.SetText(form1.richTextBox1.Text);
+            Clipboard.SetText(mainForm.richTextBox1.Text);
         }
         private void InstallComplete() {
-            form1.TopMost = true;
+            mainForm.TopMost = true;
             MessageBox.Show("Installation Complete!", "RePlaysTV Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            form1.TopMost = false;
+            mainForm.TopMost = false;
         }
         private static bool startImport = false;
         private static void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine) {
             if (!String.IsNullOrEmpty(outLine.Data)) {
-                if (form1.richTextBox1.InvokeRequired) {
-                    form1.richTextBox1.Invoke(new MethodInvoker(delegate {
+                if (mainForm.richTextBox1.InvokeRequired) {
+                    mainForm.richTextBox1.Invoke(new MethodInvoker(delegate {
                         if (outLine.Data.Contains("All rights reserved.")) {
-                            form1.richTextBox1.Text = "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready";
+                            mainForm.richTextBox1.Text = "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Ready";
                         } else if (outLine.Data.Contains("We will now attempt to import: ") && !startImport) { //part two of installation
                             var enterThread = new Thread(
                             new ThreadStart(
                                 () => {
                                     Installer.StartImport(SW);
-                                    form1.Invoke(new MethodInvoker(delegate {
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                        form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                                    mainForm.Invoke(new MethodInvoker(delegate {
+                                        mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                        mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                        mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                        mainForm.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                                     }));
                                 }
                             ));
@@ -91,39 +100,39 @@ namespace RePlaysTV_Installer {
                             enterThread.Start();
                         } else {
                             if (outLine.Data.Contains("npm install") || (outLine.Data.Contains("electron-forge package") && !outLine.Data.Contains("\"electron-forge package\"")) || outLine.Data.Contains("asar extract")) {
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                             }
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                                Installer.StartModify(SW, form1.VERSION);
+                                Installer.StartModify(SW, mainForm.VERSION);
                             }
                             if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
-                                form1.TopMost = true;
+                                mainForm.TopMost = true;
                                 System.Windows.Forms.MessageBox.Show("An unhandled error has occurred during the install, It is possible that the installation has failed.\nTry restarting your computer and turn off anti-virus before installing.\n\nReport this issue by copying the logs and sending it to a developer.");
-                                form1.TopMost = false;
+                                mainForm.TopMost = false;
                             }
                             if (outLine.Data.Contains("'nodejs-portable.exe' is not recognized")) {
-                                form1.TopMost = true;
+                                mainForm.TopMost = true;
                                 System.Windows.Forms.MessageBox.Show("'nodejs-portable.exe' is missing from the working directory.\n\nMake sure you properly extracted the installer to a folder.");
-                                form1.TopMost = false;
+                                mainForm.TopMost = false;
                             }
                             if (outLine.Data.Contains(">exit")) {
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "=======================================");
-                                form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
-                                form1.Invoke(new MethodInvoker(delegate { form1.InstallComplete(); }));
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "=======================================");
+                                mainForm.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] Installation Complete!");
+                                mainForm.Invoke(new MethodInvoker(delegate { mainForm.InstallComplete(); }));
                             }
-                            form1.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
+                            mainForm.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + outLine.Data.ToString());
                         }
                     }));
                 }
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
+        private void Main_FormClosing(object sender, FormClosingEventArgs e) {
             p.Kill();
         }
 
