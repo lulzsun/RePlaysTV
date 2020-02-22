@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Unnecessary build files
+RePlaysTV-Installer/bin/rh.ini
+RePlaysTV-Installer/bin/resources.res
+RePlaysTV-Installer/bin/Resources.rc
+RePlaysTV-Installer/bin/Release.7z
+RePlaysTV-Installer/bin/Re[Pp]laysSetup.exe
+
 # User-specific files
 *.rsuser
 *.suo
@@ -26,7 +33,6 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
