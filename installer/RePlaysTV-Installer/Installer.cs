@@ -130,6 +130,8 @@ namespace RePlaysTV_Installer {
             //--------------------------------------
             //start modifying original plays files
             //--------------------------------------
+            //set version
+            ModifyFileAtLine("log.info(`Version: " + VERSION + "`);", workDirectory + "\\temp\\src\\main\\main.js", 36);
             //dev tools
             ModifyFileAtLine("if (true) {", workDirectory + "\\temp\\src\\main\\main.js", 682);
             ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", workDirectory + "\\temp\\src\\main\\UIManager.js", 419);
