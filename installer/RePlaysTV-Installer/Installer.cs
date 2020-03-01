@@ -12,6 +12,15 @@ using System.Windows.Forms;
 namespace RePlaysTV_Installer {
     class Installer {
         public static string rePlaysDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\RePlays";
+        public static Dictionary<string, Object> installSettings =
+        new Dictionary<string, Object> ()
+        {
+            { "playsSetupUrl", "https://web.archive.org/web/20191212211927if_/https://app-updates.plays.tv/builds/PlaysSetup.exe" },
+            { "ltcVersion", "0.54.7" },
+            { "cleanInstall", true },
+            { "deleteTemp", false },
+            { "ignoreChecksum", false },
+        };
         public static void ListInstalledAntivirusProducts(RichTextBox richTextBox1 = null) {
             using (var searcher = new ManagementObjectSearcher(@"\\" +
                                                 Environment.MachineName +
@@ -44,24 +53,26 @@ namespace RePlaysTV_Installer {
 
             // Checksum
             if (File.Exists(workDirectory + "\\PlaysSetup.exe")) {
-                bool checksumPass = false;
-                using (var md5 = MD5.Create()) {
-                    using (var stream = File.OpenRead(workDirectory + "\\PlaysSetup.exe")) {
-                        var hash = md5.ComputeHash(stream);
-                        var hashAsString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                if ((bool)installSettings["ignoreChecksum"] == false) {
+                    bool checksumPass = false;
+                    using (var md5 = MD5.Create()) {
+                        using (var stream = File.OpenRead(workDirectory + "\\PlaysSetup.exe")) {
+                            var hash = md5.ComputeHash(stream);
+                            var hashAsString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
 
-                        if (correctHash == hashAsString) {
-                            checksumPass = true;
-                            Log("PlaysSetup.exe passed MD5 checksum: " + BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant(), richTextBox1);
-                        } else {
-                            checksumPass = false;
-                            Log("PlaysSetup.exe did not pass MD5 checksum!!!", richTextBox1);
+                            if (correctHash == hashAsString) {
+                                checksumPass = true;
+                                Log("PlaysSetup.exe passed MD5 checksum: " + BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant(), richTextBox1);
+                            } else {
+                                checksumPass = false;
+                                Log("PlaysSetup.exe did not pass MD5 checksum!!!", richTextBox1);
+                            }
                         }
                     }
-                }
-                if (!checksumPass)
-                    File.Delete(workDirectory + "\\PlaysSetup.exe");
-                else return;
+                    if (!checksumPass)
+                        File.Delete(workDirectory + "\\PlaysSetup.exe");
+                    else return;
+                } else return;
             }
 
             Log("PlaysSetup.exe missing or failed checksum, starting download", richTextBox1);
@@ -74,7 +85,7 @@ namespace RePlaysTV_Installer {
                     await DownloadSetup(richTextBox1, workDirectory);
                 };
                 await client.DownloadFileTaskAsync(
-                    new Uri("https://web.archive.org/web/20191212211927if_/https://app-updates.plays.tv/builds/PlaysSetup.exe"),
+                    new Uri((string) installSettings["playsSetupUrl"]),
                     workDirectory + "\\PlaysSetup.exe");
             }
         }
@@ -84,13 +95,14 @@ namespace RePlaysTV_Installer {
             else SW.WriteLine("cd /d " + workDirectory);
 
             SW.WriteLine("nodejs-portable.exe");
-            if (Directory.Exists(workDirectory + "\\temp"))
+            if (Directory.Exists(workDirectory + "\\temp") && (bool)installSettings["cleanInstall"] == true) {
                 SW.WriteLine("rd /s /q temp");
-            SW.WriteLine("mkdir temp");
-            SW.WriteLine("7z e PlaysSetup.exe -o.\\PlaysSetup -aos");
-            SW.WriteLine("copy /Y .\\PlaysSetup\\Update.exe .\\Install.exe");
-            SW.WriteLine("7z x .\\PlaysSetup\\Plays-3.0.0-full.nupkg -o.\\PlaysSetup\\Plays-3.0.0-full -aos");
-            SW.WriteLine("asar extract .\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\app.asar temp");
+                SW.WriteLine("mkdir temp");
+                SW.WriteLine("7z e PlaysSetup.exe -o.\\PlaysSetup -aos");
+                SW.WriteLine("copy /Y .\\PlaysSetup\\Update.exe .\\Update.exe");
+                SW.WriteLine("7z x .\\PlaysSetup\\Plays-3.0.0-full.nupkg -o.\\PlaysSetup\\Plays-3.0.0-full -aos");
+                SW.WriteLine("asar extract .\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\app.asar temp");
+            }
             SW.WriteLine("cd temp");
             SW.WriteLine("npm init -f");
             SW.WriteLine("npm install");
@@ -185,9 +197,12 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("cd ..");
             SW.WriteLine("del /f RELEASES");
             if (workDirectory == rePlaysDirectory) {
-                SW.WriteLine("Install.exe --install=.\\");
+                SW.WriteLine("Update.exe --install=.\\");
             } else {
                 SW.WriteLine("echo WARNING: Current work directory is '" + workDirectory + "', proper work directory should be at '" + rePlaysDirectory + "', skipping completion install...");
+            }
+            if((bool)installSettings["deleteTemp"] == true) {
+                SW.WriteLine("rd /s /q temp");
             }
             SW.WriteLine("exit");
         }
