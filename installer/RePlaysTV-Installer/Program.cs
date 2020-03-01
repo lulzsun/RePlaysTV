@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,6 +20,8 @@ namespace RePlaysTV_Installer {
 
         [STAThread]
         static void Main(string[] args) {
+            Console.OutputEncoding = Encoding.UTF8;
+
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -43,6 +46,7 @@ namespace RePlaysTV_Installer {
                 p.Start();
 
                 SW = p.StandardInput;
+                SW.WriteLine("chcp 65001"); //set encoding
 
                 p.BeginOutputReadLine();
                 p.BeginErrorReadLine();

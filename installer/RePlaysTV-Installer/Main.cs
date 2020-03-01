@@ -46,6 +46,7 @@ namespace RePlaysTV_Installer {
             p.Start();
 
             SW = p.StandardInput;
+            SW.WriteLine("chcp 65001"); //set encoding
 
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
@@ -65,7 +66,7 @@ namespace RePlaysTV_Installer {
         }
 
         private void Button2_Click(object sender, EventArgs e) {
-            optionsForm.Show();
+            optionsForm.ShowDialog();
         }
 
         private void Button3_Click(object sender, EventArgs e) {
