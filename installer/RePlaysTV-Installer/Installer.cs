@@ -205,7 +205,7 @@ namespace RePlaysTV_Installer {
         public static void Log(string msg, RichTextBox richTextBox1 = null) {
             if (richTextBox1 != null) {
                 richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + msg);
-            } else Console.WriteLine(msg);
+            } Console.WriteLine(msg);
         }
     }
 }
