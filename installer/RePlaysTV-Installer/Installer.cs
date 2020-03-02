@@ -97,12 +97,12 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("nodejs-portable.exe");
             if (Directory.Exists(workDirectory + "\\temp") && (bool)installSettings["cleanInstall"] == true) {
                 SW.WriteLine("rd /s /q temp");
-                SW.WriteLine("mkdir temp");
-                SW.WriteLine("7z e PlaysSetup.exe -o.\\PlaysSetup -aos");
-                SW.WriteLine("copy /Y .\\PlaysSetup\\Update.exe .\\Update.exe");
-                SW.WriteLine("7z x .\\PlaysSetup\\Plays-3.0.0-full.nupkg -o.\\PlaysSetup\\Plays-3.0.0-full -aos");
-                SW.WriteLine("asar extract .\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\app.asar temp");
             }
+            SW.WriteLine("mkdir temp");
+            SW.WriteLine("7z e PlaysSetup.exe -o.\\PlaysSetup -aos");
+            SW.WriteLine("copy /Y .\\PlaysSetup\\Update.exe .\\Update.exe");
+            SW.WriteLine("7z x .\\PlaysSetup\\Plays-3.0.0-full.nupkg -o.\\PlaysSetup\\Plays-3.0.0-full -aos");
+            SW.WriteLine("asar extract .\\PlaysSetup\\Plays-3.0.0-full\\lib\\net45\\resources\\app.asar temp");
             SW.WriteLine("cd temp");
             SW.WriteLine("npm init -f");
             SW.WriteLine("npm install");
@@ -119,7 +119,7 @@ namespace RePlaysTV_Installer {
             SW.WriteLine("n");
             Thread.Sleep(5000);
         }
-        public static void StartModify(StreamWriter SW, string VERSION, string workDirectory = null) { //part three of installation
+        public static void StartModify(StreamWriter SW, string VERSION, string workDirectory = null, RichTextBox richTextBox1 = null) { //part three of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
 
             SW.WriteLine("cd ..");
@@ -130,54 +130,40 @@ namespace RePlaysTV_Installer {
             //--------------------------------------
             //start modifying original plays files
             //--------------------------------------
+
+            //copying replaceables
+            SW.WriteLine("robocopy /E /NP /MT .\\src-patch\\src .\\temp\\src");
+
             //set version
-            ModifyFileAtLine("log.info(`Version: " + VERSION + "`);", workDirectory + "\\temp\\src\\main\\main.js", 36);
-            //dev tools
-            ModifyFileAtLine("if (true) {", workDirectory + "\\temp\\src\\main\\main.js", 682);
-            ModifyFileAtLine("preload: AugerWindow.getPreload('preload.js'), devTools: true,", workDirectory + "\\temp\\src\\main\\UIManager.js", 419);
-            ModifyFileAtLine("devTools: true,", workDirectory + "\\temp\\src\\main\\UIManager.js", 548);
-            //replays modifications
-            ModifyFileAtLine("const showurl = '/replays/index.html';", workDirectory + "\\temp\\src\\main\\UIManager.js", 571);
-            for (int i = 608; i <= 634; i++) {
-                ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\main\\UIManager.js", i);
+            ModifyFileAtLine("log.info(`Version: " + VERSION + "`);", workDirectory + "\\temp\\src\\main\\main.js", 36, richTextBox1);
+
+            int counter = 1;
+            string line;
+            StreamReader configFile = new StreamReader(workDirectory + "\\src-patch\\config.txt");
+            while ((line = configFile.ReadLine()) != null) {
+                if (!line.StartsWith("#") && !String.IsNullOrEmpty(line)) { // if it is not a comment
+                    if(line.StartsWith("ModifyFileAtLine")) {
+                        string fileName = line.Split(new string[] { "\"" }, 3, StringSplitOptions.None)[1];
+                        string lineNumber = line.Replace("ModifyFileAtLine \"" + fileName + "\" ", ""); lineNumber = lineNumber.Substring(0, lineNumber.IndexOf(' '));
+                        string newLine = line.Replace("ModifyFileAtLine \"" + fileName + "\" " + lineNumber + " ", "");
+
+                        if(lineNumber.Contains("-")) {
+                            int start = Int32.Parse(lineNumber.Split('-')[0]);
+                            int end = Int32.Parse(lineNumber.Split('-')[1]);
+
+                            for (int i = start; i <= end; i++) {
+                                ModifyFileAtLine(newLine, workDirectory + "\\temp" + fileName, i, richTextBox1);
+                                counter++;
+                            }
+                        } else {
+                            ModifyFileAtLine(newLine, workDirectory + "\\temp" + fileName, Int32.Parse(lineNumber), richTextBox1);
+                            counter++;
+                        }
+                    }
+                }
             }
-            for (int i = 637; i <= 640; i++) {
-                ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\main\\UIManager.js", i);
-            }
-            ModifyFileAtLine("window.loadURL(path.join(__dirname, '/../../resources/auger', augerRouteUrl), urlOptions);", workDirectory + "\\temp\\src\\core\\AugerWindow.js", 38);
-            ModifyFileAtLine("nodeIntegration: true,", workDirectory + "\\temp\\src\\core\\AugerWindow.js", 53);
-            //disables original plays updater
-            ModifyFileAtLine("if (false) {", workDirectory + "\\temp\\src\\core\\Updater.js", 62);
-            //ingame hud replacement
-            ModifyFileAtLine("const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';", workDirectory + "\\temp\\src\\service\\IngameOverlay\\IngameHUDService.js", 15);
-            //disables online plays user checks
-            ModifyFileAtLine("return true;", workDirectory + "\\temp\\src\\service\\RunningGamesService.js", 105);    //disables check for login required to recording
-            //ModifyFileAtLine("return null;", workDirectory + "\\temp\\src\\service\\BaseService.js", 48); 
-            ModifyFileAtLine("return {userId: \"REPLAYSTV\"};", workDirectory + "\\temp\\src\\core\\Settings.js", 239);
-            for (int i = 159; i <= 166; i++) {
-                ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\service\\Notifications\\FlowListener.js", i);
-            }
-            ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\service\\PresenceService.js", 79);
-            ModifyFileAtLine("// removed", workDirectory + "\\temp\\src\\service\\PresenceService.js", 94);
-            // changes gamecatalog url
-            ModifyFileAtLine("const GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';", workDirectory + "\\temp\\src\\core\\Utils.js", 39);
-            ModifyFileAtLine("const CATALOG_GAME_DETECTION = 'game_detections';", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 6);
-            ModifyFileAtLine("const CATALOG_NONGAME_DETECTION = 'nongame_detections';", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 7);
-            ModifyFileAtLine("static getLatestVersionFileUrl() {", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 13);
-            ModifyFileAtLine("return `/version.json`;", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 14);
-            ModifyFileAtLine("const url = GameCatalogRequest.getLatestVersionFileUrl();", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 27);
-            ModifyFileAtLine("return {version: response[`${catalog}_version`].version, key: `${catalog}.json`};", workDirectory + "\\temp\\src\\service\\DetectionRequests\\GameCatalogRequest.js", 34);
-            // repurposed presence logger for update logs
-            ModifyFileAtLine("const UPDATERLOGPATH = path.join(USERDATAPATH, 'updater.log');", workDirectory + "\\temp\\src\\core\\Logger.js", 18);
-            ModifyFileAtLine("touch.sync(UPDATERLOGPATH);", workDirectory + "\\temp\\src\\core\\Logger.js", 28);
-            ModifyFileAtLine("const updaterLogger = winston.createLogger({", workDirectory + "\\temp\\src\\core\\Logger.js", 256);
-            ModifyFileAtLine("filename: UPDATERLOGPATH,", workDirectory + "\\temp\\src\\core\\Logger.js", 265);
-            ModifyFileAtLine("export const updaterLog = Loggify(updaterLogger);", workDirectory + "\\temp\\src\\core\\Logger.js", 278);
-            // autoLaunch correction
-            ModifyFileAtLine("const autoLaunch = new AutoLaunch({ name: \"Plays\", path: require(\"electron\").remote.app.getPath('exe') });", workDirectory + "\\temp\\src\\service\\SettingsService.js", 457);
-            //--------------------------------------
-            //end modifying original plays files
-            //--------------------------------------
+            Log("Number of changes: " + counter, richTextBox1);
+            configFile.Close();
 
             StartPackage(SW, VERSION, workDirectory);
         }
