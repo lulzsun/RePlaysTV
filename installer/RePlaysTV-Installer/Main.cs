@@ -107,7 +107,7 @@ namespace RePlaysTV_Installer {
                                 mainForm.richTextBox1.AppendText(Environment.NewLine + "[" + DateTime.Now.ToString("h:mm:ss tt") + "] This next process will take awhile (with no sign of progress)... Please be patient.");
                             }
                             if (outLine.Data.Contains("Thanks for using ") && outLine.Data.Contains("electron-forge")) {
-                                Installer.StartModify(SW, mainForm.VERSION);
+                                Installer.StartModify(SW, mainForm.VERSION, null, mainForm.richTextBox1);
                             }
                             if (outLine.Data.Contains("npm ERR!") || outLine.Data.Contains("unhandled error") || outLine.Data.Contains("Error: ")) {
                                 mainForm.TopMost = true;
