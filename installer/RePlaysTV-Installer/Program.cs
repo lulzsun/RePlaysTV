@@ -20,7 +20,7 @@ namespace RePlaysTV_Installer {
 
         [STAThread]
         static void Main(string[] args) {
-            Console.OutputEncoding = Encoding.UTF8;
+            //Console.OutputEncoding = Encoding.UTF8; this causes System.IO.IOException: The handle is invalid
 
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
