@@ -20,8 +20,6 @@ namespace RePlaysTV_Installer {
 
         [STAThread]
         static void Main(string[] args) {
-            //Console.OutputEncoding = Encoding.UTF8; this causes System.IO.IOException: The handle is invalid
-
             if (args.Length == 0) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -39,6 +37,8 @@ namespace RePlaysTV_Installer {
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                p.StartInfo.StandardErrorEncoding = Encoding.UTF8;
 
                 p.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
                 p.ErrorDataReceived += new DataReceivedEventHandler(SortOutputHandler);

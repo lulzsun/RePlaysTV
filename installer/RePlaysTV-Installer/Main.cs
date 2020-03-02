@@ -39,6 +39,8 @@ namespace RePlaysTV_Installer {
             p.StartInfo.RedirectStandardInput = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+            p.StartInfo.StandardErrorEncoding = Encoding.UTF8;
 
             p.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
             p.ErrorDataReceived += new DataReceivedEventHandler(SortOutputHandler);
