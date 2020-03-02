@@ -1,0 +1,47 @@
+# Usage: ModifyFileAtLine "fileName" lineNumber newLine
+# Note: lineNumber can also represent a range (ex. 36-45)
+
+# dev tools
+ModifyFileAtLine "\src\main\main.js" 682 if (true) {
+ModifyFileAtLine "\src\main\UIManager.js" 419 preload: AugerWindow.getPreload('preload.js'), devTools: true,
+ModifyFileAtLine "\src\main\UIManager.js" 548 devTools: true,
+
+# replays modifications
+ModifyFileAtLine "\src\main\UIManager.js" 571 const showurl = '/replays/index.html';
+ModifyFileAtLine "\src\main\UIManager.js" 608-634 // removed
+ModifyFileAtLine "\src\main\UIManager.js" 637-640 // removed
+ModifyFileAtLine "\src\core\AugerWindow.js" 38 window.loadURL(path.join(__dirname, '/../../resources/auger', augerRouteUrl), urlOptions);
+ModifyFileAtLine "\src\core\AugerWindow.js" 53 nodeIntegration: true,
+
+# disables original plays updater
+ModifyFileAtLine "\src\core\Updater.js" 62 if (false) {
+
+# ingame hud replacement
+ModifyFileAtLine "\src\service\IngameOverlay\IngameHUDService.js" 15 const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';
+
+# disables online plays user checks
+ModifyFileAtLine "\src\service\RunningGamesService.js" 105 return true;
+ModifyFileAtLine "\src\core\Settings.js" 239 return {userId: "REPLAYSTV"};
+ModifyFileAtLine "\src\service\Notifications\FlowListener.js" 159-166 // removed
+ModifyFileAtLine "\src\service\PresenceService.js" 79 // removed
+ModifyFileAtLine "\src\service\PresenceService.js" 94 // removed
+
+# change gamecatalog url
+ModifyFileAtLine "\src\core\Utils.js" 39 const GAMECATALOGS_URL = 'https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/detections/';
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 6 const CATALOG_GAME_DETECTION = 'game_detections';
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 7 const CATALOG_NONGAME_DETECTION = 'nongame_detections';
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 13 static getLatestVersionFileUrl() {
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 14 return `/version.json`;
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 27 const url = GameCatalogRequest.getLatestVersionFileUrl();
+ModifyFileAtLine "\src\service\DetectionRequests\GameCatalogRequest.js" 34 return {version: response[`${catalog}_version`].version, key: `${catalog}.json`};
+
+# repurposed presence logger for update logs
+ModifyFileAtLine "\src\core\Logger.js" 18 const UPDATERLOGPATH = path.join(USERDATAPATH, 'updater.log');
+ModifyFileAtLine "\src\core\Logger.js" 28 touch.sync(UPDATERLOGPATH);
+ModifyFileAtLine "\src\core\Logger.js" 256 const updaterLogger = winston.createLogger({
+ModifyFileAtLine "\src\core\Logger.js" 265 filename: UPDATERLOGPATH,
+ModifyFileAtLine "\src\core\Logger.js" 278 export const updaterLog = Loggify(updaterLogger);
+ModifyFileAtLine "\src\core\Logger.js" 28 touch.sync(UPDATERLOGPATH);
+
+# autoLaunch correction
+ModifyFileAtLine "\src\service\SettingsService.js" 457 const autoLaunch = new AutoLaunch({ name: "Plays", path: require("electron").remote.app.getPath('exe') });
