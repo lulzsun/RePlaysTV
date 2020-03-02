@@ -6,6 +6,6 @@ Full file modifications are only when necessary (if a majority of the original P
 
 Otherwise, Small changes will be modified by line and file location.
 
-Small changes are made using the file `./decide file later.json`. The installer will read from this file to determine which specified lines of code to override rather than completely overriding files (Full file modifications).
+Small changes are made using the file `./config.txt`. The installer will read from this file to determine which specified lines of code to override rather than completely overriding files (Full file modifications).
 
 This may make the development environment difficult to manage, but it is done to respect the original code of Plays. We should never upload their copyrighted code.
