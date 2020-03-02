@@ -16,8 +16,9 @@ ModifyFileAtLine "\src\core\AugerWindow.js" 53 nodeIntegration: true,
 # disables original plays updater
 ModifyFileAtLine "\src\core\Updater.js" 62 if (false) {
 
-# ingame hud replacement
-ModifyFileAtLine "\src\service\IngameOverlay\IngameHUDService.js" 15 const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';
+# ingame hud changes
+# ModifyFileAtLine "\src\service\IngameOverlay\IngameHUDService.js" 15 const AUGER_URL_IG_WIDGETS = '/replays/IngameOverlay.html';
+ModifyFileAtLine "\src\controller\IngameHUD.js" 19 return HUDMODE_V1;
 
 # disables online plays user checks
 ModifyFileAtLine "\src\service\RunningGamesService.js" 105 return true;
