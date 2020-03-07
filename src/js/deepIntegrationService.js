@@ -25,6 +25,12 @@ function initPinSettings(video) {
         makeSettingDOM("di:player:assist", "Assists");
         makeSettingDOM("di:round", "Round Status");
         makeSettingDOM("di:objective", "Bomb Status", true);
+    } else if(currentVideo.game.id == DI_LEAGUE_OF_LEGENDS) {
+        makeSettingDOM("CHAMPION_KILL", "Kills");
+        makeSettingDOM("CHAMPION_DEATH", "Deaths");
+        makeSettingDOM("CHAMPION_ASSIST", "Assists");
+        makeSettingDOM("ELITE_MONSTER_KILL", "Epic Monsters");
+        makeSettingDOM("BUILDING_KILL", "Structures", true);
     }
 }
 
@@ -47,6 +53,19 @@ function setPinTooltip(value) {
                 icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:objective fa fa-bomb" aria-hidden="true"></span>`;
             else if(currentVideo.allPins[value].group.includes("di:round")) 
                 icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:round fa fa-stopwatch" aria-hidden="true"></span>`;
+        }
+    } else if(currentVideo.game.id == DI_LEAGUE_OF_LEGENDS) {
+        if(value && currentVideo.allPins[value].type == "di") {
+            if(currentVideo.allPins[value].group == "CHAMPION_KILL")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_KILL fa fa-crosshairs" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "CHAMPION_DEATH")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_DEATH fa fa-skull-crossbones" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "CHAMPION_ASSIST")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_ASSIST fa fa-hands-helping" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "ELITE_MONSTER_KILL")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject ELITE_MONSTER_KILL fa fa-dragon" aria-hidden="true"></span>`;
+            else if(currentVideo.allPins[value].group == "BUILDING_KILL")
+                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject BUILDING_KILL fa fa-gopuram" aria-hidden="true"></span>`; //monument
         }
     }
 
