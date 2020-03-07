@@ -13,11 +13,14 @@ var playClipped = false;
 var testSegments;
 const ZOOM = [100, 110, 125, 150, 175, 200, 250, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 7500, 10000];
 
-const videoSessDom = document.createElement('video'); //video playback object
+var videoSessDom = document.createElement('video'); //video playback object
 var currentVideo = null; //the current video object passed in from openVideoEditor()
 
 export default function openVideoEditor(video) {
     currentVideo = video;
+
+    if(videoSessDom == null)
+        videoSessDom = document.createElement('video');
 
     const videoSource = document.createElement('source');
     videoSessDom.setAttribute('id', `sess-play-${currentVideo.id}`);
@@ -187,7 +190,7 @@ function createPins(allPins, update=false) {
     var sliderPins = [];
 
     Object.keys(allPins).forEach(function(key) {
-        //console.log(key + ':', allPins[key]);
+        console.log(key + ':', allPins[key]);
         sliderPins.push(allPins[key].time/1000);
     });
 

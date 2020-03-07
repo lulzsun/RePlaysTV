@@ -11,9 +11,12 @@ import SharedFolder from './libs/uploaders/sharedFolder';
 
 var continuePlay, sliding;
 var seeker;
-const videoClipDom = document.createElement('video'); //video playback on the viewer
+var videoClipDom = document.createElement('video'); //video playback on the viewer
 
 export default function openVideoViewer(video) {
+    if(videoClipDom == null)
+        videoClipDom = document.createElement('video');
+
     console.log(video.url);
     const videoSource = document.createElement('source');
     videoClipDom.setAttribute('id', `clip-play-${video.id}`);
