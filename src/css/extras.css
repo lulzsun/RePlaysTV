@@ -30,6 +30,14 @@ div[id='sess-Seeker'] > .noUi-base .noUi-origin .noUi-handle {
     border-color: red;
 }
 
+div[id='sess-Segments'] > .noUi-base .noUi-origin .noUi-handle {
+    width: 8px !important;
+    height: 40px !important;
+    left: auto !important;
+    right: -4px !important;
+    top: -1px !important;
+}
+
 div[id='sess-Pins'] {
     cursor: default !important;
 }
