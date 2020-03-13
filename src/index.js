@@ -1,4 +1,5 @@
 const IPC = require('../../../src/core/IPCCapsule.js');
+//const VideoService = require('../../../src/service/VideoService.js');
 const { remote, ipcRenderer } = require('electron');
 const moment = require('moment');
 
@@ -64,7 +65,8 @@ function recordingTime() {
 }
 
 function onLoader() { //this will check if the local api is online (is there a better way to do this?)
-    fetch('http://localhost:9000/').then(   //hacky way to check if local filesystem is online
+    //var port = VideoService.settings.getGameDVRSetting('localServerPort');
+    fetch(`http://localhost:9000/`).then(
         function() {
             init();
         }
