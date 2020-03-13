@@ -3,7 +3,7 @@ import moment from 'moment';
 import shortid from 'shortid';
 import TranscoderService from '../../../../src/service/TranscoderService';
 import * as IPC from '../../../../src/core/IPCCapsule.js';
-import {getVideoById} from './sessions';
+import {fetchAllSessions, getVideoById} from './sessions';
 import {fetchAllClips} from './clips';
 import {initPinSettings, setPinTooltip, addPin, removePin, tempAddPins, tempRemovePins} from './deepIntegrationService';
 
@@ -19,12 +19,22 @@ var currentVideo = null; //the current video object passed in from openVideoEdit
 export default function openVideoEditor(video) {
     currentVideo = video;
 
-    if(videoSessDom == null)
-        videoSessDom = document.createElement('video');
+    if(videoSessDom == null) videoSessDom = document.createElement('video');
+
+    videoSessDom.removeEventListener('timeupdate', onTimeUpdate);
+    videoSessDom.removeEventListener('loadeddata', onLoadVideo);
+    videoSessDom.addEventListener('timeupdate', onTimeUpdate);
+    videoSessDom.addEventListener('loadeddata', onLoadVideo, false);
 
     const videoSource = document.createElement('source');
     videoSessDom.setAttribute('id', `sess-play-${currentVideo.id}`);
-    videoSource.setAttribute('src', currentVideo.url);
+    videoSource.setAttribute('src', `http://localhost:9000/s/v2/recordings/${currentVideo.id}`)
+    // code below is futureproof, but is not secure
+    // before using, set
+    // webPreferences: {
+    //   webSecurity: false
+    // }
+    //videoSource.setAttribute('src', `${currentVideo.saveDir}/${currentVideo.path.substring(1)}/${currentVideo.fileName}`);
     videoSessDom.setAttribute('style', "height: calc(100vh - 190px);width: 100%");
     videoSessDom.setAttribute('preload', 'auto');
     videoSessDom.appendChild(videoSource);
@@ -98,7 +108,7 @@ $("#video-editor-div").on('click', function (e) { //left click functions
             if(element.id.split('-')[2]) {
                 if(element.id.split('-')[2] == "Add") {
                     addPin('bookmark', videoSessDom.currentTime * 1000);
-                    createPins(currentVideo.allPins, true);
+                    createPins(currentVideo.pins, true);
                 }
                 if(element.id.split('-')[2] == "Show") //this is a checkbox object, 
                     e.stopPropagation();               //do not close dropdown if it is changed
@@ -263,7 +273,7 @@ function deletePin(target) {
                     starts = $(starts).attr('id')/1000;
                     removePin('bookmark', starts*1000);
                 }
-                createPins(currentVideo.allPins, true);
+                createPins(currentVideo.pins, true);
             }
         }
     });
@@ -496,10 +506,11 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
             }
         });
     }
+    fetchAllSessions();
     fetchAllClips();
 })
 
-videoSessDom.addEventListener('timeupdate', function(){
+function onTimeUpdate() {
     if (videoSessDom.paused){
         document.getElementById("sess-PlayPause").innerHTML = '';
         const clickable = document.createElement('span');
@@ -541,9 +552,9 @@ videoSessDom.addEventListener('timeupdate', function(){
     }
 
     document.getElementById("sess-TimeStamp").innerText = currentTime + " / " + duration;
-})
+}
 
-videoSessDom.addEventListener('loadeddata', function() {
+function onLoadVideo() {
     if(!seeker) {
         seeker = $('#sess-Seeker')[0];
         noUiSlider.create(seeker, {
@@ -565,7 +576,7 @@ videoSessDom.addEventListener('loadeddata', function() {
                 'max': [videoSessDom.duration]
             }
         });
-        createPins(currentVideo.allPins);
+        createPins(currentVideo.pins);
     } else {
         seeker.noUiSlider.off();
         seeker.noUiSlider.updateOptions({
@@ -582,7 +593,7 @@ videoSessDom.addEventListener('loadeddata', function() {
                 'max': [videoSessDom.duration]
             }
         });
-        createPins(currentVideo.allPins, true);
+        createPins(currentVideo.pins, true);
     }
     
     seeker.noUiSlider.on('start', function () {
@@ -602,7 +613,7 @@ videoSessDom.addEventListener('loadeddata', function() {
     });
 
     document.getElementById("sess-Pins").style.height = "100%";
-}, false);
+}
 
 //helper functions
 function closest(array, num) {

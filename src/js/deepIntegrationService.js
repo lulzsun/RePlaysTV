@@ -16,6 +16,7 @@ var currentVideo = null; //the current video object passed in from openVideoEdit
 var tempAddPins = [], tempRemovePins = []; //exists for bookmarks added manually
 
 function initPinSettings(video) {
+    tempAddPins = [], tempRemovePins = [];
     currentVideo = video;
     document.getElementById("sess-Dropdown-Pins").innerHTML = '';
 
@@ -35,37 +36,37 @@ function initPinSettings(video) {
 }
 
 function setPinTooltip(value) {
-    const exists = Object.keys(currentVideo.allPins).find(key => (currentVideo.allPins[key].time/1000).toFixed(4) === value);
+    const exists = Object.keys(currentVideo.pins).find(key => (currentVideo.pins[key].time/1000).toFixed(4) === value);
     if(exists) value = exists;
     else return `<span id="${value*1000}" class="pinObject fa fa-bookmark" aria-hidden="true"></span>`; //this must be a tempAddPins array object
 
-    let icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject fa fa-bookmark" aria-hidden="true"></span>`;
+    let icon = `<span id="${currentVideo.pins[value].time}" class="pinObject fa fa-bookmark" aria-hidden="true"></span>`;
 
     if(currentVideo.game.id == DI_CS_GLOBAL_OFFENSIVE) {
-        if(value && currentVideo.allPins[value].type == "di") {
-            if(currentVideo.allPins[value].group == "di:player:kill")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:kill fa fa-crosshairs" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "di:player:death")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:death fa fa-skull-crossbones" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "di:player:assist")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:player:assist fa fa-hands-helping" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group.includes("di:objective")) 
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:objective fa fa-bomb" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group.includes("di:round")) 
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject di:round fa fa-stopwatch" aria-hidden="true"></span>`;
+        if(value && currentVideo.pins[value].type == "di") {
+            if(currentVideo.pins[value].group == "di:player:kill")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject di:player:kill fa fa-crosshairs" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "di:player:death")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject di:player:death fa fa-skull-crossbones" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "di:player:assist")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject di:player:assist fa fa-hands-helping" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group.includes("di:objective")) 
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject di:objective fa fa-bomb" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group.includes("di:round")) 
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject di:round fa fa-stopwatch" aria-hidden="true"></span>`;
         }
     } else if(currentVideo.game.id == DI_LEAGUE_OF_LEGENDS) {
-        if(value && currentVideo.allPins[value].type == "di") {
-            if(currentVideo.allPins[value].group == "CHAMPION_KILL")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_KILL fa fa-crosshairs" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "CHAMPION_DEATH")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_DEATH fa fa-skull-crossbones" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "CHAMPION_ASSIST")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject CHAMPION_ASSIST fa fa-hands-helping" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "ELITE_MONSTER_KILL")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject ELITE_MONSTER_KILL fa fa-dragon" aria-hidden="true"></span>`;
-            else if(currentVideo.allPins[value].group == "BUILDING_KILL")
-                icon = `<span id="${currentVideo.allPins[value].time}" class="pinObject BUILDING_KILL fa fa-gopuram" aria-hidden="true"></span>`; //monument
+        if(value && currentVideo.pins[value].type == "di") {
+            if(currentVideo.pins[value].group == "CHAMPION_KILL")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject CHAMPION_KILL fa fa-crosshairs" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "CHAMPION_DEATH")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject CHAMPION_DEATH fa fa-skull-crossbones" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "CHAMPION_ASSIST")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject CHAMPION_ASSIST fa fa-hands-helping" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "ELITE_MONSTER_KILL")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject ELITE_MONSTER_KILL fa fa-dragon" aria-hidden="true"></span>`;
+            else if(currentVideo.pins[value].group == "BUILDING_KILL")
+                icon = `<span id="${currentVideo.pins[value].time}" class="pinObject BUILDING_KILL fa fa-gopuram" aria-hidden="true"></span>`; //monument
         }
     }
 

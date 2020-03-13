@@ -14,13 +14,17 @@ var seeker;
 var videoClipDom = document.createElement('video'); //video playback on the viewer
 
 export default function openVideoViewer(video) {
-    if(videoClipDom == null)
-        videoClipDom = document.createElement('video');
+    if(videoClipDom == null) videoClipDom = document.createElement('video');
 
-    console.log(video.url);
+    videoClipDom.removeEventListener('timeupdate', onTimeUpdate);
+    videoClipDom.removeEventListener('loadeddata', onLoadVideo);
+    videoClipDom.addEventListener('timeupdate', onTimeUpdate);
+    videoClipDom.addEventListener('loadeddata', onLoadVideo, false);
+
+    //console.log(video.url);
     const videoSource = document.createElement('source');
     videoClipDom.setAttribute('id', `clip-play-${video.id}`);
-    videoSource.setAttribute('src', video.url);
+    videoSource.setAttribute('src', `http://localhost:9000/s/v2/recordings/${video.id}`);
     videoClipDom.setAttribute('style', "height: calc(100vh - 160px);width: 100%");
     videoClipDom.setAttribute('preload', 'auto');
     videoClipDom.appendChild(videoSource);
@@ -138,7 +142,7 @@ $('a[data-toggle="pill"]').on('shown.bs.tab', function () { //pause and cleanup 
     }
 })
 
-videoClipDom.addEventListener('timeupdate', function() {
+function onTimeUpdate() {
     if (videoClipDom.paused){
         document.getElementById("clip-PlayPause").innerHTML = '';
         const clickable = document.createElement('span');
@@ -162,9 +166,9 @@ videoClipDom.addEventListener('timeupdate', function() {
     }
 
     document.getElementById("clip-TimeStamp").innerText = currentTime + " / " + duration;
-});
+}
 
-videoClipDom.addEventListener('loadeddata', function() {
+function onLoadVideo() {
     if(!seeker) {
         seeker = $('#clip-Seeker')[0];
         noUiSlider.create(seeker, {
@@ -202,7 +206,7 @@ videoClipDom.addEventListener('loadeddata', function() {
         if(videoClipDom.currentTime != seeker.noUiSlider.get())
             videoClipDom.currentTime = seeker.noUiSlider.get();
     });
-}, false);
+}
 
 function uploadClip(videoId) {
     let title;

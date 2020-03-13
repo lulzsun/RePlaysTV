@@ -1,11 +1,9 @@
 import {shell} from 'electron';
-import urljoin from 'url-join';
 import moment from 'moment';
 import shortid from 'shortid';
-import BaseService from '../../../../src/service/BaseService';
 import VideoService from '../../../../src/service/VideoService';
+import MediaService from '../../../../src/service/MediaService';
 import TranscoderService from '../../../../src/service/TranscoderService';
-import request from 'request-promise-native';
 
 import openVideoViewer from './video-viewer';
 //
@@ -32,11 +30,7 @@ import openVideoViewer from './video-viewer';
 //     }
 // });
 
-const Settings = BaseService.getSettings();
-
 const vidList = document.getElementById('clip-list-div');
-const apiBase = Settings.getMainSetting('api');
-const baseUrl = apiBase.baseurl;
 
 var _videos = [];
 var sortType = "Newest";
@@ -48,15 +42,6 @@ var videoClipDom = document.getElementById("clip-play-UNKNOWN"); //video playbac
 TranscoderService.initialize();
 fetchAllClips();
 
-function doGet(urlPath) {
-return new Promise(
-    (accept) => {
-    request.get(urlPath).then(
-        (response) => {
-        accept(JSON.parse(response));
-        });
-    });
-}
 
 $("#clips-div").mousedown( function (e) {
     var element;
@@ -174,10 +159,11 @@ function fetchAllClips(game=null, type=null) {
         game = sortGame;
         type = sortType;
     }
+    _videos = [];
     var totalSize = 0;
-    document.getElementById("clip-TotalSize").innerText = '';
-    doGet(urljoin(baseUrl, 'api/recordings')).then(
-        (videos) => {
+    if(document.getElementById("clip-TotalSize")) document.getElementById("clip-TotalSize").innerText = '';
+    MediaService.getAllMedia().then(async (data) => {
+        let videos = data[1];
         vidList.innerHTML = '';
         videos
             .sort(function(left, right){
@@ -192,7 +178,7 @@ function fetchAllClips(game=null, type=null) {
             })
             .forEach(
             (video) => {
-                if(video.type == "clipped") {
+                if(video.createType == "clipped") {
                     if(document.getElementById("clip-Sort-Game|" + video.game.title) == null) {
                         const clickable = document.createElement('a');
                         clickable.setAttribute('id', 'clip-Sort-Game|' + video.game.title);
@@ -204,24 +190,23 @@ function fetchAllClips(game=null, type=null) {
                     if(game && game != "All Games") {
                         if(video.game.title == game) {
                             //console.log('Fetched video.id=%s', video.id);
-                            video._id = video.id;
+                            video.id = video.mediaId.replace("video-", "");
                             const newVidDom = makeVidDOM(video);
                             vidList.appendChild(newVidDom);
-                            _videos.push(video);
                             totalSize += parseFloat((video.fileSizeBytes * 0.000000001));
                         }
                     }
                     else {
                         //console.log('Fetched video.id=%s', video.id);
-                        video._id = video.id;
+                        video.id = video.mediaId.replace("video-", "");
                         const newVidDom = makeVidDOM(video);
                         vidList.appendChild(newVidDom);
-                        _videos.push(video);
                         totalSize += parseFloat((video.fileSizeBytes * 0.000000001));
                     }
+                    _videos.push(video);
                 }
             });
-            document.getElementById("clip-TotalSize").innerText = totalSize.toFixed(2) + " GB";
+            if(document.getElementById("clip-TotalSize")) document.getElementById("clip-TotalSize").innerText = totalSize.toFixed(2) + " GB";
         }
     );
 }
@@ -294,7 +279,7 @@ function makeVidDOM(video) {
     card_img.onerror = () => {
         card_img.setAttribute('src', './media/video_thumbnail_placeholder.png');
     }
-    card_img.setAttribute('src', video.posterUrl);
+    card_img.setAttribute('src', `${video.saveDir}/${video.poster}`);
     card_img.setAttribute('alt', 'Missing Thumbnail');
     card_img.setAttribute('style', 'position: absolute;');
     img_container.append(card_img);
@@ -363,7 +348,7 @@ function makeVidDOM(video) {
     card_hover_dmenu2_sub1.setAttribute('class', 'dropdown-item');
     card_hover_dmenu2_sub1.setAttribute('href', '#');
     card_hover_dmenu2_sub1.append('Show In Folder');
-    card_hover_dmenu2_sub1.onclick = () => shell.showItemInFolder(video.filePath);
+    card_hover_dmenu2_sub1.onclick = () => shell.showItemInFolder(`${video.saveDir}/${video.path.substring(1)}/${video.fileName}`);
     card_hover_dmenu2.append(card_hover_dmenu2_sub1);
 
     const card_hover_dmenu2_sub2 = document.createElement('a');
@@ -430,22 +415,27 @@ function deleteVideo(videoId, confirmation=true) {
             if (window.confirm(confirmString)) {
                 console.log(`Deleting video ${video._id} - ${video.fileName}`);
                 VideoService.deleteVideos([videoId]).then(
-                (docs) => {
-                    console.log(`Successfully deleted ${docs.length} documents`);
-                    document.getElementById(videoId).remove();
-                }
+                    (docs) => {
+                        console.log(`Successfully deleted ${docs.length} documents`);
+                        document.getElementById(videoId).remove();
+                    }
                 );
-                fetchAllClips(sortGame, sortType);
+                setTimeout(function(){ 
+                    fetchAllClips(sortGame, sortType);
+                }, 500);
             }
         } 
         else {
             console.log(`Deleting video ${video._id} - ${video.fileName}`);
-                VideoService.deleteVideos([videoId]).then(
+            VideoService.deleteVideos([videoId]).then(
                 (docs) => {
                     console.log(`Successfully deleted ${docs.length} documents`);
                     document.getElementById(videoId).remove();
                 }
             );
+            setTimeout(function(){ 
+                fetchAllClips(sortGame, sortType);
+            }, 500);
         }
     });
     $("#v-pills-clips-tab").click();

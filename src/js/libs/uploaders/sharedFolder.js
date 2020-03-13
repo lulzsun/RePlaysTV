@@ -1,20 +1,20 @@
 import fs from 'fs';
 import shortid from 'shortid';
-import { GameDVRService } from '../../../../../../src/service/GameDVRService';
 import { log } from '../../../../../../src/core/Logger';
 import ReplaysSettingsService from '../../replaysSettingsService';
 import {createUploadNotification} from '../../uploads';
 
 function upload(location, video, title='untitled') {
   return new Promise((accept, reject) => {
-    let thumbPath = GameDVRService.getSaveDir() + video.posterUrl.replace('http://localhost:9000/s/thumbnails', '').replace(/%20/g, ' ');
+    let thumbPath = `${video.saveDir}/${video.poster}`;
 
     fs.copyFile(thumbPath, thumbPath.replace('-thumb', '-uthumb'), () => {
-      thumbPath = thumbPath.replace('-thumb', '-uthumb').replace(GameDVRService.getSaveDir(), 'http://localhost:9000/s/thumbnails').replace(/ /g, '%20');
+      thumbPath = thumbPath.replace('-thumb', '-uthumb');
       console.log(thumbPath);
     });
 
-    let size = fs.lstatSync(video.filePath).size;
+    let filePath = `${video.saveDir}/${video.path.substring(1)}/${video.fileName}`;
+    let size = fs.lstatSync(filePath).size;
     let bytes = 0;
     let notfication = createUploadNotification(video, title);
 
@@ -24,7 +24,7 @@ function upload(location, video, title='untitled') {
         location = `${location}\\${title}-${shortid.generate()}.mp4`;
     } else location = `${location}\\${title}.mp4`;
 
-    var rd = fs.createReadStream(video.filePath);
+    var rd = fs.createReadStream(filePath);
     rd.on('error', function(err) {
         log.error(`Error occured during uploading: ${title}`);
         log.error(err);
