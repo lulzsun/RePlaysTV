@@ -85,6 +85,12 @@ const GENERAL = [
     SETTING_MAIN_REMEMBER_ME,
     SETTING_MAIN_DETECT_ELEVATED_PROCESSES,
     SETTING_KB_TAKE_SCREENSHOT,
+    SETTING_AUTO_UPLOAD_CLIP,   //this is disabled for now, since it will try to upload to plays.
+    SETTING_HIGHLIGHT_LENGTH_SECS, //replay
+    SETTING_KB_SAVE_HIGHLIGHT,
+    SETTING_KB_BOOKMARK,
+    SETTING_IR_LENGTH_SECS,
+    SETTING_KB_INSTANT_REPLAY,
     SETTING_OVERLAY_LOCATION,
     SETTING_SHOW_RECORDING_TIMER,
 ]
@@ -94,12 +100,6 @@ const VIDEO = [
     SETTING_AUTO_RECORD,
     SETTING_MANUAL_RECORD,
     SETTING_KB_START_STOP_REC,
-    SETTING_AUTO_UPLOAD_CLIP,   //this is disabled for now, since it will try to upload to plays.
-    SETTING_HIGHLIGHT_LENGTH_SECS, //replay
-    SETTING_KB_SAVE_HIGHLIGHT,
-    SETTING_KB_BOOKMARK,
-    SETTING_IR_LENGTH_SECS,
-    SETTING_KB_INSTANT_REPLAY,
     SETTING_VIDEO_RESOLUTION,
     SETTING_VIDEO_FRAMERATE,
     SETTING_VIDEO_BITRATE,
@@ -164,6 +164,11 @@ function initGeneral() {
             $('#sett-rememberMe').prop('checked', setting.rememberMe); 
             $('#sett-detectElevatedProcesses').prop('checked', setting.detectElevatedProcesses); 
             document.getElementById("sett-keybindTakeScreenshot").innerText = setting.keybindTakeScreenshot;
+            document.getElementById("sett-highlightLengthSecs").innerText = setting.highlightLengthSecs + " Seconds";
+            document.getElementById("sett-keybindSaveHighlight").innerText = setting.keybindSaveHighlight;
+            document.getElementById("sett-keybindBookmark").innerText = setting.keybindBookmark;
+            document.getElementById("sett-instantReplayLengthSecs").innerText = setting.instantReplayLengthSecs + " Seconds";
+            document.getElementById("sett-keybindInstantReplay").innerText = setting.keybindInstantReplay;
             $('#sett-overlayLocation-'+setting.overlayLocation).prop('checked', setting.overlayLocation); 
             $('#sett-showRecordingTimer').prop('checked', setting.showRecordingTimer); 
             //console.log(setting);
@@ -191,11 +196,6 @@ function initVideo() {
             if(!setting.manualRecord && !setting.autoRecord)
                 $('#sett-offRecord').prop('checked', true); 
             document.getElementById("sett-keybindStartStopRec").innerText = setting.keybindStartStopRec;
-            document.getElementById("sett-highlightLengthSecs").innerText = setting.highlightLengthSecs + " Seconds";
-            document.getElementById("sett-keybindSaveHighlight").innerText = setting.keybindSaveHighlight;
-            document.getElementById("sett-keybindBookmark").innerText = setting.keybindBookmark;
-            document.getElementById("sett-instantReplayLengthSecs").innerText = setting.instantReplayLengthSecs + " Seconds";
-            document.getElementById("sett-keybindInstantReplay").innerText = setting.keybindInstantReplay;
             if(setting.videoFramerate == 30){
                 if(setting.videoResolution == 480 && setting.videoBitrate == 5) 
                     $('#sett-qualityPresets-low').prop('checked', true); 
@@ -374,15 +374,6 @@ $("#settings-general-div").mousedown(function (e) {
         if(element.id.includes("detectElevatedProcesses")){
             SettingsService.setSetting(SETTING_MAIN_DETECT_ELEVATED_PROCESSES, !$(element).is(":checked"));
         }
-        if(element.id.includes("keybindTakeScreenshot")){
-            onKeybind(element, SETTING_KB_TAKE_SCREENSHOT);
-        }
-        if(element.id.includes("overlayLocation")){
-            SettingsService.setSetting(SETTING_OVERLAY_LOCATION, element.id.split("-")[2]);
-        }
-        if(element.id.includes("showRecordingTimer")){
-            SettingsService.setSetting(SETTING_SHOW_RECORDING_TIMER, !$(element).is(":checked"));
-        }
         if(element.id.includes("theme")){
             if(element.id.split("-")[2]) {
                 ReplaysSettingsService.setSetting(SETTING_REPLAYS_THEME, element.id.split("-")[2]);
@@ -395,39 +386,8 @@ $("#settings-general-div").mousedown(function (e) {
                     document.getElementById("css-theme").href = "./css/bootstrap.css";
             }
         }
-    }
-});
-
-$("#settings-video-div").mousedown(function (e) {
-    var element;
-    if(!$(e.target)[0].id) {
-        element = $(e.target)[0].parentElement;
-        if(element.className.includes('custom-control')) {
-            element = element.children[0];
-        }
-    }else element = $(e.target)[0];
-
-    if(e.which == 1 && element.id.includes("sett-")) { //left click
-        if(element.id.includes("autoRecord")){
-            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "automatic");
-            SettingsService.setSetting(SETTING_AUTO_RECORD, !$(element).is(":checked"));
-            SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
-        }
-        if(element.id.includes("manualRecord")){
-            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "manual");
-            SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
-            SettingsService.setSetting(SETTING_MANUAL_RECORD, !$(element).is(":checked"));
-        }
-        if(element.id.includes("desktopRecord")){
-            alert("This feature is not reimplemented yet.");
-        }
-        if(element.id.includes("offRecord")){
-            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "off");
-            SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
-            SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
-        }
-        if(element.id.includes("keybindStartStopRec")){
-            onKeybind(element, SETTING_KB_START_STOP_REC);
+        if(element.id.includes("keybindTakeScreenshot")){
+            onKeybind(element, SETTING_KB_TAKE_SCREENSHOT);
         }
         if(element.id.includes("highlightLengthSecs")){
             if(element.id.split("-")[2]) {
@@ -449,6 +409,43 @@ $("#settings-video-div").mousedown(function (e) {
         }
         if(element.id.includes("keybindInstantReplay")){
             onKeybind(element, SETTING_KB_INSTANT_REPLAY);
+        }
+        if(element.id.includes("overlayLocation")){
+            SettingsService.setSetting(SETTING_OVERLAY_LOCATION, element.id.split("-")[2]);
+        }
+        if(element.id.includes("showRecordingTimer")){
+            SettingsService.setSetting(SETTING_SHOW_RECORDING_TIMER, !$(element).is(":checked"));
+        }
+    }
+});
+
+$("#settings-video-div").mousedown(function (e) {
+    var element;
+    if(!$(e.target)[0].id) {
+        element = $(e.target)[0].parentElement;
+        if(element.className.includes('custom-control')) {
+            element = element.children[0];
+        }
+    }else element = $(e.target)[0];
+
+    if(e.which == 1 && element.id.includes("sett-")) { //left click
+        if(element.id.includes("autoRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "automatic");
+            SettingsService.setSetting(SETTING_AUTO_RECORD, !$(element).is(":checked"));
+            SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
+        } else if(element.id.includes("manualRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "manual");
+            SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
+            SettingsService.setSetting(SETTING_MANUAL_RECORD, !$(element).is(":checked"));
+        } else if(element.id.includes("offRecord")){
+            SettingsService.setSetting(SETTING_VIDEO_RECORDING_MODE, "off");
+            SettingsService.setSetting(SETTING_AUTO_RECORD, $(element).is(":checked"));
+            SettingsService.setSetting(SETTING_MANUAL_RECORD, $(element).is(":checked"));
+        } else if(element.id.includes("desktopRecord")){
+            alert("This feature is not reimplemented yet.");
+        }
+        if(element.id.includes("keybindStartStopRec")){
+            onKeybind(element, SETTING_KB_START_STOP_REC);
         }
         if(element.id.includes("qualityPresets")){
             if(element.id.split("-")[2] == "low"){

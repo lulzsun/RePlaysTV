@@ -14,7 +14,7 @@
     <br><a>Start and stop recording by using a hotkey while in game.</a>
     </label>
 </div>
-<div class="custom-control custom-radio">
+<div class="custom-control custom-radio"> <!-- Hidden Until Reimplemented -->
     <input id="sett-desktopRecord" type="radio" name="recordingMode" class="custom-control-input" disabled>
     <label for="sett-desktopRecord" class="custom-control-label">
     <b>Desktop</b>
@@ -34,80 +34,6 @@
 <button id="sett-keybindStartStopRec" class="btn btn-outline-primary" type="button" style="min-width: 120px;height: 35px;">
     N/A
 </button>
-
-<h5>&nbsp;</h5>
-<h5>Replay Tools</h5>
-<h6>Clip</h6>
-<a>Save clips of what just happened while you are in game.</a><br>
-<div class="custom-control custom-checkbox" hidden>
-    <input id="sett-" type="checkbox" class="custom-control-input" disabled>
-    <label for="sett-" class="custom-control-label">Automatically Upload Clips</label>
-</div>
-<div>
-    <div style="float: left; padding-right: 3px;">
-        <b>Clip Length</b>
-        <br>
-        <button id="sett-highlightLengthSecs" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            30 Seconds
-        </button>
-        <div class="dropdown-menu">
-            <a id="sett-highlightLengthSecs-5" class="dropdown-item" href="#">5 Seconds</a>
-            <a id="sett-highlightLengthSecs-10" class="dropdown-item" href="#">10 Seconds</a>
-            <a id="sett-highlightLengthSecs-15" class="dropdown-item" href="#">15 Seconds</a>
-            <a id="sett-highlightLengthSecs-20" class="dropdown-item" href="#">20 Seconds</a>
-            <a id="sett-highlightLengthSecs-25" class="dropdown-item" href="#">25 Seconds</a>
-            <a id="sett-highlightLengthSecs-30" class="dropdown-item" href="#">30 Seconds</a>
-            <a id="sett-highlightLengthSecs-60" class="dropdown-item" href="#">60 Seconds</a>
-            <a id="sett-highlightLengthSecs-90" class="dropdown-item" href="#">90 Seconds</a>
-        </div>
-    </div>
-    <div>
-        <b>Save a Clip</b>
-        <br>
-        <button id="sett-keybindSaveHighlight" class="btn btn-outline-primary" type="button" style="min-width: 120px;height: 35px;">
-            N/A
-        </button>
-    </div>
-</div>
-
-<h6>&nbsp;</h6>
-<h6>Bookmark</h6>
-<a>Bookmark a moment in game to find it later in your recording</a><br>
-<b>Add Bookmark</b>
-<br>
-<button id="sett-keybindBookmark" class="btn btn-outline-primary" type="button" style="min-width: 120px;height: 35px;">
-    N/A
-</button>
-
-<h6>&nbsp;</h6>
-<h6>Instant Replay</h6>
-<a>Watch what just happened while you are in game. This won't pause your game and replays are available to watch later.</a><br>
-<div>
-    <div style="float: left; padding-right: 3px;">
-        <b>Replay Length</b>
-        <br>
-        <button id="sett-instantReplayLengthSecs" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            30 Seconds
-        </button>
-        <div class="dropdown-menu">
-            <a id="sett-instantReplayLengthSecs-5" class="dropdown-item" href="#">5 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-10" class="dropdown-item" href="#">10 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-15" class="dropdown-item" href="#">15 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-20" class="dropdown-item" href="#">20 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-25" class="dropdown-item" href="#">25 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-30" class="dropdown-item" href="#">30 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-60" class="dropdown-item" href="#">60 Seconds</a>
-            <a id="sett-instantReplayLengthSecs-90" class="dropdown-item" href="#">90 Seconds</a>
-        </div>
-    </div>
-    <div>
-        <b>Watch Replay</b>
-        <br>
-        <button id="sett-keybindInstantReplay" class="btn btn-outline-primary" type="button" style="min-width: 120px;height: 35px;">
-            N/A
-        </button>
-    </div>
-</div>
 
 <h5>&nbsp;</h5>
 <h5>Quality Presets</h5>
@@ -173,6 +99,24 @@
             <a id="sett-videoBitrate-50" class="dropdown-item" href="#">50Mbps</a>
         </div>
     </div>
+</div>
+
+<h5>&nbsp;</h5>
+<h5>Capture Method</h5>
+<a>Specify media capture and transcoding method</a>
+<div class="custom-control custom-radio">
+    <input id="sett-legacyCapture" type="radio" name="captureMode" class="custom-control-input">
+    <label for="sett-legacyCapture" class="custom-control-label">
+    <b>Legacy Mode</b>
+    <br><a>Capture gameplay using the Plays LTC process (Recommended)</a>
+    </label>
+</div>
+<div class="custom-control custom-radio">
+    <input id="sett-experimentalCapture" type="radio" name="captureMode" class="custom-control-input">
+    <label for="sett-experimentalCapture" class="custom-control-label">
+    <b>Experimental Mode</b>
+    <br><a>Capture gameplay using the Electron Desktop Capturer API (In Beta)</a>
+    </label>
 </div>
 
 <h5>&nbsp;</h5>
