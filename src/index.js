@@ -95,11 +95,13 @@ function maximizeWindow () {
 
 function init() {
     $("#sessions-div").load("./html/sessions.html"); 
-    $("#clips-div").load("./html/clips.html"); 
+    $("#clips-div").load("./html/clips.html");
+    $("#screenshots-div").load("./html/screenshots.html");
     $("#uploads-div").load("./html/uploads.html"); 
     $("#settings-div").load("./html/settings.html"); 
     $("#video-editor-div").load("./html/video-editor.html"); 
     $("#video-viewer-div").load("./html/video-viewer.html"); 
+    $("#screenshot-viewer-div").load("./html/screenshot-viewer.html"); 
 
     document.getElementById("loader").style.visibility = "hidden";
     document.getElementById("app").style.visibility = "visible";
