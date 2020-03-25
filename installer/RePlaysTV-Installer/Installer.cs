@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Net;
 using System.Security.Cryptography;
@@ -142,12 +143,16 @@ namespace RePlaysTV_Installer {
             StreamReader configFile = new StreamReader(workDirectory + "\\src-patch\\config.txt");
             while ((line = configFile.ReadLine()) != null) {
                 if (!line.StartsWith("#") && !String.IsNullOrEmpty(line)) { // if it is not a comment
-                    if(line.StartsWith("ModifyFileAtLine")) {
-                        string fileName = line.Split(new string[] { "\"" }, 3, StringSplitOptions.None)[1];
-                        string lineNumber = line.Replace("ModifyFileAtLine \"" + fileName + "\" ", ""); lineNumber = lineNumber.Substring(0, lineNumber.IndexOf(' '));
-                        string newLine = line.Replace("ModifyFileAtLine \"" + fileName + "\" " + lineNumber + " ", "");
+                    if(line.StartsWith("ModifyFileAtLine") || line.StartsWith("AppendToFileAtLine")) {
+                        string command = "ModifyFileAtLine";
+                        if (line.StartsWith("AppendToFileAtLine"))
+                            command = "AppendToFileAtLine";
 
-                        if(lineNumber.Contains("-")) {
+                        string fileName = line.Split(new string[] { "\"" }, 3, StringSplitOptions.None)[1];
+                        string lineNumber = line.Replace(command + " \"" + fileName + "\" ", ""); lineNumber = lineNumber.Substring(0, lineNumber.IndexOf(' '));
+                        string newLine = line.Replace(command + " \"" + fileName + "\" " + lineNumber + " ", "");
+
+                        if(lineNumber.Contains("-") && command == "ModifyFileAtLine") {
                             int start = Int32.Parse(lineNumber.Split('-')[0]);
                             int end = Int32.Parse(lineNumber.Split('-')[1]);
 
@@ -156,7 +161,10 @@ namespace RePlaysTV_Installer {
                                 counter++;
                             }
                         } else {
-                            ModifyFileAtLine(newLine, workDirectory + "\\temp" + fileName, Int32.Parse(lineNumber), richTextBox1);
+                            if(command == "AppendToFileAtLine")
+                                AppendToFileAtLine(newLine, workDirectory + "\\temp" + fileName, Int32.Parse(lineNumber), richTextBox1);
+                            else
+                                ModifyFileAtLine(newLine, workDirectory + "\\temp" + fileName, Int32.Parse(lineNumber), richTextBox1);
                             counter++;
                         }
                     }
@@ -198,6 +206,13 @@ namespace RePlaysTV_Installer {
         public static void ModifyFileAtLine(string newText, string fileName, int line_to_edit, RichTextBox richTextBox1 = null) {
             string[] arrLine = File.ReadAllLines(fileName);
             arrLine[line_to_edit - 1] = newText;
+            File.WriteAllLines(fileName, arrLine);
+            Log(fileName + ">>> Writing to line " + line_to_edit + ": " + newText, richTextBox1);
+        }
+
+        public static void AppendToFileAtLine(string newText, string fileName, int line_to_edit, RichTextBox richTextBox1 = null) {
+            var arrLine = File.ReadAllLines(fileName).ToList();
+            arrLine.Insert(line_to_edit + 1, newText);
             File.WriteAllLines(fileName, arrLine);
             Log(fileName + ">>> Writing to line " + line_to_edit + ": " + newText, richTextBox1);
         }
