@@ -9,6 +9,7 @@ import ReplaysSettingsService, {
     SETTING_REPLAYS_UPDATE_FOLDER_DIR,
     SETTING_REPLAYS_UPDATE_CHECK_FREQ,
     SETTING_REPLAYS_UPDATE_DELETE_OLD,
+    SETTING_REPLAYS_CAPTURE_METHOD,
 } from './replaysSettingsService';
 import { SETTING_EXTERNAL_VIDEO_DIRS } from '../../../../src/service/FolderService';
 import SettingsService, {
@@ -215,6 +216,11 @@ function initVideo() {
             //console.log(setting);
         }else console.error("Video settings missing?");
     })
+
+    const captureMethod = ReplaysSettingsService.getSetting(SETTING_REPLAYS_CAPTURE_METHOD);
+    if(captureMethod)
+        $(`#sett-captureMethod-${captureMethod}`).prop('checked', true); 
+    else console.error("Capture mode setting missing?");
 }
 
 function initAudio() {
@@ -490,6 +496,13 @@ $("#settings-video-div").mousedown(function (e) {
                 SettingsService.setSetting(SETTING_VIDEO_BITRATE, element.id.split("-")[2]);
                 document.getElementById("sett-videoBitrate").innerText = element.id.split("-")[2] + "Mbps";
                 $('#sett-qualityPresets-cust').prop('checked', true); 
+            }
+        }
+        if(element.id.includes("captureMethod")){
+            if(element.id.split("-")[2] == "legacy"){
+                ReplaysSettingsService.setSetting(SETTING_REPLAYS_CAPTURE_METHOD, 'legacy');
+            }else if(element.id.split("-")[2] == "experimental"){
+                ReplaysSettingsService.setSetting(SETTING_REPLAYS_CAPTURE_METHOD, 'experimental');
             }
         }
         if(element.id.includes("recordMouseCursor")){

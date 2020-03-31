@@ -25,6 +25,8 @@ export const SETTING_REPLAYS_UPDATE_FOLDER_DIR = 'updateFolderDir';
 export const SETTING_REPLAYS_UPDATE_CHECK_FREQ = 'updateCheckFreq';
 export const SETTING_REPLAYS_UPDATE_DELETE_OLD = 'deleteOldVersion';
 
+export const SETTING_REPLAYS_CAPTURE_METHOD = 'captureMethod';
+
 export const UPLOAD = [
     SETTING_REPLAYS_THEME,
     SETTING_REPLAYS_UPLOAD_DEFAULT,
@@ -40,6 +42,7 @@ export const UPLOAD = [
     SETTING_REPLAYS_UPDATE_FOLDER_DIR,
     SETTING_REPLAYS_UPDATE_CHECK_FREQ,
     SETTING_REPLAYS_UPDATE_DELETE_OLD,
+    SETTING_REPLAYS_CAPTURE_METHOD,
 ]
 
 const defaultSettings = {
@@ -58,6 +61,7 @@ const defaultSettings = {
     [SETTING_REPLAYS_UPDATE_FOLDER_DIR]: '',
     [SETTING_REPLAYS_UPDATE_CHECK_FREQ]: 3,
     [SETTING_REPLAYS_UPDATE_DELETE_OLD]: true,
+    [SETTING_REPLAYS_CAPTURE_METHOD]: 'legacy',
 }
 
 export default class ReplaysSettingsService {

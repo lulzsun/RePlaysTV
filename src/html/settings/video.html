@@ -14,7 +14,7 @@
     <br><a>Start and stop recording by using a hotkey while in game.</a>
     </label>
 </div>
-<div class="custom-control custom-radio"> <!-- Hidden Until Reimplemented -->
+<div hidden class="custom-control custom-radio"> <!-- Hidden Until Reimplemented -->
     <input id="sett-desktopRecord" type="radio" name="recordingMode" class="custom-control-input" disabled>
     <label for="sett-desktopRecord" class="custom-control-label">
     <b>Desktop</b>
@@ -103,23 +103,23 @@
 
 <h5>&nbsp;</h5>
 <h5>Capture Method</h5>
-<a>Specify media capture and transcoding method</a>
+<a>Specify media capture method, transcoding method, and game detection method</a><br>
 <div class="custom-control custom-radio">
-    <input id="sett-legacyCapture" type="radio" name="captureMode" class="custom-control-input">
-    <label for="sett-legacyCapture" class="custom-control-label">
+    <input id="sett-captureMethod-legacy" type="radio" name="captureMethod" class="custom-control-input">
+    <label for="sett-captureMethod-legacy" class="custom-control-label">
     <b>Legacy Mode</b>
     <br><a>Capture gameplay using the Plays LTC process (Recommended)</a>
     </label>
 </div>
 <div class="custom-control custom-radio">
-    <input id="sett-experimentalCapture" type="radio" name="captureMode" class="custom-control-input">
-    <label for="sett-experimentalCapture" class="custom-control-label">
+    <input id="sett-captureMethod-experimental" type="radio" name="captureMethod" class="custom-control-input">
+    <label for="sett-captureMethod-experimental" class="custom-control-label">
     <b>Experimental Mode</b>
     <br><a>Capture gameplay using the Electron Desktop Capturer API (In Beta)</a>
     </label>
 </div>
+<p><small>*Changes to these settings require a full restart to be active</small></p>
 
-<h5>&nbsp;</h5>
 <h5>Recording Display Options</h5>
 <div class="custom-control custom-checkbox">
     <input id="sett-recordMouseCursor" type="checkbox" class="custom-control-input">
