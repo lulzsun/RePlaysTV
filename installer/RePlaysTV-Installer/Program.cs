@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace RePlaysTV_Installer {
 
     static class Program {
-        public const string VERSION = "3.0.3";
+        public const string VERSION = "3.0.4";
         //public static string playsDirectory = Environment.GetEnvironmentVariable("LocalAppData") + "\\Plays";
         public static string workDirectory = null;
 
