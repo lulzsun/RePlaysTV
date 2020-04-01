@@ -41,7 +41,7 @@ function initialize() {
     videoClipDom = document.getElementById("clip-play-UNKNOWN");
 
     if(!vidList) { //if vidList is found to be null, reinitialize. this happens occasionally when the dom loads slower than script
-        setTimeout(initialize(), 1000);
+        setTimeout(initialize, 1000);
     } else {
         fetchAllClips();
     }

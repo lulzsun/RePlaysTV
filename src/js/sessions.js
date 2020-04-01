@@ -3,7 +3,6 @@ import moment from 'moment';
 import shortid from 'shortid';
 import VideoService from '../../../../src/service/VideoService';
 import MediaService from '../../../../src/service/MediaService';
-
 import openVideoEditor from './video-editor';
 
 var vidList;
@@ -19,7 +18,7 @@ function initialize() {
     videoSessDom = document.getElementById("sess-play-UNKNOWN");
 
     if(!vidList) { //if vidList is found to be null, reinitialize. this happens occasionally when the dom loads slower than script
-        setTimeout(initialize(), 1000);
+        setTimeout(initialize, 1000);
     } else {
         fetchAllSessions();
     }
