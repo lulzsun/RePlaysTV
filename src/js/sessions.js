@@ -3,20 +3,27 @@ import moment from 'moment';
 import shortid from 'shortid';
 import VideoService from '../../../../src/service/VideoService';
 import MediaService from '../../../../src/service/MediaService';
-import TranscoderService from '../../../../src/service/TranscoderService';
 
 import openVideoEditor from './video-editor';
 
-const vidList = document.getElementById('session-list-div');
-
+var vidList;
 var _videos = [];
 var sortType = "Newest";
 var sortGame = "All Games";
 var sortView = "Grid";
-var videoSessDom = document.getElementById("sess-play-UNKNOWN"); //video playback on the editor
+var videoSessDom; //video playback on the editor
 
-TranscoderService.initialize();
-fetchAllSessions();
+initialize();
+function initialize() {
+    vidList = document.getElementById('session-list-div');
+    videoSessDom = document.getElementById("sess-play-UNKNOWN");
+
+    if(!vidList) { //if vidList is found to be null, reinitialize. this happens occasionally when the dom loads slower than script
+        setTimeout(initialize(), 1000);
+    } else {
+        fetchAllSessions();
+    }
+}
 
 //sessions tab
 $("#sessions-div").mousedown( function (e) {

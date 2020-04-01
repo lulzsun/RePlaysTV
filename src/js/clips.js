@@ -3,8 +3,6 @@ import moment from 'moment';
 import shortid from 'shortid';
 import VideoService from '../../../../src/service/VideoService';
 import MediaService from '../../../../src/service/MediaService';
-import TranscoderService from '../../../../src/service/TranscoderService';
-
 import openVideoViewer from './video-viewer';
 //
 // example code gets a unknown cyphier error, see issue #4
@@ -30,18 +28,24 @@ import openVideoViewer from './video-viewer';
 //     }
 // });
 
-const vidList = document.getElementById('clip-list-div');
-
+var vidList;
 var _videos = [];
 var sortType = "Newest";
 var sortGame = "All Games";
 var sortView = "Grid";
+var videoClipDom; //video playback on the viewer
 
-var videoClipDom = document.getElementById("clip-play-UNKNOWN"); //video playback on the viewer
+initialize();
+function initialize() {
+    vidList = document.getElementById('clip-list-div');
+    videoClipDom = document.getElementById("clip-play-UNKNOWN");
 
-TranscoderService.initialize();
-fetchAllClips();
-
+    if(!vidList) { //if vidList is found to be null, reinitialize. this happens occasionally when the dom loads slower than script
+        setTimeout(initialize(), 1000);
+    } else {
+        fetchAllClips();
+    }
+}
 
 $("#clips-div").mousedown( function (e) {
     var element;
