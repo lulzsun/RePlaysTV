@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import VideoService from '../../../../src/service/VideoService';
 import MediaService from '../../../../src/service/MediaService';
 import openVideoEditor from './video-editor';
+import TranscoderService from '../../../../src/service/TranscoderService';
 
 var vidList;
 var _videos = [];
@@ -20,6 +21,7 @@ function initialize() {
     if(!vidList) { //if vidList is found to be null, reinitialize. this happens occasionally when the dom loads slower than script
         setTimeout(initialize, 1000);
     } else {
+        TranscoderService.initialize();
         fetchAllSessions();
     }
 }
