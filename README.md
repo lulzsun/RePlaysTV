@@ -31,6 +31,7 @@ Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
   2. Close out of Plays if it is currently running
   3. Open the installer executable 
+     * Note (Bug): The installer directory should not contain a space (e.g C:\Downloads\Random Folder\Installer\ vs C:\Downloads\Random_Folder\Installer\)
   4. Locate/confirm the location of Plays
      * Should be located at `~/AppData/Local/Plays`
   5. Hit install and wait for the completion message popup
