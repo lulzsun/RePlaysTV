@@ -45,7 +45,7 @@ ModifyFileAtLine "\src\core\Logger.js" 278 export const updaterLog = Loggify(upd
 ModifyFileAtLine "\src\core\Logger.js" 28 touch.sync(UPDATERLOGPATH);
 
 # LTCMockinterface 
-ModifyFileAtLine "\src\controller\LTCInterface.js" 8 import ReplaysSettingsService, {SETTING_REPLAYS_CAPTURE_METHOD} from '../../resources/auger/replays/js/replaysSettingsService'
+ModifyFileAtLine "\src\controller\LTCInterface.js" 8 import ReplaysSettingsService, {SETTING_REPLAYS_CAPTURE_METHOD} from '../../resources/auger/replays/js/replaysSettingsService';
 ModifyFileAtLine "\src\controller\LTCInterface.js" 37 if (Utils.isOSX() || ReplaysSettingsService.getSetting(SETTING_REPLAYS_CAPTURE_METHOD) == 'experimental') {
 
 # AutoLaunch correction
