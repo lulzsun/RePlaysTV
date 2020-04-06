@@ -93,7 +93,7 @@ namespace RePlaysTV_Installer {
 
         public static void StartExtract(StreamWriter SW, string workDirectory=null) { //part one of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
-            else SW.WriteLine("cd /d " + workDirectory);
+            else SW.WriteLine("cd /d \"" + workDirectory + "\"");
 
             SW.WriteLine("nodejs-portable.exe");
             if (Directory.Exists(workDirectory + "\\temp") && (bool)installSettings["cleanInstall"] == true) {
