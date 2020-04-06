@@ -176,7 +176,8 @@ $("#video-editor-div").dblclick(function(e) { //double left click functions
     var element = $(e.target)[0];
 
     if(element.className.includes("noUi-handle") || element.className.includes("noUi-connect") || 
-       element.parentElement.className.includes("noUi-tooltip") || element.className.includes("noUi-tooltip")) {
+       element.parentElement.className.includes("noUi-tooltip") || element.className.includes("noUi-tooltip") ||
+       element.className.includes("noUi-touch-area")) {
         var xpos = window.event.x + document.getElementById("sess-SeekBar").scrollLeft - 227;
         var result = ( xpos / ( document.getElementById("sess-Seeker").clientWidth / videoSessDom.duration ) )
                         .toFixed(2);
@@ -199,10 +200,15 @@ $("#video-editor-div").on('keydown', function(event) { //clip editor key control
 function createPins(allPins, update=false) {
     var sliderPins = [];
 
-    Object.keys(allPins).forEach(function(key) {
-        console.log(key + ':', allPins[key]);
+    for(var i=0; i<Object.keys(allPins).length; i++) { //this should be faster? still pretty slow. push() is probably the issue? make this async?
+        let key = Object.keys(allPins)[i];
+        //console.log(key + ':', allPins[key]);
         sliderPins.push(allPins[key].time/1000);
-    });
+    }
+    // Object.keys(allPins).forEach(function(key) {
+    //     //console.log(key + ':', allPins[key]);
+    //     sliderPins.push(allPins[key].time/1000);
+    // });
 
     if(tempAddPins) {
         tempAddPins.forEach(pin => {
