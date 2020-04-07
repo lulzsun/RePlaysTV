@@ -123,6 +123,7 @@ namespace RePlaysTV_Installer {
         public static void StartModify(StreamWriter SW, string VERSION, string workDirectory = null, RichTextBox richTextBox1 = null) { //part three of installation
             if (workDirectory == null) workDirectory = Directory.GetCurrentDirectory();
 
+            SW.WriteLine("npm install electron-prebuilt-compile@4.0.0 --save-dev --save-exact");
             SW.WriteLine("cd ..");
             SW.WriteLine("rd /s /q .\\temp\\.cache");
             SW.WriteLine("mkdir .\\temp\\resources\\auger\\replays");
