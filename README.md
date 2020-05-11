@@ -25,7 +25,7 @@ Installation instructions below.
 ![Preview](/resources/preview.png)
 
 # Installation
-You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here](https://web.archive.org/web/20191212211927/https://app-updates.plays.tv/builds/PlaysSetup.exe).
+You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here](https://www.dropbox.com/s/11b5fptw2qsjmn5/PlaysSetup.exe).
 
 Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
