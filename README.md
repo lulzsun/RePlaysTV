@@ -27,6 +27,8 @@ Installation instructions below.
 # Installation
 You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here](https://www.dropbox.com/s/11b5fptw2qsjmn5/PlaysSetup.exe).
 
+Note: When installing the original Plays client, if the message 'Could not launch - make sure your internet is connected and retry' pops up, exit Plays and continue with the following instructions.
+
 Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
   2. Close out of Plays if it is currently running
