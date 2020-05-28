@@ -26,14 +26,8 @@ mono_crash.*
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/cache
-[Rr]elease/temp
-[Rr]elease/src-patch
-[Rr]elease/src
-[Rr]elease/RePlaysTV-Installer.exe
-[Rr]elease/RePlaysTV-Installer.exe.config
-[Rr]elease/nodejs-portable.log
-[Rr]elease/Release.7z
+[Rr]elease/
+
 x64/
 x86/
 [Aa][Rr][Mm]/
@@ -195,8 +189,6 @@ publish/
 # in these scripts will be unencrypted
 PublishScripts/
 
-# NuGet Packages
-*.nupkg
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
