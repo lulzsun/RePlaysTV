@@ -26,8 +26,14 @@ mono_crash.*
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+[Rr]elease/cache
+[Rr]elease/temp
+[Rr]elease/src-patch
+[Rr]elease/src
+[Rr]elease/RePlaysTV-Installer.exe
+[Rr]elease/RePlaysTV-Installer.exe.config
+[Rr]elease/nodejs-portable.log
+[Rr]elease/Release.7z
 x64/
 x86/
 [Aa][Rr][Mm]/
