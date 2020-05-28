@@ -5413,6 +5413,12 @@
 				"title": "Microsoft Office"
 			},
 			{
+				"id": "cf63e0abe2953ecdaf134f7ee2d1c8cf",
+				"detect_exe": "LocalBridge.exe",
+				"nongame_type": "blacklist",
+				"title": "LocalBridge.exe"
+			},
+			{
 				"id": "0454520a3f52aaba40c14b2117661889",
 				"detect_exe": "sllauncher.exe",
 				"nongame_type": "blacklist",

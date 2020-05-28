@@ -27,7 +27,7 @@ Installation instructions below.
 # Installation
 You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here](https://www.dropbox.com/s/11b5fptw2qsjmn5/PlaysSetup.exe).
 
-Note: When installing the original Plays client, if the message 'Could not launch - make sure your internet is connected and retry' pops up, exit Plays and continue with the following instructions.
+Note: When installing the original Plays client, if Medal.tv's webpage pops out, close out of it and continue on with the instructions. It appears that Medal has taken the plays.tv domain so now their webpage loads instead of an error message.
 
 Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)
