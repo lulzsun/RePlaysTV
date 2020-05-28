@@ -20252,5 +20252,17 @@
 				"title": "Pretzel.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "7adeb6ff85f480ce3035560158e2ba1d",
+		"title": "Microsoft ZuneVideo",
+		"detections": [
+			{
+				"id": "24f4a78516a878f62ea0f8e2ab889569",
+				"detect_exe": "Video.UI.exe",
+				"nongame_type": "blacklist",
+				"title": "Video.UI.exe"
+			}
+		]
 	}
 ]
