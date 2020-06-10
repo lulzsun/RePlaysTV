@@ -5431,10 +5431,46 @@
 				"title": "Microsoft Money"
 			},
 			{
+				"id": "4ba544d1d1d8bc9a064c45b55a1c5a2b",
+				"detect_exe": "POWERPNT.EXE|Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Powerpoint"
+			},
+			{
 				"id": "3a1b78317678e3498ada13fd7f6f12d1",
-				"detect_exe": "Microsoft Office\\Root\\Office16\\PDFREFLOW.EXE",
+				"detect_exe": "PDFREFLOW.EXE|Microsoft Office\\Root\\Office16\\PDFREFLOW.EXE",
 				"nongame_type": "blacklist",
 				"title": "Microsoft Office"
+			},
+			{
+				"id": "dd0bcc0d47e52a03b237ea6b549d5d57",
+				"detect_exe": "EXCEL.EXE|Microsoft Office\\Root\\Office16\\EXCEL.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Excel"
+			},
+			{
+				"id": "51c5e6b2d641441123aca9a54fd2a0bb",
+				"detect_exe": "MSACCESS.EXE|Microsoft Office\\Root\\Office16\\MSACCESS.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Access"
+			},
+			{
+				"id": "13a9ce32c387a8f483d7ec567c01de19",
+				"detect_exe": "VISIO.EXE|Microsoft Office\\Root\\Office16\\VISIO.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Visio"
+			},
+			{
+				"id": "d43ed662e0444ef51c5668dc8c13c6fd",
+				"detect_exe": "WINPROJ.EXE|Microsoft Office\\Root\\Office16\\WINPROJ.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Project"
+			},
+			{
+				"id": "63ca65483996721f7e5de56cb5036d32",
+				"detect_exe": "WINWORD.EXE|Microsoft Office\\Root\\Office16\\WINWORD.EXE",
+				"nongame_type": "blacklist",
+				"title": "Microsoft Word"
 			},
 			{
 				"id": "3fd38beffb4ac95545c324868fa87be0",
@@ -20268,6 +20304,30 @@
 				"detect_exe": "Video.UI.exe",
 				"nongame_type": "blacklist",
 				"title": "Video.UI.exe"
+			}
+		]
+	},
+		{
+		"nongame_id": "145054e140dd12086b94afa87eec8892",
+		"title": "Cloud Notifications",
+		"detections": [
+			{
+				"id": "7d4212667f6d785c6291cc3a69de7ab7",
+				"detect_exe": "CloudNotifications.exe",
+				"nongame_type": "blacklist",
+				"title": "CloudNotifications.exe"
+			}
+		]
+	},
+		{
+		"nongame_id": "21f2ceb6ad3ed93958a9653b63f1c6b3",
+		"title": "Vanguard",
+		"detections": [
+			{
+				"id": "9c82d49a9ab119e23ba0c8c4b4f67e6b",
+				"detect_exe": "vgtray.exe",
+				"nongame_type": "blacklist",
+				"title": "vgtray.exe"
 			}
 		]
 	}
