@@ -20264,5 +20264,17 @@
 				"title": "Video.UI.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "946e243363eee59a5b2f371f8d33a89d",
+		"title": "zTwitch",
+		"detections": [
+			{
+				"id": "e967d0c364bec9a634588f7733cb216b",
+				"detect_exe": "TwitchUWP.exe",
+				"nongame_type": "blacklist",
+				"title": "TwitchUWP.exe"
+			}
+		]
 	}
 ]
