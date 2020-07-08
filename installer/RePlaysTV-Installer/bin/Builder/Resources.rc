@@ -1,0 +1,22 @@
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION    1,0,0,0
+    PRODUCTVERSION 1,0,0,0
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904b0"
+        {
+            VALUE "CompanyName",        "lulzsun @ GitHub\0"
+            VALUE "FileDescription",    "RePlays Installer for Plays.tv Desktop App\0"
+            VALUE "FileVersion",        "1.0.0.0\0"
+            VALUE "LegalCopyright",     "\0"
+            VALUE "OriginalFilename",   "RePlaysSetup.exe\0"
+            VALUE "ProductName",        "RePlays Setup\0"
+            VALUE "ProductVersion",     "1.0.0.0\0"
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x409, 1200
+    }
+}

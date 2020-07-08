@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Plays</id>
+<version>3.0.4-full</version>
+    <title>Plays</title>
+    <authors>lulzsun</authors>
+    <iconUrl>https://raw.githubusercontent.com/lulzsun/RePlaysTV/master/resources/replays.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plays.tv Desktop Application patched using RePlays Installer</description>
+  </metadata>
+  <files>
+    <file src="out\**" target="lib" />
+  </files>
+</package>
