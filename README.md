@@ -1,4 +1,4 @@
-# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link] [![Paypal][paypal-badge]][paypal-link] [![Venmo][venmo-badge]][venmo-link] 
+# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link]
 
 [download-badge]: https://img.shields.io/github/downloads/lulzsun/RePlaysTV/total
 [download-link]: https://github.com/lulzsun/RePlaysTV/releases/
