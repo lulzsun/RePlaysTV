@@ -6,12 +6,6 @@
 [discord-badge]: https://img.shields.io/discord/654698116917886986?label=Discord&logo=discord
 [discord-link]: https://discordapp.com/invite/Qj2BmZX
 
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
-[paypal-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AC6XUC2KNBLNN&item_name=Support+ReplaysTV+Development&currency_code=USD&source=url
-
-[venmo-badge]: https://img.shields.io/badge/Venmo-Donate!-informational
-[venmo-link]: https://venmo.com/jminquach
-
 A community project patch for the discontinued Plays.tv client
 
 On 12/15/19, Plays.tv discontinued support to their website and desktop application.
