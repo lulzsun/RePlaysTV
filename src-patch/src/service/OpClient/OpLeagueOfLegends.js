@@ -4,7 +4,7 @@ import LeagueClientAPI from '../LeagueOfLegends/LeagueClientAPI.js';
 
 const LCU_API_CURRENT_SUMMONER = '/lol-summoner/v1/current-summoner';
 const LCU_GET_SUMMONER_BY_NAME = '/lol-summoner/v1/summoners';
-const LCU_GET_SUMMONER_MATCH_HISTORY = '/lol-match-history/v1/delta';
+const LCU_GET_SUMMONER_MATCH_HISTORY = '/lol-match-history/v1/matchlist';
 const LCU_GET_GAME_DATA = '/lol-match-history/v1/games';  // takes path /gameId
 const LCU_GET_GAME_TIMELINE = '/lol-match-history/v1/game-timelines'; // takes path /gameId
 

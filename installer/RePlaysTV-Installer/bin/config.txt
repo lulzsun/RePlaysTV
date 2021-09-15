@@ -1,6 +1,0 @@
-;!@Install@!UTF-8!
-Title="RePlays Installer"
-InstallPath="%localappdata%\\RePlays"
-BeginPrompt="Do you want to install and run RePlays Installer?"
-RunProgram="RePlaysTV-Installer.exe"
-;!@InstallEnd@!

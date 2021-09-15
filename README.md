@@ -1,16 +1,10 @@
-# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link] [![Paypal][paypal-badge]][paypal-link] [![Venmo][venmo-badge]][venmo-link] 
+# RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link]
 
 [download-badge]: https://img.shields.io/github/downloads/lulzsun/RePlaysTV/total
 [download-link]: https://github.com/lulzsun/RePlaysTV/releases/
 
 [discord-badge]: https://img.shields.io/discord/654698116917886986?label=Discord&logo=discord
 [discord-link]: https://discordapp.com/invite/Qj2BmZX
-
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
-[paypal-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AC6XUC2KNBLNN&item_name=Support+ReplaysTV+Development&currency_code=USD&source=url
-
-[venmo-badge]: https://img.shields.io/badge/Venmo-Donate!-informational
-[venmo-link]: https://venmo.com/jminquach
 
 A community project patch for the discontinued Plays.tv client
 
@@ -27,7 +21,7 @@ Installation instructions below.
 # Installation
 You must have the last Plays client installed (3.0.0). You can still download the original Plays setup from [here](https://www.dropbox.com/s/11b5fptw2qsjmn5/PlaysSetup.exe).
 
-Note: When installing the original Plays client, if the message 'Could not launch - make sure your internet is connected and retry' pops up, exit Plays and continue with the following instructions.
+Note: When installing the original Plays client, if Medal.tv's webpage pops out, close out of it and continue on with the instructions. It appears that Medal has taken the plays.tv domain so now their webpage loads instead of an error message.
 
 Instructions:
   1. Download and extract the [latest release](https://github.com/lulzsun/RePlaysTV/releases)

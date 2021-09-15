@@ -183,8 +183,8 @@ export default class LeagueOfLegendsAdapter extends BaseAdapter {
               // get latest match's timestamp ('createdTime') and verify if it is between our 'startTime' and 'endTime'
               let startTime = this.sessionData.startTime;
               let endTime = new Date().getTime();
-              let createdTime = lolMatchHistory.deltas[0].platformDelta.timestamp;
-              let gameId = lolMatchHistory.deltas[0].gameId;
+              let createdTime = lolMatchHistory.games.games[0].gameCreation;
+              let gameId = lolMatchHistory.games.games[0].gameId;
 
               // returns true if 'createdTime' is between 'startTime' and 'endTime'
               if (startTime < createdTime && endTime > createdTime) {
