@@ -20342,5 +20342,17 @@
 				"title": "TwitchUWP.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "29f0065721effaac222a0507687efa50",
+		"title": "EdgeWebView2",
+		"detections": [
+			{
+				"id": "77e58728aa05b2c315176f133dd9a0d0",
+				"detect_exe": "msedgewebview2.exe",
+				"nongame_type": "blacklist",
+				"title": "msedgewebview2.exe"
+			}
+		]
 	}
 ]
