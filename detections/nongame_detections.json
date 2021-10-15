@@ -20354,5 +20354,41 @@
 				"title": "msedgewebview2.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "daadd867bd1d2c8e0ea86bfccf007df4",
+		"title": "ServiceHub.ThreadedWaitDialog",
+		"detections": [
+			{
+				"id": "fb9319d3987c52aeb824b8f1616bae7a",
+				"detect_exe": "ServiceHub.ThreadedWaitDialog.exe",
+				"nongame_type": "blacklist",
+				"title": "ServiceHub.ThreadedWaitDialog.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "f4ec238c8a6948366d62d58a0648a333",
+		"title": "DesignToolsServer",
+		"detections": [
+			{
+				"id": "93e179af642a6f0309de059238491454",
+				"detect_exe": "DesignToolsServer.exe",
+				"nongame_type": "blacklist",
+				"title": "DesignToolsServer.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "b06f3289fb983fdca5d40d5255504167",
+		"title": "dnSpy",
+		"detections": [
+			{
+				"id": "3aaa0375283e92ba19fe0998dc292d10",
+				"detect_exe": "dnSpy.exe",
+				"nongame_type": "blacklist",
+				"title": "dnSpy.exe"
+			}
+		]
 	}
 ]
