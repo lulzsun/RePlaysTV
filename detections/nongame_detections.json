@@ -20390,5 +20390,17 @@
 				"title": "dnSpy.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "d27645a6fba0b057d203015e367bfb13",
+		"title": "Kicad Pcbnew",
+		"detections": [
+			{
+				"id": "7fd41d9c25ddd4c212c069ab9af64f80",
+				"detect_exe": "pcbnew.exe",
+				"nongame_type": "blacklist",
+				"title": "pcbnew.exe"
+			}
+		]
 	}
 ]
