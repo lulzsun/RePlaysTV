@@ -1,8 +1,8 @@
 {
 	"game_detections_version": {
-		"version": "20200609.1"
+		"version": "20211217.1"
 	},
 	"nongame_detections_version": {
-		"version": "20200609.1"
+		"version": "20211217.1"
 	}
 }

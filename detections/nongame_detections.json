@@ -20402,5 +20402,17 @@
 				"title": "pcbnew.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "fdd557b4e4e2468539e4a8320daf354a",
+		"title": "Kicad Eeschema",
+		"detections": [
+			{
+				"id": "58b9214356e389de2902227822cc81b9",
+				"detect_exe": "eeschema.exe",
+				"nongame_type": "blacklist",
+				"title": "eeschema.exe"
+			}
+		]
 	}
 ]
