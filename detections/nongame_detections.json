@@ -20414,5 +20414,197 @@
 				"title": "eeschema.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "04b87bc9351136c5a4f6267b3ebc5350",
+		"title": "Visual Studio Background Download",
+		"detections": [
+			{
+				"id": "6dc6838ce6349dc65748bcf546b4df90",
+				"detect_exe": "BackgroundDownload.exe",
+				"nongame_type": "blacklist",
+				"title": "BackgroundDownload.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "2d2055fbdf8ff9a94024fb6b1274e7eb",
+		"title": "Facebook Messenger",
+		"detections": [
+			{
+				"id": "0471619ded8564f90764e2a72b583ec4",
+				"detect_exe": "Messenger.exe",
+				"nongame_type": "blacklist",
+				"title": "Messenger.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "6b39af4e532424eff459f92d427df34f",
+		"title": "startmenuexperiencehost",
+		"detections": [
+			{
+				"id": "9426e720b5a2ce68f327cdcf7ab820d0",
+				"detect_exe": "startmenuexperiencehost.exe",
+				"nongame_type": "blacklist",
+				"title": "startmenuexperiencehost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "b23898d27cdacb52bb293dd632ee4f57",
+		"title": "applicationframehost",
+		"detections": [
+			{
+				"id": "890eadde6400a1aa63c7107c8fafbc54",
+				"detect_exe": "applicationframehost.exe",
+				"nongame_type": "blacklist",
+				"title": "applicationframehost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "bd947081f9658d365435a5ad58eab972",
+		"title": "peopleexperiencehost",
+		"detections": [
+			{
+				"id": "3d1603633f0e04abd148784a78949e71",
+				"detect_exe": "peopleexperiencehost.exe",
+				"nongame_type": "blacklist",
+				"title": "peopleexperiencehost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "3170143f75fc76b19cc74f60b2b2a60a",
+		"title": "shellexperiencehost",
+		"detections": [
+			{
+				"id": "c1a37a068ce701498380ed0bcd7b4f0e",
+				"detect_exe": "shellexperiencehost.exe",
+				"nongame_type": "blacklist",
+				"title": "shellexperiencehost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "bd9b9981e5e5272705e99f6e0ca104b8",
+		"title": "microsoft.notes",
+		"detections": [
+			{
+				"id": "505dd96b81f48b4c87ca24faa159b90a",
+				"detect_exe": "microsoft.notes.exe",
+				"nongame_type": "blacklist",
+				"title": "microsoft.notes.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "33390c86ba1e66287bf648e70f65c9d0",
+		"title": "systemsettings",
+		"detections": [
+			{
+				"id": "8b80b060377f25e87980245f5f3ede94",
+				"detect_exe": "systemsettings.exe",
+				"nongame_type": "blacklist",
+				"title": "systemsettings.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "6145e151e9c846cfee1e052f89416be3",
+		"title": "textinputhost",
+		"detections": [
+			{
+				"id": "47f74dd04bb1e1cfd41f60a732b4301b",
+				"detect_exe": "textinputhost.exe",
+				"nongame_type": "blacklist",
+				"title": "textinputhost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "fa2f3c6c4a9852965dabfa85fcec1829",
+		"title": "searchapp",
+		"detections": [
+			{
+				"id": "afcbe53dc04702e7300e6b39e53f2a42",
+				"detect_exe": "searchapp.exe",
+				"nongame_type": "blacklist",
+				"title": "searchapp.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "ceca1cf41a45daef1f9920b5174462d1",
+		"title": "searchui",
+		"detections": [
+			{
+				"id": "e6d79fa314e3fbbcd45852cb2ed584c4",
+				"detect_exe": "searchui.exe",
+				"nongame_type": "blacklist",
+				"title": "searchui.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "29488fd30b51049afa37e274ad7e61e2",
+		"title": "lockapp",
+		"detections": [
+			{
+				"id": "c23277cdf28bffda2b0c70871890c3c3",
+				"detect_exe": "lockapp.exe",
+				"nongame_type": "blacklist",
+				"title": "lockapp.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "8eea5d880282c961059d5511fa0db561",
+		"title": "cortana",
+		"detections": [
+			{
+				"id": "6ae2713e7883a90c8255f2a98a95bbc5",
+				"detect_exe": "cortana.exe",
+				"nongame_type": "blacklist",
+				"title": "cortana.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "836e5679f046f52b599f401a4ce1bac5",
+		"title": "gamebar",
+		"detections": [
+			{
+				"id": "922084bab21a1739de168d0bd1f82716",
+				"detect_exe": "gamebar.exe",
+				"nongame_type": "blacklist",
+				"title": "gamebar.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "12f135aad0f56dd0f2b197069a82a1c7",
+		"title": "tabtip",
+		"detections": [
+			{
+				"id": "58e2933428675d074d87a28ebe515453",
+				"detect_exe": "tabtip.exe",
+				"nongame_type": "blacklist",
+				"title": "tabtip.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "d195ac5a520b862580a873b864e925cf",
+		"title": "time",
+		"detections": [
+			{
+				"id": "d78bccfdf6abfc58b6495996e2a1fa91",
+				"detect_exe": "time.exe",
+				"nongame_type": "blacklist",
+				"title": "time.exe"
+			}
+		]
 	}
 ]
