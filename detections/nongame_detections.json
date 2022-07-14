@@ -20606,5 +20606,53 @@
 				"title": "time.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "cf55333021605965f0d785170fdb0a6b",
+		"title": "SearchProtocolHost",
+		"detections": [
+			{
+				"id": "7bb62e01020efee5c357afc8e156058c",
+				"detect_exe": "SearchProtocolHost.exe",
+				"nongame_type": "blacklist",
+				"title": "SearchProtocolHost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "573910ed678b7ba1b77b863f7f0b2fa4",
+		"title": "git",
+		"detections": [
+			{
+				"id": "9c8f14e1aaaed4a85cbb1b12da91841b",
+				"detect_exe": "git.exe",
+				"nongame_type": "blacklist",
+				"title": "git.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "15a2ddb6967cfb138d60e331258c5ba3",
+		"title": "inject-helper64",
+		"detections": [
+			{
+				"id": "f24b15489917a86c757534d36355bcfd",
+				"detect_exe": "inject-helper64.exe",
+				"nongame_type": "blacklist",
+				"title": "inject-helper64.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "inject-helper32",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "inject-helper32.exe",
+				"nongame_type": "blacklist",
+				"title": "inject-helper32.exe"
+			}
+		]
 	}
 ]
