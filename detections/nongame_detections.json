@@ -20656,11 +20656,11 @@
 		]
 	},
 	{
-		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"nongame_id": "dfa9a357c8e98d115dd2fa390f31bf6e",
 		"title": "RePlays",
 		"detections": [
 			{
-				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"id": "2d987677a9a210c7dd1bd082dd69d6a2",
 				"detect_exe": "replays.exe",
 				"nongame_type": "blacklist",
 				"title": "replays.exe"
@@ -20668,11 +20668,11 @@
 		]
 	},
 	{
-		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"nongame_id": "2cbcc2cb3d558e35b6f0de6aa9186b78",
 		"title": "SearchFilterHost",
 		"detections": [
 			{
-				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"id": "a3ce2b33b39ccd44eb84bc38669de17e",
 				"detect_exe": "SearchFilterHost.exe",
 				"nongame_type": "blacklist",
 				"title": "SearchFilterHost.exe"
@@ -20680,11 +20680,11 @@
 		]
 	},
 	{
-		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"nongame_id": "8c52e1ebc621644d97c61ce1069674ca",
 		"title": "Taskmgr",
 		"detections": [
 			{
-				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"id": "1540fafff449102e62582950fd311407",
 				"detect_exe": "Taskmgr.exe",
 				"nongame_type": "blacklist",
 				"title": "Taskmgr.exe"
@@ -20692,11 +20692,11 @@
 		]
 	},
 	{
-		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"nongame_id": "b307ae031cb29448257fe6831df60e08",
 		"title": "Commandline",
 		"detections": [
 			{
-				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"id": "8008d1ba3c9861ec13a00e2b174b981d",
 				"detect_exe": "cmd.exe",
 				"nongame_type": "blacklist",
 				"title": "cmd.exe"
@@ -20704,14 +20704,26 @@
 		]
 	},
 	{
-		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"nongame_id": "59daa2dd46980326f38f6bde3cd84cc1",
 		"title": "Powershell",
 		"detections": [
 			{
-				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"id": "5df8bf7035745f4aa0a819372fed5dc9",
 				"detect_exe": "powershell.exe",
 				"nongame_type": "blacklist",
 				"title": "powershell.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "ae9b0740ce1d384e3dd49841d8da92db",
+		"title": "Idle",
+		"detections": [
+			{
+				"id": "f24afb1660ee13090cd9f68100349228",
+				"detect_exe": "Idle.exe",
+				"nongame_type": "blacklist",
+				"title": "Idle.exe"
 			}
 		]
 	}
