@@ -20654,5 +20654,65 @@
 				"title": "inject-helper32.exe"
 			}
 		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "RePlays",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "replays.exe",
+				"nongame_type": "blacklist",
+				"title": "replays.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "SearchFilterHost",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "SearchFilterHost.exe",
+				"nongame_type": "blacklist",
+				"title": "SearchFilterHost.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "Taskmgr",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "Taskmgr.exe",
+				"nongame_type": "blacklist",
+				"title": "Taskmgr.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "Commandline",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "cmd.exe",
+				"nongame_type": "blacklist",
+				"title": "cmd.exe"
+			}
+		]
+	},
+	{
+		"nongame_id": "758e14cd43d377ff35a70523596edcb2",
+		"title": "Powershell",
+		"detections": [
+			{
+				"id": "813dd8222fac726604f6ecd2cfd4909e",
+				"detect_exe": "powershell.exe",
+				"nongame_type": "blacklist",
+				"title": "powershell.exe"
+			}
+		]
 	}
 ]
