@@ -1,5 +1,17 @@
 [
 	{
+		"nongame_id": "38ff03203e6f40a2073968a45d38e9f8",
+		"title": "Search Host",
+		"detections": [
+			{
+				"id": "371524a1b5ba2d6946d9655378bacaf7",
+				"detect_exe": "SearchHost.exe",
+				"nongame_type": "blacklist",
+				"title": "SearchHost.exe"
+			}
+		]
+	},
+	{
 		"nongame_id": "7e8a548af7f7aa65b77dcc535123870b",
 		"title": "Smart Technology",
 		"detections": [
