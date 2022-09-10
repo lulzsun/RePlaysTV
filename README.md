@@ -1,3 +1,7 @@
+This project has been superseded by [RePlays](https://github.com/lulzsun/RePlays). It is recommended to use RePlays instead of RePlaysTV (the current repo that you are in). 
+
+[Learn more here.](https://github.com/lulzsun/RePlays/wiki#what-is-the-difference-between-replays-vs-replaystv)
+
 # RePlaysTV [![Downloads][download-badge]][download-link] [![Discord][discord-badge]][discord-link]
 
 [download-badge]: https://img.shields.io/github/downloads/lulzsun/RePlaysTV/total
